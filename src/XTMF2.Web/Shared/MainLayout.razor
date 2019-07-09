@@ -1,15 +1,34 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="sidebar">
-    <NavMenu />
-</div>
 
-<div class="main">
-    <div class="top-row px-4">
-        <a href="https://docs.microsoft.com/en-us/aspnet/" target="_blank">About</a>
+<div class="main-container">
+    <div class="alert alert-app-level">
+        Alert
     </div>
+    <header class="header header-6">
 
-    <div class="content px-4">
-        @Body
+    <div class="branding">
+        ...
+    </div>
+    <div class="header-nav">
+        <a href="javascript://" class="active nav-link nav-text">Dashboard</a>
+        <a href="javascript://" class="nav-link nav-text">Interactive Analytics</a>
+    </div>
+    <div class="header-actions">
+        <a href="javascript://" class="nav-link nav-icon">
+            <clr-icon shape="cog"></clr-icon>
+        </a>
+    </div>
+    </header>
+    <nav class="subnav">
+        Subnav
+    </nav>
+    <div class="content-container">
+        <div class="content-area">
+            Body
+        </div>
+        <nav class="sidenav">
+            <NavMenu />
+        </nav>
     </div>
 </div>
