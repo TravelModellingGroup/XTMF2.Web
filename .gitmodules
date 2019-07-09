@@ -1,3 +1,4 @@
 [submodule "src/XTMF2"]
 	path = src/XTMF2
 	url = https://github.com/TravelModellingGroup/XTMF2.git
+	branch = InnerRing
