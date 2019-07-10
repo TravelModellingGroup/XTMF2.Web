@@ -28,6 +28,12 @@ namespace XTMF2.Web
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<XTMF2.XTMFRuntime>(XTMF2.XTMFRuntime.CreateRuntime());
+            services.AddScoped<XTMF2.User>((provider) =>
+            {
+                var runtime = provider.GetService<XTMF2.XTMFRuntime>();
+                return runtime.UserController.Users[0];
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

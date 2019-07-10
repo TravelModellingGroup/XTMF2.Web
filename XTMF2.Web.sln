@@ -11,10 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FB16866A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XTMF2.Web.UnitTests", "tests\XTMF2.Web.UnitTests\XTMF2.Web.UnitTests.csproj", "{C4B064DE-A49B-4B4D-BCD6-9CF62A584462}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XTMF2", "src\XTMF2\src\XTMF2\XTMF2.csproj", "{B7AA4261-226B-484D-864C-94BD63DEFDEA}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XTMF2.Interfaces", "src\XTMF2\src\XTMF2.Interfaces\XTMF2.Interfaces.csproj", "{3E07507F-259C-49C1-83B0-3EDE4801488D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

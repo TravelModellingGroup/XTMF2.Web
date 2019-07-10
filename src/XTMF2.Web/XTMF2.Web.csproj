@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.0.0-preview6.19307.2" />
+    <PackageReference Include="XTMF2" Version="1.0.1-ALPHA" />
   </ItemGroup>
 
 </Project>

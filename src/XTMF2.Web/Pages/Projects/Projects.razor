@@ -1,0 +1,18 @@
+@page "/projects"
+@inherits ProjectsBase
+
+
+XTMF2 Projects
+
+<ul>
+@foreach (var project in Projects)
+        {
+            <li>@project.Name</li>
+        }
+</ul>
+<Counter/>
+
+@code {
+
+    
+}
