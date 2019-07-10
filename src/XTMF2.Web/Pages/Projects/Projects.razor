@@ -4,12 +4,29 @@
 
 XTMF2 Projects
 
-<ul>
-@foreach (var project in Projects)
+<table class="table">
+    <thead>
+        <tr>
+            <th>Project Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var project in Projects)
         {
-            <li>@project.Name</li>
+            <tr>
+                <td>@project.Name</td>
+                <td>
+                    <button @onclick=@(() => DeleteProject(@project)) type="button" class="btn btn-icon btn-danger" aria-label="error">
+    <clr-icon shape="error-standard"></clr-icon>
+    Delete
+</button></td>
+            </tr>
         }
-</ul>
+    </tbody>
+</table>
+
+
 <Counter/>
 
 @code {

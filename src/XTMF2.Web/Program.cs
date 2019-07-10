@@ -24,6 +24,10 @@ namespace XTMF2.Web
                 {
                     webBuilder.UseStartup<Startup>();
 
-                });
+                }).ConfigureLogging(logging =>
+        {
+            logging.ClearProviders();
+            logging.AddConsole();
+        });
     }
 }
