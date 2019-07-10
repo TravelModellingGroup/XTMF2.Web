@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Layouts;
 using Microsoft.Extensions.Logging;
 using XTMF2;
 using XTMF2.Editing;
@@ -61,6 +62,8 @@ namespace XTMF2.Web.Pages
             string error = "";
             XTMFRuntime.ProjectController.DeleteProject(XTMFUser, project.Name, ref error);
             Projects.Remove(project);
+
+            LayoutComponentBase b;
         }
     }
 
