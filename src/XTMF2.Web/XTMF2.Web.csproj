@@ -10,4 +10,8 @@
     <PackageReference Include="XTMF2" Version="1.0.1-ALPHA" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\XTMF2.Web.Components\XTMF2.Web.Components.csproj" />
+  </ItemGroup>
+
 </Project>
