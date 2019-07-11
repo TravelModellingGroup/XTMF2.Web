@@ -1,0 +1,23 @@
+@inherits ModalBase
+@namespace XTMF2.Web.Components
+
+
+@if (IsShow)
+{
+    <div class="modal fadeDown @ShowClass">
+        <div class="modal-dialog" role="dialog" aria-hidden="true">
+
+            <div class="modal-content">
+                <div class="modal-header"><h3 class="modal-title">@Title</h3></div>
+                
+            <div class="modal-body" tabindex="0">@Content</div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" type="button" @onclick="@Cancel">Cancel</button>
+                <button class="btn btn-primary" type="button" @onclick="@Confirm">@ConfirmText</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop @ShowClass" aria-hidden="true"></div> 
+}
+

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components.Layouts;
 using Microsoft.Extensions.Logging;
 using XTMF2;
 using XTMF2.Editing;
+using XTMF2.Web.Components;
 using XTMF2.Web.Shared;
 
 namespace XTMF2.Web.Pages
@@ -27,10 +28,14 @@ namespace XTMF2.Web.Pages
         [Inject]
         protected ILogger<ProjectsBase> Logger { get; set; }
 
+        [Parameter]
+        protected string NewProjectName {get;set;}
+
         [CascadingParameter]
         private ContentLayout Layout { get; set; }
 
- 
+        protected Modal newProjectDialog;
+
 
         public List<XTMF2.Project> Projects { get; set; }
 
@@ -47,21 +52,8 @@ namespace XTMF2.Web.Pages
         /// </summary>
         protected override void OnInit()
         {
-            ProjectSession session = null;
-            string error = "";
             Projects = new List<XTMF2.Project>();
-
-            if (XTMFRuntime.ProjectController.CreateNewProject(XTMFUser, "Project" + Guid.NewGuid(),
-            out session, ref error))
-            {
-
-                Projects.AddRange(XTMFRuntime.ProjectController.GetProjects(XTMFUser));
-
-            }
-
-            Logger.LogInformation("layout: " + Layout);
-
-
+            Projects.AddRange(XTMFRuntime.ProjectController.GetProjects(XTMFUser));
         }
 
         public void DeleteProject(XTMF2.Project project)
@@ -72,6 +64,43 @@ namespace XTMF2.Web.Pages
             Projects.Remove(project);
 
             LayoutComponentBase b;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        protected void ShowNewProjectDialog(UIMouseEventArgs e)
+        {
+            this.newProjectDialog.Show();
+        }
+
+
+        protected void NewProjectDialog_Confirm(UIEventArgs e)
+        {
+            ProjectSession session = null;
+            string error = "";
+            if ((XTMFRuntime.ProjectController.CreateNewProject(XTMFUser, NewProjectName,
+            out session, ref error)))
+            {
+                Projects.Add(session.Project);
+                Console.WriteLine("Adding project");
+
+            }
+            else
+            {
+                Console.WriteLine("Error occured");
+            }
+            Console.WriteLine("confirmed");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        protected void NewProjectDialog_Cancel(UIEventArgs e)
+        {
+            Console.WriteLine("cancelled");
         }
     }
 
