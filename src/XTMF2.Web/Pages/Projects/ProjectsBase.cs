@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components.Layouts;
 using Microsoft.Extensions.Logging;
 using XTMF2;
 using XTMF2.Editing;
+using XTMF2.Web.Shared;
 
 namespace XTMF2.Web.Pages
 {
@@ -24,7 +25,12 @@ namespace XTMF2.Web.Pages
         protected XTMF2.User XTMFUser { get; set; }
 
         [Inject]
-        protected ILogger<ProjectsBase> Logger {get;set;}
+        protected ILogger<ProjectsBase> Logger { get; set; }
+
+        [CascadingParameter]
+        private ContentLayout Layout { get; set; }
+
+ 
 
         public List<XTMF2.Project> Projects { get; set; }
 
@@ -52,6 +58,8 @@ namespace XTMF2.Web.Pages
                 Projects.AddRange(XTMFRuntime.ProjectController.GetProjects(XTMFUser));
 
             }
+
+            Logger.LogInformation("layout: " + Layout);
 
 
         }

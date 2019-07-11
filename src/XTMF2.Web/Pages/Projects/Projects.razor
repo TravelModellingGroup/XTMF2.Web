@@ -1,10 +1,9 @@
 @page "/projects"
 @inherits ProjectsBase
 
-
-XTMF2 Projects
-
-<table class="table">
+<BasePage ShowSideNav="false">
+ <Content>
+     <table class="table">
     <thead>
         <tr>
             <th>Project Name</th>
@@ -24,10 +23,22 @@ XTMF2 Projects
             </tr>
         }
     </tbody>
+
+
+    
 </table>
+<button class="btn btn-primary">Create New Project</button>
+     </Content>
+
+</BasePage>
 
 
-<Counter/>
+
+
+
+
+
+
 
 @code {
 

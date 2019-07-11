@@ -1,9 +1,15 @@
 @inherits LayoutComponentBase
+@using System
 @layout MainLayout
-        <div class="content-area">
-@Body
-        </div>
-        <nav class="sidenav">
-            Here
-        </nav>
 
+
+@Body
+
+
+@code {
+
+    public RenderFragment NavMenuContent {get;set;}
+
+
+    
+}

@@ -1,0 +1,23 @@
+<div class="content-area">
+
+            <CascadingValue Value=this>
+
+                    @Content
+            </CascadingValue>
+        </div>
+        @if(ShowSideNav) {
+        <nav class="sidenav">
+            @NavContent
+        </nav>
+        }
+
+@code {
+    [Parameter]
+    private RenderFragment Content { get; set; }
+
+    [Parameter]
+    private RenderFragment NavContent { get; set; }
+
+    [Parameter]
+    private bool ShowSideNav { get; set; }
+}
