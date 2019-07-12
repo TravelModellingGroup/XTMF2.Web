@@ -1,0 +1,17 @@
+#main-content {
+    width: 100%;
+}
+
+#main-sidebar {
+    background-color: #152535;
+    min-height: 100vh;
+    width: 300px;
+}
+
+.wrapper {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    justify-content: stretch;
+    align-content: stretch;
+}
