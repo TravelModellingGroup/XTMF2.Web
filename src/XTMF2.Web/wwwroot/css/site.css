@@ -27,7 +27,7 @@ button i {
 #main-sidebar {
     background-color: #152535;
     min-height: 100vh;
-    width: 300px;
+    flex: 0 300px;
 }
 
 #main-sidebar .sidebar-logo {
