@@ -8,6 +8,11 @@ namespace XTMF2.Web.Components {
 
         [Parameter]
         public RenderFragment Alert {get;set;}
+
+
+        public void ClearAlert() {
+            Alert = null;
+        }
         
     }
 }

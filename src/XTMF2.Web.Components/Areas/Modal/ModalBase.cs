@@ -1,12 +1,22 @@
 
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace XTMF2.Web.Components
 {
 
     public class ModalBase : ComponentBase
     {
+
+        [Inject]
+        public IJSRuntime JsRuntime { get; set; }
+
+
+
+        protected ElementRef modalElement;
+
         [Parameter]
         public RenderFragment Content { get; set; }
 
@@ -15,11 +25,14 @@ namespace XTMF2.Web.Components
         public RenderFragment Title { get; set; }
 
         [Parameter]
-        public string ConfirmText {get;set;} = "Confirm";
+        public string ModalName { get; set; }
+
+        [Parameter]
+        public string ConfirmText { get; set; } = "Confirm";
 
         protected bool IsShow { get; set; } = false;
 
-        protected string ShowClass => IsShow ? "in" : "";
+        protected string ShowClass => IsShow ? "show" : "";
 
         [Parameter]
         private EventCallback<UIEventArgs> OnConfirm { get; set; }
@@ -28,8 +41,15 @@ namespace XTMF2.Web.Components
         private EventCallback<UIEventArgs> OnCancel { get; set; }
 
 
-        public void Show()
+        public async void Show()
         {
+            await JsRuntime.InvokeAsync<object>("XTMF2.showModal", ModalName);
+            this.IsShow = true;
+        }
+
+        public async void Hide()
+        {
+            await JsRuntime.InvokeAsync<object>("XTMF2.hideModal", ModalName);
             this.IsShow = true;
         }
 

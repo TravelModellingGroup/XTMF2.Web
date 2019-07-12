@@ -30,25 +30,19 @@
         <button class="btn btn-primary" @onclick="@ShowNewProjectDialog">Create New Project</button>
 
        
-        <Modal @ref="newProjectDialog" OnConfirm="@NewProjectDialog_Confirm"
+        <Modal @ref="newProjectDialog" OnConfirm="@NewProjectDialog_Confirm" ModalName="newProjectDialog"
         OnCancel="@NewProjectDialog_Cancel" ConfirmText="Create Project">
         <Title>
             New Project
         </Title>
         <Content>
 
-            <form class="clr-form clr-form-horizontal">
-                <div class="clr-form-control">
-                        <label for="project-name" class="clr-control-label">Project Name</label>
-                        <div class="clr-control-container">
-                            <div class="clr-input-wrapper">
-                                <input @bind="NewProjectName" type="text" id="project-name" placeholder="Enter a project name..." class="clr-input"/>
-                                <clr-icon class="clr-validate-icon" shape="exclamation-circle"></clr-icon>
-                            </div>
-                            <span class="clr-subtext">Choose a unique name for your new project.</span>
-                        </div>
-                    </div>
-
+            <form>
+  <div class="form-group">
+    <label for="projectNameInput">Project Name</label>
+    <input @bind="NewProjectName" type="text" class="form-control" id="projectNameInput" aria-describedby="emailHelp" placeholder="Enter a project name"/>
+    <small id="projectNameHelp" class="form-text text-muted">A project name must be unique.</small>
+  </div>
             </form>
         </Content>
         </Modal>
@@ -57,15 +51,9 @@
 
     </Content>
 
+    <Title>Projects</Title>
+
 </BasePage>
-
-
-
-
-
-
-
-
 
 @code {
 

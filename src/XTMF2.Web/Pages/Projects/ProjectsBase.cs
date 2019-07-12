@@ -85,13 +85,15 @@ namespace XTMF2.Web.Pages
             {
                 Projects.Add(session.Project);
                 Console.WriteLine("Adding project");
+                this.newProjectDialog.Hide();
 
             }
             else
             {
+                this.newProjectDialog.Hide();
                 Console.WriteLine("Error occured");
             }
-            Console.WriteLine("confirmed");
+            
         }
 
         /// <summary>

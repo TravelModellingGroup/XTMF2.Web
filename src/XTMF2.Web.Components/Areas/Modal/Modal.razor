@@ -2,22 +2,23 @@
 @namespace XTMF2.Web.Components
 
 
-@if (IsShow)
-{
-    <div class="modal fadeDown @ShowClass">
-        <div class="modal-dialog" role="dialog" aria-hidden="true">
-
-            <div class="modal-content">
-                <div class="modal-header"><h3 class="modal-title">@Title</h3></div>
-                
-            <div class="modal-body" tabindex="0">@Content</div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" type="button" @onclick="@Cancel">Cancel</button>
-                <button class="btn btn-primary" type="button" @onclick="@Confirm">@ConfirmText</button>
-            </div>
-            </div>
-        </div>
+<div id="@ModalName" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true" @ref="modalElement">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">@Title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        @Content
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="@Cancel">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" @onclick="@Confirm">@ConfirmText</button>
+      </div>
     </div>
-    <div class="modal-backdrop @ShowClass" aria-hidden="true"></div> 
-}
+  </div>
+</div>
 

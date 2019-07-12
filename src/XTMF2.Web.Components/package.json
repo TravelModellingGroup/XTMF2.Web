@@ -1,0 +1,8 @@
+{
+	"name": "xtmf2.web.components",
+	"description": "Lib resources for components in xtmf2.web.components",
+	"devDependencies": {
+		"@types/bootstrap": "^4.3.1",
+		"@types/jquery": "^3.3.30"
+	}
+}

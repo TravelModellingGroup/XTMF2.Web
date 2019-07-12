@@ -1,28 +1,38 @@
 ﻿@inherits MainLayoutBase
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">
+    <img src="img/xtmf.png" width="32" height="32" class="d-inline-block align-top" alt="">
+    XTMF2
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <NavLink class="nav-link nav-item" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-plus" aria-hidden="true"></span>Dashboard</NavLink>
+                    
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link nav-item" href="projects" Match="NavLinkMatch.Prefix">
+                <span class="oi oi-plus" aria-hidden="true"></span>Projects</NavLink>
+                     
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Scheduler</a>
+                    </li>
+                  </ul>
+                  <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                  </form>
+                </div>
+</nav>
+<div class="container-fluid">
 
+    @Body
 
-<div class="main-container">
-    <div class="alert alert-app-level">
-        @Alert
-    </div>
-    <header class="header header-6">
-
-    <div class="branding">
-        ...
-    </div>
-    <div class="header-nav">
-        <a href="javascript://" class="active nav-link nav-text">Dashboard</a>
-    </div>
-    <div class="header-actions">
-        <a href="javascript://" class="nav-link nav-icon">
-            <clr-icon shape="cog"></clr-icon>
-        </a>
-    </div>
-    </header>
-    <nav class="subnav">
-        Subnav
-    </nav>
-    <div class="content-container">
-        @Body
-    </div>
 </div>
+
+
