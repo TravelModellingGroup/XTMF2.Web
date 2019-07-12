@@ -43,13 +43,13 @@ namespace XTMF2.Web.Components
 
         public async void Show()
         {
-            await JsRuntime.InvokeAsync<object>("XTMF2.showModal", ModalName);
+            await JsRuntime.InvokeAsync<object>("xtmf2WebComponents.Modal.showModal", ModalName);
             this.IsShow = true;
         }
 
         public async void Hide()
         {
-            await JsRuntime.InvokeAsync<object>("XTMF2.hideModal", ModalName);
+            await JsRuntime.InvokeAsync<object>("xtmf2WebComponents.Modal.showModal", ModalName);
             this.IsShow = true;
         }
 

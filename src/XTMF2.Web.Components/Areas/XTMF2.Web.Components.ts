@@ -1,7 +1,7 @@
-﻿export interface XTMF2Window extends Window {
-	XTMF2: any;
-}
+﻿import * as Modal from './Modal/Modal';
 
-declare let window: XTMF2Window;
+export { Modal };
 
-window.XTMF2 = {};
+//declare let window: XTMF2Window;
+
+//window.XTMF2 = {};
