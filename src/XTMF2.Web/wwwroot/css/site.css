@@ -8,6 +8,19 @@
     width: 300px;
 }
 
+#main-sidebar .sidebar-logo {
+    text-align:center;
+    margin: 20px;
+}
+
+#main-sidebar a {
+    color: white;
+}
+
+#main-sidebar .list-group-item {
+    background: transparent;
+}
+
 .wrapper {
     display: flex;
     align-items: stretch;
