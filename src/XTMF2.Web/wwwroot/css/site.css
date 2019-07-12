@@ -41,6 +41,10 @@ button i {
     color: white;
 }
 
+#main-sidebar i {
+    opacity: 0.2;
+}
+
 #main-sidebar .list-group-item {
     background: transparent;
 }
