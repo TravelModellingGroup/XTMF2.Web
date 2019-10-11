@@ -1,16 +1,19 @@
 {
-	"name": "xtmf2.web.components",
-	"description": "Lib resources for components in xtmf2.web.components",
-	"scripts": {
-		"build": "webpack",
-		"prod": "webpack --production"
-	},
-	"devDependencies": {
-		"@types/bootstrap": "^4.3.1",
-		"@types/jquery": "^3.3.30",
-		"ts-loader": "^6.0.4",
-		"typescript": "^3.5.3",
-		"webpack": "^4.35.3",
-		"webpack-cli": "^3.3.5"
-	}
+  "name": "xtmf2.web.components",
+  "description": "Lib resources for components in xtmf2.web.components",
+  "scripts": {
+    "build": "webpack",
+    "prod": "webpack --production"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "^4.3.1",
+    "@types/jquery": "^3.3.30",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.3",
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.5"
+  },
+  "dependencies": {
+    "bootstrap": "^4.3.1"
+  }
 }
