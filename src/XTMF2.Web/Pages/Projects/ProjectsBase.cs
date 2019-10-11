@@ -70,13 +70,13 @@ namespace XTMF2.Web.Pages
         /// 
         /// </summary>
         /// <param name="e"></param>
-        protected void ShowNewProjectDialog(UIMouseEventArgs e)
+        protected void ShowNewProjectDialog(MouseEventArgs e)
         {
             this.newProjectDialog.Show();
         }
 
 
-        protected void NewProjectDialog_Confirm(UIEventArgs e)
+        protected void NewProjectDialog_Confirm(EventArgs  e)
         {
             ProjectSession session = null;
             string error = "";
@@ -100,7 +100,7 @@ namespace XTMF2.Web.Pages
         /// 
         /// </summary>
         /// <param name="e"></param>
-        protected void NewProjectDialog_Cancel(UIEventArgs e)
+        protected void NewProjectDialog_Cancel(EventArgs  e)
         {
             Console.WriteLine("cancelled");
         }

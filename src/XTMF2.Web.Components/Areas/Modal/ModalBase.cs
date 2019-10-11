@@ -13,9 +13,7 @@ namespace XTMF2.Web.Components
         [Inject]
         public IJSRuntime JsRuntime { get; set; }
 
-
-
-        protected ElementRef modalElement;
+        protected ElementReference modalElement;
 
         [Parameter]
         public RenderFragment Content { get; set; }
@@ -35,10 +33,10 @@ namespace XTMF2.Web.Components
         protected string ShowClass => IsShow ? "show" : "";
 
         [Parameter]
-        private EventCallback<UIEventArgs> OnConfirm { get; set; }
+        private EventCallback<EventArgs > OnConfirm { get; set; }
 
         [Parameter]
-        private EventCallback<UIEventArgs> OnCancel { get; set; }
+        private EventCallback<EventArgs > OnCancel { get; set; }
 
 
         public async void Show()
@@ -53,13 +51,13 @@ namespace XTMF2.Web.Components
             this.IsShow = true;
         }
 
-        public void Confirm(UIEventArgs e)
+        public void Confirm(EventArgs  e)
         {
             this.IsShow = false;
-            OnConfirm.InvokeAsync(e);
+           OnConfirm.InvokeAsync(e);
         }
 
-        public void Cancel(UIEventArgs e)
+        public void Cancel(EventArgs  e)
         {
             this.IsShow = false;
             OnCancel.InvokeAsync(e);
