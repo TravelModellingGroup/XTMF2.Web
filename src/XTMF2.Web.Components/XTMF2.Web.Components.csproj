@@ -15,6 +15,11 @@
     <EmbeddedResource Include="*.css" Exclude="wwwroot\*.min.css" LogicalName="xtmf2:css:%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <PackageReference Include="BlazorStrap" Version="1.0.105" />
+  </ItemGroup>
+
   <!-- <Target Name="InstallNodePackages" AfterTargets="Restore">
     As part of publishing, ensure the JS resources are freshly built in production mode 
     <Exec WorkingDirectory="." Command="npm install" />
