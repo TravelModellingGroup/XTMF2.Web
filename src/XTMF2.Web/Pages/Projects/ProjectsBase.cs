@@ -8,8 +8,8 @@ using XTMF2;
 using BlazorStrap;
 using XTMF2.Editing;
 using XTMF2.Web.Components;
-using XTMF2.Web.Shared;
-
+using XTMF2.Web.Pages;
+using XTMF2.Web;
 namespace XTMF2.Web.Pages
 {
 
@@ -31,8 +31,6 @@ namespace XTMF2.Web.Pages
         [Parameter]
         protected string NewProjectName { get; set; }
 
-        [CascadingParameter]
-        private ContentLayout Layout { get; set; }
 
         public BSModal LiveDemo;
 
@@ -50,7 +48,7 @@ namespace XTMF2.Web.Pages
         public void NewProjectClicked(System.EventArgs e)
         {
             Console.WriteLine("Button was clicked!");
-            Logger.LogDebug("hello");
+            Logger.LogDebug("hello debug");
             LiveDemo.Show();
             // Console.WriteLine(LiveDemo.Show());
         }
