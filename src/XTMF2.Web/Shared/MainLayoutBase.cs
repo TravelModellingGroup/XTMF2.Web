@@ -1,17 +1,18 @@
 
 using Microsoft.AspNetCore.Components;
 
-namespace XTMF2.Web.Components {
-
-    public class MainLayoutBase : LayoutComponentBase {
+namespace XTMF2.Web.Components
+{
+    public class MainLayoutBase : LayoutComponentBase
+    {
 
         [Parameter]
-        public RenderFragment Alert {get;set;}
+        public RenderFragment Alert { get; set; }
 
-
-        public void ClearAlert() {
+        public void ClearAlert()
+        {
             Alert = null;
         }
-        
+
     }
 }

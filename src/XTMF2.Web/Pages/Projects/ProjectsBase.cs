@@ -17,9 +17,9 @@ namespace XTMF2.Web.Pages
     ///  Projects (page) base component.
     /// </summary>
     public class ProjectsBase : ComponentBase
-    { 
+    {
 
-        [Inject] 
+        [Inject]
         protected XTMF2.XTMFRuntime XTMFRuntime { get; set; }
 
         [Inject]

@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Components;
 
-namespace XTMF2.Web.Pages {
+namespace XTMF2.Web.Pages
+{
 
-    public class XtmfSystemBase : ComponentBase {
-        
+    public class XtmfSystemBase : ComponentBase
+    {
+
     }
 }
