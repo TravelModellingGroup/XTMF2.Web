@@ -1,0 +1,3 @@
+[submodule "src/XTMF"]
+	path = src/XTMF
+	url = https://github.com/TravelModellingGroup/XTMF.git
