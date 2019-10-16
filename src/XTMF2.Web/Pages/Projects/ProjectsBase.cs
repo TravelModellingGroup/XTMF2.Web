@@ -1,15 +1,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
-using XTMF2;
 using BlazorStrap;
 using XTMF2.Editing;
-using XTMF2.Web.Components;
-using XTMF2.Web.Pages;
-using XTMF2.Web;
 namespace XTMF2.Web.Pages
 {
 
@@ -32,7 +27,7 @@ namespace XTMF2.Web.Pages
         protected string NewProjectName { get; set; }
 
 
-        public BSModal LiveDemo;
+        public BSModal NewProjectModal;
 
 
         public List<XTMF2.Project> Projects { get; set; }
@@ -47,10 +42,7 @@ namespace XTMF2.Web.Pages
 
         public void NewProjectClicked(System.EventArgs e)
         {
-            Console.WriteLine("Button was clicked!");
-            Logger.LogDebug("hello debug");
-            LiveDemo.Show();
-            // Console.WriteLine(LiveDemo.Show());
+            NewProjectModal.Show();
         }
 
 
@@ -62,7 +54,7 @@ namespace XTMF2.Web.Pages
 
             Projects = new List<XTMF2.Project>();
             Projects.AddRange(XTMFRuntime.ProjectController.GetProjects(XTMFUser));
-            Console.WriteLine("hello");
+
         }
 
         public void DeleteProject()

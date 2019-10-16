@@ -33,11 +33,11 @@
         <button @onclick="ShowMessage">Hello</button>
         <BSButton Color="Color.Primary" OnClick="@NewProjectClicked">Create New Project</BSButton>
 
-        <BSModal @ref="LiveDemo">
-            <BSModalHeader>Modal title</BSModalHeader>
-            <BSModalBody><p>Modal body text goes here.</p></BSModalBody>
+        <BSModal @ref="NewProjectModal">
+            <BSModalHeader>Create new project</BSModalHeader>
+            <BSModalBody><p>Create a new project..</p></BSModalBody>
             <BSModalFooter>
-                <BSButton Color="Color.Primary">Do Something</BSButton>
+                <BSButton Color="Color.Primary">Create</BSButton>
                 <BSButton Color="Color.Secondary">Cancel</BSButton>
             </BSModalFooter>
         </BSModal>
