@@ -30,7 +30,6 @@
 
         </table>
 
-        <button @onclick="ShowMessage">Hello</button>
         <BSButton Color="Color.Primary" OnClick="@NewProjectClicked">Create New Project</BSButton>
 
         <BSModal @ref="NewProjectModal">
@@ -55,8 +54,4 @@
 
 @code {
 
-    private void ShowMessage(MouseEventArgs e)
-    {
-        Console.WriteLine("hello2");
-    }
 }
