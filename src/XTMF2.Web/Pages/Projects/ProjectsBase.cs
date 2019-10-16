@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Layouts;
 using Microsoft.Extensions.Logging;
 using XTMF2;
 using XTMF2.Editing;
@@ -34,7 +33,7 @@ namespace XTMF2.Web.Pages
         [CascadingParameter]
         private ContentLayout Layout { get; set; }
 
-        protected Modal newProjectDialog;
+
 
 
         public List<XTMF2.Project> Projects { get; set; }
@@ -50,8 +49,9 @@ namespace XTMF2.Web.Pages
         /// <summary>
         /// 
         /// </summary>
-        protected override void OnInit()
+        protected override void OnInitialized()
         {
+    
             Projects = new List<XTMF2.Project>();
             Projects.AddRange(XTMFRuntime.ProjectController.GetProjects(XTMFUser));
         }
@@ -63,16 +63,15 @@ namespace XTMF2.Web.Pages
             XTMFRuntime.ProjectController.DeleteProject(XTMFUser, project.Name, ref error);
             Projects.Remove(project);
 
-            LayoutComponentBase b;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="e"></param>
-        protected void ShowNewProjectDialog(MouseEventArgs e)
+        public void ShowNewProjectDialog(EventArgs e)
         {
-            this.newProjectDialog.Show();
+            
         }
 
 
@@ -85,12 +84,11 @@ namespace XTMF2.Web.Pages
             {
                 Projects.Add(session.Project);
                 Console.WriteLine("Adding project");
-                this.newProjectDialog.Hide();
 
             }
             else
             {
-                this.newProjectDialog.Hide();
+
                 Console.WriteLine("Error occured");
             }
             

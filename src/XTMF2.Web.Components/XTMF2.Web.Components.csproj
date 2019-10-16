@@ -26,9 +26,9 @@
 
   </Target>-->
 
-  <Target Name="BundleResources" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+    <!-- <Target Name="BundleResources" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug'">
     <Exec WorkingDirectory="." Command="npm run build" />
-  </Target>
+  </Target> -->
 
 
 

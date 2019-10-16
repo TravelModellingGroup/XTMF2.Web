@@ -15,7 +15,7 @@
                     <tr>
                         <td>@project.Name</td>
                         <td>
-                            <button @onclick=@(() => DeleteProject(@project)) type="button" class="btn btn-sm btn-danger" aria-label="error">
+                            <button @onclick=@DeleteProject(@project) type="button" class="btn btn-sm btn-danger" aria-label="error">
                                 <clr-icon shape="error-standard"></clr-icon>
                                 Delete
                             </button>
@@ -30,22 +30,7 @@
         <button class="btn btn-primary" @onclick="@ShowNewProjectDialog">Create New Project</button>
 
        
-        <Modal @ref="newProjectDialog" OnConfirm="@NewProjectDialog_Confirm" ModalName="newProjectDialog"
-        OnCancel="@NewProjectDialog_Cancel" ConfirmText="Create Project">
-        <Title>
-            New Project
-        </Title>
-        <Content>
 
-            <form>
-  <div class="form-group">
-    <label for="projectNameInput">Project Name</label>
-    <input @bind="NewProjectName" type="text" class="form-control" id="projectNameInput" aria-describedby="emailHelp" placeholder="Enter a project name"/>
-    <small id="projectNameHelp" class="form-text text-muted">A project name must be unique.</small>
-  </div>
-            </form>
-        </Content>
-        </Modal>
 
 
 
