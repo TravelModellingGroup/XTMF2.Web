@@ -56,12 +56,10 @@ namespace XTMF2.Web.Pages
             Projects.AddRange(XTMFRuntime.ProjectController.GetProjects(XTMFUser));
         }
 
-        public void DeleteProject(XTMF2.Project project)
+        public void DeleteProject() 
         {
-            Logger.LogInformation("Deleting project " + project.Name);
-            string error = "";
-            XTMFRuntime.ProjectController.DeleteProject(XTMFUser, project.Name, ref error);
-            Projects.Remove(project);
+            Logger.LogInformation("Deleting project " );
+            
 
         }
 
