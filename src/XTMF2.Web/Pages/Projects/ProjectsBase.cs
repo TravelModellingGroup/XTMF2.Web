@@ -1,15 +1,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Layouts;
 using Microsoft.Extensions.Logging;
-using XTMF2;
+using BlazorStrap;
 using XTMF2.Editing;
-using XTMF2.Web.Components;
-using XTMF2.Web.Shared;
-
 namespace XTMF2.Web.Pages
 {
 
@@ -29,12 +24,10 @@ namespace XTMF2.Web.Pages
         protected ILogger<ProjectsBase> Logger { get; set; }
 
         [Parameter]
-        protected string NewProjectName {get;set;}
+        protected string NewProjectName { get; set; }
 
-        [CascadingParameter]
-        private ContentLayout Layout { get; set; }
 
-        protected Modal newProjectDialog;
+        public BSModal NewProjectModal;
 
 
         public List<XTMF2.Project> Projects { get; set; }
@@ -47,36 +40,40 @@ namespace XTMF2.Web.Pages
 
         }
 
+        public void NewProjectClicked(System.EventArgs e)
+        {
+            NewProjectModal.Show();
+        }
+
+
         /// <summary>
         /// 
         /// </summary>
-        protected override void OnInit()
+        protected override void OnInitialized()
         {
+
             Projects = new List<XTMF2.Project>();
             Projects.AddRange(XTMFRuntime.ProjectController.GetProjects(XTMFUser));
+
         }
 
-        public void DeleteProject(XTMF2.Project project)
+        public void DeleteProject()
         {
-            Logger.LogInformation("Deleting project " + project.Name);
-            string error = "";
-            XTMFRuntime.ProjectController.DeleteProject(XTMFUser, project.Name, ref error);
-            Projects.Remove(project);
+            Logger.LogInformation("Deleting project ");
 
-            LayoutComponentBase b;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="e"></param>
-        protected void ShowNewProjectDialog(MouseEventArgs e)
+        public void ShowNewProjectDialog(EventArgs e)
         {
-            this.newProjectDialog.Show();
+
         }
 
 
-        protected void NewProjectDialog_Confirm(EventArgs  e)
+        protected void NewProjectDialog_Confirm(EventArgs e)
         {
             ProjectSession session = null;
             string error = "";
@@ -85,22 +82,21 @@ namespace XTMF2.Web.Pages
             {
                 Projects.Add(session.Project);
                 Console.WriteLine("Adding project");
-                this.newProjectDialog.Hide();
 
             }
             else
             {
-                this.newProjectDialog.Hide();
+
                 Console.WriteLine("Error occured");
             }
-            
+
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="e"></param>
-        protected void NewProjectDialog_Cancel(EventArgs  e)
+        protected void NewProjectDialog_Cancel(EventArgs e)
         {
             Console.WriteLine("cancelled");
         }

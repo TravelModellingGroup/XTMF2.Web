@@ -1,5 +1,7 @@
 @page "/projects"
 @inherits ProjectsBase
+@using Microsoft.AspNetCore.Components.Web
+
 <BasePage ShowSideNav="false">
     <Content>
         <table class="table table-hover">
@@ -15,7 +17,7 @@
                     <tr>
                         <td>@project.Name</td>
                         <td>
-                            <button @onclick=@(() => DeleteProject(@project)) type="button" class="btn btn-sm btn-danger" aria-label="error">
+                            <button @onclick="@DeleteProject" type="button" class="btn btn-sm btn-danger" aria-label="error">
                                 <clr-icon shape="error-standard"></clr-icon>
                                 Delete
                             </button>
@@ -27,25 +29,17 @@
 
 
         </table>
-        <button class="btn btn-primary" @onclick="@ShowNewProjectDialog">Create New Project</button>
 
-       
-        <Modal @ref="newProjectDialog" OnConfirm="@NewProjectDialog_Confirm" ModalName="newProjectDialog"
-        OnCancel="@NewProjectDialog_Cancel" ConfirmText="Create Project">
-        <Title>
-            New Project
-        </Title>
-        <Content>
+        <BSButton Color="Color.Primary" OnClick="@NewProjectClicked">Create New Project</BSButton>
 
-            <form>
-  <div class="form-group">
-    <label for="projectNameInput">Project Name</label>
-    <input @bind="NewProjectName" type="text" class="form-control" id="projectNameInput" aria-describedby="emailHelp" placeholder="Enter a project name"/>
-    <small id="projectNameHelp" class="form-text text-muted">A project name must be unique.</small>
-  </div>
-            </form>
-        </Content>
-        </Modal>
+        <BSModal @ref="NewProjectModal">
+            <BSModalHeader>Create new project</BSModalHeader>
+            <BSModalBody><p>Create a new project..</p></BSModalBody>
+            <BSModalFooter>
+                <BSButton Color="Color.Primary">Create</BSButton>
+                <BSButton Color="Color.Secondary">Cancel</BSButton>
+            </BSModalFooter>
+        </BSModal>
 
 
 
@@ -53,9 +47,11 @@
 
     <Title>Projects</Title>
 
+
 </BasePage>
 
-@code {
 
+
+@code {
 
 }

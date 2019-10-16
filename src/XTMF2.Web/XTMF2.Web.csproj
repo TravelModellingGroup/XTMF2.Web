@@ -7,12 +7,14 @@
 
   <ItemGroup>
     <PackageReference Include="BlazorQuery" Version="0.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.0.0-preview6.19307.2" />
-    <PackageReference Include="XTMF2" Version="1.0.1-ALPHA" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.1.0-preview1.19508.20" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\XTMF2.Web.Components\XTMF2.Web.Components.csproj" />
+    <ProjectReference Include="..\XTMF2\src\XTMF2\XTMF2.csproj" />
+    <ProjectReference Include="..\XTMF2\src\XTMF2.Interfaces\XTMF2.Interfaces.csproj" />
+    <ProjectReference Include="..\XTMF2\src\XTMF2.Run\XTMF2.Run.csproj" />
   </ItemGroup>
 
 </Project>
