@@ -34,7 +34,7 @@ namespace XTMF2.Web
             services.AddScoped<XTMF2.User>((provider) =>
             {
                 var runtime = provider.GetService<XTMF2.XTMFRuntime>();
-                return runtime.UserController.Users.FirstOrDefault(user => user.UserName == "local");
+                return runtime.UserController.GetUserByName("local");
             });
         }
 
