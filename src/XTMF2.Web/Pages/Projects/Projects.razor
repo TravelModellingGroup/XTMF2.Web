@@ -17,7 +17,7 @@
                     <tr>
                         <td>@project.Name</td>
                         <td>
-                            <button @onclick="@DeleteProject" type="button" class="btn btn-sm btn-danger" aria-label="error">
+                            <button @onclick="@(() => DeleteProject(project))" type="button" class="btn btn-sm btn-danger" aria-label="error">
                                 <clr-icon shape="error-standard"></clr-icon>
                                 Delete
                             </button>
@@ -25,20 +25,27 @@
                     </tr>
                 }
             </tbody>
-
-
-
         </table>
 
-        <BSButton Color="Color.Primary" OnClick="@NewProjectClicked">Create New Project</BSButton>
+        <BSButton Color="Color.Primary" OnClick="@OpenNewProjectDialog">Create New Project</BSButton>
 
         <BSModal @ref="NewProjectModal">
-            <BSModalHeader>Create new project</BSModalHeader>
-            <BSModalBody><p>Create a new project..</p></BSModalBody>
-            <BSModalFooter>
-                <BSButton Color="Color.Primary">Create</BSButton>
-                <BSButton Color="Color.Secondary">Cancel</BSButton>
-            </BSModalFooter>
+            <BSForm Model="@NewProjectModel" ValidateOnInit="true" OnValidSubmit="@OnNewProjectFormSubmit" >
+                <BSModalHeader OnClick="@CloseNewProjectDialog">Create new project</BSModalHeader>
+                <BSModalBody>
+                    <BSFormGroup>
+                        <BSLabel For="ProjectName">Project Name</BSLabel>
+                        <BSBasicInput InputType="InputType.Text" Id="ProjectName" @bind-Value="@NewProjectModel.ProjectName" ValidateOnChange="true"></BSBasicInput>
+                        <BSFormFeedback For="@(() => NewProjectModel.ProjectName)"  IsTooltip="true" ValidMessage="This is a valid project name." />
+                    </BSFormGroup>
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                </BSModalBody>
+                <BSModalFooter>
+                    <BSButton Color="Color.Primary" ButtonType="ButtonType.Submit">Create</BSButton>
+                    <BSButton Color="Color.Secondary" OnClick="@CloseNewProjectDialog">Cancel</BSButton>
+                </BSModalFooter>
+            </BSForm>
         </BSModal>
 
 
