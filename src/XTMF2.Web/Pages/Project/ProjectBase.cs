@@ -10,10 +10,10 @@ namespace XTMF2.Web.Pages.Project
     {
 
         [Inject]
-        protected XTMF2.XTMFRuntime XTMFRuntime { get; set; }
+        protected XTMF2.XTMFRuntime XtmfRuntime { get; set; }
 
         [Inject]
-        protected XTMF2.User XTMFUser { get; set; }
+        protected XTMF2.User XtmfUser { get; set; }
 
         [Parameter]
         public string Project { get; set; }
