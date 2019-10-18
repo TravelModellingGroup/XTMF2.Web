@@ -24,6 +24,9 @@ namespace XTMF2.Web.Pages.Projects
         [Inject]
         protected ILogger<ProjectsBase> Logger { get; set; }
 
+        [Inject]
+        private NavigationManager NavigationManager { get; set; }
+
         /// <summary>
         /// Modal ref for the new project dialog.
         /// </summary>
@@ -88,7 +91,7 @@ namespace XTMF2.Web.Pages.Projects
         }
 
         /// <summary>
-        /// Attemps to create a new project on submission of the new project form.
+        /// Attempts to create a new project on submission of the new project form.
         /// </summary>
         protected void OnNewProjectFormSubmit()
         {
@@ -115,6 +118,7 @@ namespace XTMF2.Web.Pages.Projects
         {
             NewProjectModal.Hide();
         }
+
     }
 
 }

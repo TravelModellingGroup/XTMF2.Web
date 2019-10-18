@@ -16,7 +16,11 @@
                 @foreach (var project in Projects)
                 {
                     <tr>
-                        <td>@project.Name</td>
+                        <td>
+                            <NavLink class="nav-link" href=@($"project/{project.Name}")>
+                                @project.Name
+                            </NavLink>
+                        </td>
                         <td>
                             <button @onclick="@(() => DeleteProject(project))" type="button" class="btn btn-sm btn-danger" aria-label="error">
 
@@ -31,16 +35,15 @@
 
         <BSButton Color="Color.Primary" OnClick="@OpenNewProjectDialog">Create New Project</BSButton>
         <BSModal @ref="NewProjectModal">
-            <BSForm Model="@NewProjectModel" ValidateOnInit="true" OnValidSubmit="@OnNewProjectFormSubmit">
+            <BSForm Model="@NewProjectModel" ValidateOnInit="false" OnValidSubmit="@OnNewProjectFormSubmit">
+                <DataAnnotationsValidator />
                 <BSModalHeader OnClick="@CloseNewProjectDialog">Create new project</BSModalHeader>
                 <BSModalBody>
                     <BSFormGroup>
                         <BSLabel For="ProjectName">Project Name</BSLabel>
-                        <BSBasicInput InputType="InputType.Text" Id="ProjectName" @bind-Value="@NewProjectModel.ProjectName" ValidateOnChange="true"></BSBasicInput>
+                        <BSInput InputType="InputType.Text" Id="ProjectName" @bind-Value="@NewProjectModel.ProjectName" ValidateOnChange="true"></BSInput>
                         <BSFormFeedback For="@(() => NewProjectModel.ProjectName)" IsTooltip="true" ValidMessage="This is a valid project name." />
                     </BSFormGroup>
-                    <DataAnnotationsValidator />
-                    <ValidationSummary />
                 </BSModalBody>
                 <BSModalFooter>
                     <BSButton Color="Color.Primary" ButtonType="ButtonType.Submit">Create</BSButton>
