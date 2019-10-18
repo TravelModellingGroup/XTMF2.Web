@@ -20,16 +20,4 @@
     <PackageReference Include="BlazorStrap" Version="1.0.105" />
   </ItemGroup>
 
-  <!-- <Target Name="InstallNodePackages" AfterTargets="Restore">
-    As part of publishing, ensure the JS resources are freshly built in production mode 
-    <Exec WorkingDirectory="." Command="npm install" />
-
-  </Target>-->
-
-    <!-- <Target Name="BundleResources" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug'">
-    <Exec WorkingDirectory="." Command="npm run build" />
-  </Target> -->
-
-
-
 </Project>
