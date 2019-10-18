@@ -18,6 +18,7 @@
                         <td>@project.Name</td>
                         <td>
                             <button @onclick="@(() => DeleteProject(project))" type="button" class="btn btn-sm btn-danger" aria-label="error">
+
                                 <clr-icon shape="error-standard"></clr-icon>
                                 Delete
                             </button>
@@ -46,6 +47,7 @@
                     <BSButton Color="Color.Secondary" OnClick="@CloseNewProjectDialog">Cancel</BSButton>
                 </BSModalFooter>
             </BSForm>
+
         </BSModal>
 
 

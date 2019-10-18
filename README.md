@@ -5,7 +5,7 @@ Server-side Blazor based GUI for XTMF2.
 
 ## Requirements
 
-1. DotNet Core 3.0 SDK
+1. DotNet Core 3.1 SDK
 
 ## Clone the XTMF2.Web repository
 
