@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Components.Web
 
 <BasePage ShowSideNav="false">
+
     <Content>
         <table class="table table-hover">
             <thead>
@@ -29,7 +30,6 @@
         </table>
 
         <BSButton Color="Color.Primary" OnClick="@OpenNewProjectDialog">Create New Project</BSButton>
-
         <BSModal @ref="NewProjectModal">
             <BSForm Model="@NewProjectModel" ValidateOnInit="true" OnValidSubmit="@OnNewProjectFormSubmit">
                 <BSModalHeader OnClick="@CloseNewProjectDialog">Create new project</BSModalHeader>
@@ -47,19 +47,12 @@
                     <BSButton Color="Color.Secondary" OnClick="@CloseNewProjectDialog">Cancel</BSButton>
                 </BSModalFooter>
             </BSForm>
-
         </BSModal>
-
-
-
     </Content>
 
     <Title>Projects</Title>
 
-
 </BasePage>
-
-
 
 @code {
 
