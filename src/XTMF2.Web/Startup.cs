@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using XTMF2.Web.Data;
 using BlazorStrap;
 
 namespace XTMF2.Web
@@ -29,14 +28,13 @@ namespace XTMF2.Web
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
             services.AddBlazorQuery();
             services.AddBootstrapCSS();
             services.AddSingleton<XTMF2.XTMFRuntime>(XTMF2.XTMFRuntime.CreateRuntime());
             services.AddScoped<XTMF2.User>((provider) =>
             {
                 var runtime = provider.GetService<XTMF2.XTMFRuntime>();
-                return runtime.UserController.Users[0];
+                return runtime.UserController.GetUserByName("local");
             });
         }
 
