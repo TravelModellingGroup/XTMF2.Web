@@ -91,7 +91,7 @@ namespace XTMF2.Web.Pages.Projects
         }
 
         /// <summary>
-        /// Attemps to create a new project on submission of the new project form.
+        /// Attempts to create a new project on submission of the new project form.
         /// </summary>
         protected void OnNewProjectFormSubmit()
         {
@@ -119,14 +119,6 @@ namespace XTMF2.Web.Pages.Projects
             NewProjectModal.Hide();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="project"></param>
-        protected void NavigateToProject(XTMF2.Project project)
-        {
-            this.NavigationManager.NavigateTo($"/project/{project.Name}");
-        }
     }
 
 }
