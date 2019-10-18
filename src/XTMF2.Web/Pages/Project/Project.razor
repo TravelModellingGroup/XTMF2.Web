@@ -1,16 +1,21 @@
-﻿@page "/project/{project}"
-@inherits XTMF2.Web.Pages.Projects.ProjectsBase
-@using Microsoft.AspNetCore.Components.Web
+﻿@page "/project/{ProjectName}"
+@inherits XTMF2.Web.Pages.Project.ProjectBase
 
 <BasePage ShowSideNav="false">
     <Content>
+        @if (Project != null)
+        {
+            <div>The project was loaded successfully.</div>
+        }
+        else
+        {
+            <BSAlert Color="Color.Danger">
+                The project was not loaded or could not be found.
+            </BSAlert>
+        }
     </Content>
-
-    <Title>Project - </Title>
-
-
+    <Title>Project - @ProjectName</Title>
 </BasePage>
 
 @code {
-
 }

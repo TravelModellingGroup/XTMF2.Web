@@ -24,6 +24,9 @@ namespace XTMF2.Web.Pages.Projects
         [Inject]
         protected ILogger<ProjectsBase> Logger { get; set; }
 
+        [Inject]
+        private NavigationManager NavigationManager { get; set; }
+
         /// <summary>
         /// Modal ref for the new project dialog.
         /// </summary>
@@ -114,6 +117,15 @@ namespace XTMF2.Web.Pages.Projects
         protected void CloseNewProjectDialog()
         {
             NewProjectModal.Hide();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="project"></param>
+        protected void NavigateToProject(XTMF2.Project project)
+        {
+            this.NavigationManager.NavigateTo($"/project/{project.Name}");
         }
     }
 
