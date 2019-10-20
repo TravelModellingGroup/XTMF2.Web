@@ -12,7 +12,7 @@ namespace XTMF2.Web.Pages.Projects
     ///  Projects (page) base component. This page lists the currently existing projects
     /// for the current active user. The user can both add and delete projects from this page.
     /// </summary>
-    public class ProjectsBase : ComponentBase
+    public partial class ProjectsList
     {
 
         [Inject]
@@ -22,7 +22,7 @@ namespace XTMF2.Web.Pages.Projects
         protected XTMF2.User XtmfUser { get; set; }
 
         [Inject]
-        protected ILogger<ProjectsBase> Logger { get; set; }
+        protected ILogger<ProjectsList> Logger { get; set; }
 
         [Inject]
         private NavigationManager NavigationManager { get; set; }
@@ -45,7 +45,7 @@ namespace XTMF2.Web.Pages.Projects
         /// <summary>
         /// 
         /// </summary>
-        public ProjectsBase()
+        public ProjectsList()
         {
 
         }

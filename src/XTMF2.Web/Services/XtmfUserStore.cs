@@ -3,23 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
+using XTMF2.Web.Data;
 using XTMF2.Web.Data.Models;
 
 namespace XTMF2.Web.Services
 {
-    public class XtmfUserStore<TUser> : IUserStore<TUser> where TUser : XtmfUserModel
+    public class XtmfUserStore<TUser> : IUserStore<TUser> where TUser : XtmfUser
     {
         private XTMFRuntime _xtmfRuntime;
+        private IMapper _mapper;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="xtmfRuntme"></param>
-        public XtmfUserStore(XTMF2.XTMFRuntime xtmfRuntme)
+        /// <param name="mapper"></param>
+        public XtmfUserStore(XTMF2.XTMFRuntime xtmfRuntme, IMapper mapper)
         {
             this._xtmfRuntime = xtmfRuntme;
+            this._mapper = mapper;
         }
 
         /// <summary>
@@ -57,12 +62,8 @@ namespace XTMF2.Web.Services
         /// <returns></returns>
         public Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            var user = _xtmfRuntime.UserController.GetUserByName(userId);
-            return !(user is null) ? Task.FromResult((TUser)new XtmfUserModel()
-            {
-                UserName = user.UserName,
-                Admin = user.Admin
-            }) : Task.FromResult<TUser>(null);
+            var user = _mapper.Map<XtmfUser>(_xtmfRuntime.UserController.GetUserByName(userId));
+            return !(user is null) ? Task.FromResult((TUser)user) : Task.FromResult<TUser>(null);
 
         }
 
@@ -75,11 +76,7 @@ namespace XTMF2.Web.Services
         public Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
             var user = _xtmfRuntime.UserController.GetUserByName(normalizedUserName.ToLower());
-            return !(user is null) ? Task.FromResult((TUser)new XtmfUserModel()
-            {
-                UserName = user.UserName,
-                Admin = user.Admin
-            }) : Task.FromResult<TUser>(null);
+            return !(user is null) ? Task.FromResult((TUser)new XtmfUser(user.UserName, user.Admin)) : Task.FromResult<TUser>(null);
         }
 
         /// <summary>

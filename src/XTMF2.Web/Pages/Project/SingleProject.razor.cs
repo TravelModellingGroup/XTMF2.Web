@@ -6,7 +6,7 @@ namespace XTMF2.Web.Pages.Project
     /// <summary>
     /// Single project view (page).
     /// </summary>
-    public class ProjectBase : ComponentBase
+    public partial class SingleProject
     {
         [Inject]
         protected XTMF2.XTMFRuntime XtmfRuntime { get; set; }
@@ -22,7 +22,7 @@ namespace XTMF2.Web.Pages.Project
 
 
         [Inject]
-        protected ILogger<ProjectBase> Logger { get; set; }
+        protected ILogger<SingleProject> Logger { get; set; }
 
         /// <summary>
         /// The loaded project.
@@ -32,7 +32,7 @@ namespace XTMF2.Web.Pages.Project
         /// <summary>
         /// 
         /// </summary>
-        public ProjectBase()
+        public SingleProject()
         {
 
         }
