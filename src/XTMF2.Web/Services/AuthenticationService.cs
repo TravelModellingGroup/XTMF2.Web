@@ -18,7 +18,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using XTMF2.Web.Data.Models;
 
 namespace XTMF2.Web.Services
 {
@@ -29,16 +28,16 @@ namespace XTMF2.Web.Services
     {
         private readonly ILogger<AuthenticationService> _logger;
 
-        private readonly SignInManager<XtmfUser> _signInManager;
+        private readonly SignInManager<XTMF2.User> _signInManager;
 
-        private readonly UserManager<XtmfUser> _userManager;
+        private readonly UserManager<XTMF2.User> _userManager;
 
         /// <summary>
         /// </summary>
         /// <param name="userManager"></param>
         /// <param name="signInManager"></param>
         /// <param name="logger"></param>
-        public AuthenticationService(UserManager<XtmfUser> userManager, SignInManager<XtmfUser> signInManager,
+        public AuthenticationService(UserManager<XTMF2.User> userManager, SignInManager<XTMF2.User> signInManager,
             ILogger<AuthenticationService> logger)
         {
             _signInManager = signInManager;

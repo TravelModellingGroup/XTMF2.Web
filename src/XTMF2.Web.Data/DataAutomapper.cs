@@ -16,7 +16,6 @@
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using AutoMapper;
-using XTMF2.Web.Data.Models;
 
 namespace XTMF2.Web.Data
 {
@@ -24,21 +23,23 @@ namespace XTMF2.Web.Data
     /// </summary>
     public class DataAutoMapper
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public DataAutoMapper()
         {
             ConfigureAutoMapper();
         }
 
+        /// <summary>
+        /// </summary>
         public MapperConfiguration Configuration { get; set; }
 
+        /// <summary>
+        /// </summary>
         private void ConfigureAutoMapper()
         {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<User, XtmfUser>()
-                    .ForMember(d => d.User.UserName, o => o.MapFrom(s => s.UserName))
-                    .ForMember(d => d.User.IsAdmin, o => o.MapFrom(s => s.IsAdmin));
-            });
+            var config = new MapperConfiguration(cfg => { });
             Configuration = config;
         }
     }

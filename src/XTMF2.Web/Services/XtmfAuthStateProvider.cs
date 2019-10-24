@@ -21,6 +21,8 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace XTMF2.Web.Services
 {
+    /// <summary>
+    /// </summary>
     public class XtmfAuthStateProvider : AuthenticationStateProvider
     {
         public const string RoleAdmin = "Admin";

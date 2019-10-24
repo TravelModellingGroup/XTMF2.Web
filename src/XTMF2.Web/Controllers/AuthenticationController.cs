@@ -19,32 +19,29 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using XTMF2.Web.Services;
 
-namespace XTMF2.Web.Controllers
-{
-    /// <summary>
-    /// </summary>
-    [Route("api/[controller]")]
-    public class AuthenticationController : Controller
-    {
-        private readonly AuthenticationService _authenticationService;
+namespace XTMF2.Web.Controllers {
+	/// <summary>
+	/// </summary>
+	[Route ("api/[controller]")]
+	public class AuthenticationController : Controller {
+		private readonly AuthenticationService _authenticationService;
 
-        /// <summary>
-        /// </summary>
-        /// <param name="authenticationService"></param>
-        public AuthenticationController(AuthenticationService authenticationService)
-        {
-            _authenticationService = authenticationService;
-        }
+		/// <summary>
+		/// </summary>
+		/// <param name="authenticationService"></param>
+		public AuthenticationController (AuthenticationService authenticationService) {
+			_authenticationService = authenticationService;
+		}
 
-        /// <summary>
-        ///     Login endpoint.
-        /// </summary>
-        /// <param name="userName">The username to login.</param>
-        [HttpPost]
-        public async Task<IActionResult> Login([FromBody] string userName)
-        {
-            await _authenticationService.SignIn(userName);
-            return new OkObjectResult(User.Identity.IsAuthenticated);
-        }
-    }
+		/// <summary>
+		 ///     Login endpoint.
+		 /// </summary>
+		 /// <param name="userName">The username to login.</param>
+		 [HttpPost]
+		 public async Task<IActionResult> Login([FromBody] string userName)
+		 {
+		     await _authenticationService.SignIn(userName);
+		     return new OkObjectResult(User.Identity.IsAuthenticated);
+		 } 
+	}
 }

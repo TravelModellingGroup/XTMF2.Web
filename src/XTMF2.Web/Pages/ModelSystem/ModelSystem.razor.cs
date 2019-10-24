@@ -15,17 +15,9 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
-using System.ComponentModel.DataAnnotations;
-
-namespace XTMF2.Web.Views.Projects
+namespace XTMF2.Web.Pages.ModelSystem
 {
-    /// <summary>
-    /// </summary>
-    public class NewProjectModel
+    public partial class ModelSystem
     {
-        /// <summary>
-        /// </summary>
-        [Required(AllowEmptyStrings = false, ErrorMessage = "You must enter a valid project name.")]
-        public string ProjectName { get; set; }
     }
 }

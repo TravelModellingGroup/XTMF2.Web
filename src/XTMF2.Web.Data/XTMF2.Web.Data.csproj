@@ -16,4 +16,9 @@
     <ProjectReference Include="..\XTMF2\src\XTMF2.Run\XTMF2.Run.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

@@ -20,26 +20,136 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using XTMF2.Web.Data.Models;
 
 namespace XTMF2.Web.Services
 {
     /// <summary>
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public class XtmfUserStore<TUser> : IUserStore<TUser> where TUser : XtmfUser
+    public class XtmfUserStore<TUser> : IUserStore<User>
     {
         private readonly IMapper _mapper;
         private readonly XTMFRuntime _xtmfRuntime;
 
         /// <summary>
         /// </summary>
-        /// <param name="xtmfRuntme"></param>
+        /// <param name="xtmfRuntime"></param>
         /// <param name="mapper"></param>
-        public XtmfUserStore(XTMFRuntime xtmfRuntme, IMapper mapper)
+        public XtmfUserStore(XTMFRuntime xtmfRuntime, IMapper mapper)
         {
-            _xtmfRuntime = xtmfRuntme;
+            _xtmfRuntime = xtmfRuntime;
             _mapper = mapper;
+        }
+
+        /// <summary>
+        /// </summary>
+        public void Dispose()
+        {
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
+        {
+            _xtmfRuntime.UserController.Delete(user);
+            return Task.FromResult(IdentityResult.Success);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<User> IUserStore<User>.FindByIdAsync(string userId, CancellationToken cancellationToken)
+        {
+            var user = _xtmfRuntime.UserController.GetUserByName(userId);
+            return !(user is null) ? Task.FromResult(user) : Task.FromResult<User>(null);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="normalizedUserName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<User> IUserStore<User>.FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+        {
+            var user = _xtmfRuntime.UserController.GetUserByName(normalizedUserName);
+            return !(user is null) ? Task.FromResult(user) : Task.FromResult<User>(null);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<string> GetNormalizedUserNameAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.UserName.ToLower());
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<string> GetUserIdAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.UserName);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<string> GetUserNameAsync(User user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.UserName);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="normalizedName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task SetNormalizedUserNameAsync(User user, string normalizedName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="userName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task SetUserNameAsync(User user, string userName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -50,106 +160,6 @@ namespace XTMF2.Web.Services
         public Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        ///     Deletes the specified XTMF2 user.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task<IdentityResult> DeleteAsync(TUser user, CancellationToken cancellationToken)
-        {
-            _xtmfRuntime.UserController.Delete(user.User.UserName);
-            return Task.FromResult(IdentityResult.Success);
-        }
-
-        public void Dispose()
-        {
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
-        {
-            var user = _xtmfRuntime.UserController.GetUserByName(userId);
-            return !(user is null) ? Task.FromResult((TUser)new XtmfUser(user)) : Task.FromResult<TUser>(null);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="normalizedUserName"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
-        {
-            var user = _xtmfRuntime.UserController.GetUserByName(normalizedUserName.ToLower());
-            return !(user is null) ? Task.FromResult((TUser) new XtmfUser(user)) : Task.FromResult<TUser>(null);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task<string> GetNormalizedUserNameAsync(TUser user, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(user.User.UserName.ToLower());
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task<string> GetUserIdAsync(TUser user, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(user.User.UserName);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task<string> GetUserNameAsync(TUser user, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(user.User.UserName);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="normalizedName"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task SetNormalizedUserNameAsync(TUser user, string normalizedName, CancellationToken cancellationToken)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="userName"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task SetUserNameAsync(TUser user, string userName, CancellationToken cancellationToken)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task<IdentityResult> UpdateAsync(TUser user, CancellationToken cancellationToken)
-        {
-            throw new NotSupportedException();
         }
     }
 }
