@@ -26,8 +26,6 @@ namespace XTMF2.Web.Views.Projects
         [Inject]
         private NavigationManager NavigationManager { get; set; }
 
-        [Inject]
-        private NavigationManager NavigationManager { get; set; }
 
         /// <summary>
         /// Modal ref for the new project dialog.

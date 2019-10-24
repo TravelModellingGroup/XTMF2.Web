@@ -15,7 +15,17 @@ namespace XTMF2.Web.Data.Models
         /// <summary>
         /// 
         /// </summary>
-        public XTMF2.User User { get; set; }
+        public XTMF2.User User => _user;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsAdmin => _user.IsAdmin;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string UserName => _user.UserName;
 
         /// <summary>
         /// Default no argument constructor.
