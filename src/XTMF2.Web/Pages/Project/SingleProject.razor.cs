@@ -45,7 +45,7 @@ namespace XTMF2.Web.Pages.Project {
 		/// </summary>
 		protected override void OnInitialized () {
 			string error = null;
-			if (XtmfRuntime.ProjectController.GetProject (XtmfUser.UserName, ProjectName, out var project, ref error)) {
+			if (XtmfRuntime.ProjectController.GetProject (XtmfUser, ProjectName, out var project, ref error)) {
 				Project = project;
 			} else {
 				Logger.LogError ("Unable to load project, or project not found: " + ProjectName);
