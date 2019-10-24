@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using BlazorStrap;
 using Microsoft.AspNetCore.Components;
@@ -49,7 +50,7 @@ namespace XTMF2.Web.Pages.Projects {
 		/// <summary>
 		///     List of projects for the active user.
 		/// </summary>
-		public List<XTMF2.Project> Projects { get; set; }
+		public ReadOnlyObservableCollection<XTMF2.Project> Projects { get; set; }
 
 		/// <summary>
 		/// </summary>
@@ -63,8 +64,7 @@ namespace XTMF2.Web.Pages.Projects {
 		///     Initialization for component.
 		/// </summary>
 		protected override Task OnInitializedAsync () {
-			Projects = new List<XTMF2.Project> ();
-			Projects.AddRange (XtmfRuntime.ProjectController.GetProjects (XtmfUser));
+			Projects =  XtmfRuntime.ProjectController.GetProjects (XtmfUser);
 			return base.OnInitializedAsync ();
 		}
 
@@ -72,8 +72,7 @@ namespace XTMF2.Web.Pages.Projects {
 		///     Deletes a project for this user.
 		/// </summary>
 		public void DeleteProject (XTMF2.Project project) {
-			var error = "";
-			Projects.Remove (project);
+			string error = null;
 			if (XtmfRuntime.ProjectController.DeleteProject (XtmfUser, project, ref error)) {
 				Logger.LogInformation ($"Deleted project: {project.Name}");
 			} else {
@@ -85,10 +84,9 @@ namespace XTMF2.Web.Pages.Projects {
 		///     Attempts to create a new project on submission of the new project form.
 		/// </summary>
 		protected void OnNewProjectFormSubmit () {
-			var error = "";
+			string error = null;
 			if (XtmfRuntime.ProjectController.CreateNewProject (XtmfUser, NewProjectModel.ProjectName,
 					out var session, ref error)) {
-				Projects.Add (session.Project);
 				Logger.LogInformation ($"New project created: {session.Project.Name}");
 				CloseNewProjectDialog ();
 			} else {
