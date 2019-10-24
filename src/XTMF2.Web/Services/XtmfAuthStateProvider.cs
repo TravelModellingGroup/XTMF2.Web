@@ -32,7 +32,7 @@ namespace XTMF2.Web.Services
         {
             var identity = new ClaimsIdentity(new[]
             {
-                new Claim( ClaimTypes.Role, XtmfUser.Admin ? RoleAdmin : RoleUser),
+                new Claim( ClaimTypes.Role, XtmfUser.IsAdmin ? RoleAdmin : RoleUser),
                 new Claim(ClaimTypes.Name, XtmfUser.UserName),
             }, "xtmf2");
             var user = new ClaimsPrincipal(identity);

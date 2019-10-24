@@ -46,7 +46,7 @@ namespace XTMF2.Web.Services
         /// <returns></returns>
         public Task<IdentityResult> DeleteAsync(TUser user, CancellationToken cancellationToken)
         {
-            this._xtmfRuntime.UserController.Delete(user.UserName);
+            this._xtmfRuntime.UserController.Delete(user.User.UserName);
             return Task.FromResult(IdentityResult.Success);
         }
 
@@ -76,7 +76,7 @@ namespace XTMF2.Web.Services
         public Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
             var user = _xtmfRuntime.UserController.GetUserByName(normalizedUserName.ToLower());
-            return !(user is null) ? Task.FromResult((TUser)new XtmfUser(user.UserName, user.Admin)) : Task.FromResult<TUser>(null);
+            return !(user is null) ? Task.FromResult((TUser)new XtmfUser(user)) : Task.FromResult<TUser>(null);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace XTMF2.Web.Services
         /// <returns></returns>
         public Task<string> GetNormalizedUserNameAsync(TUser user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.UserName.ToLower());
+            return Task.FromResult(user.User.UserName.ToLower());
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace XTMF2.Web.Services
         /// <returns></returns>
         public Task<string> GetUserIdAsync(TUser user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.UserName);
+            return Task.FromResult(user.User.UserName);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace XTMF2.Web.Services
         /// <returns></returns>
         public Task<string> GetUserNameAsync(TUser user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.UserName);
+            return Task.FromResult(user.User.UserName);
         }
 
         /// <summary>

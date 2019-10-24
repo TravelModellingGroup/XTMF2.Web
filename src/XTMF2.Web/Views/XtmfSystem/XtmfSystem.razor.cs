@@ -22,16 +22,6 @@ namespace XTMF2.Web.Views.XtmfSystem
         /// <summary>
         /// 
         /// </summary>
-        /// <returns></returns>
-        protected override async Task OnInitializedAsync()
-        {
-
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
         public async void SignIn()
         {
 
