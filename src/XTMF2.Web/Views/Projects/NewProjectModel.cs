@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace XTMF2.Web.Pages.Projects
+namespace XTMF2.Web.Views.Projects
 {
     public class NewProjectModel
     {

@@ -1,0 +1,27 @@
+﻿@page "/"
+@namespace XTMF2.Web.Views
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>XTMF2.Web</title>
+    <base href="/" />
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,800&display=swap" rel="stylesheet">
+    <link href="css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <app>@(await Html.RenderComponentAsync<App>(RenderMode.ServerPrerendered))</app>
+
+    <script src="_framework/blazor.server.js"></script>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="_content/BlazorStrap/blazorStrap.js"></script>
+    <script src="_content/BlazorStrap/popper.min.js"></script>
+</body>
+
+</html>

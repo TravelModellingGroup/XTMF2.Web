@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using XTMF2.Web.Data.Models;
 
-namespace XTMF2.Web.Pages.XtmfSystem
+namespace XTMF2.Web.Views.XtmfSystem
 {
     public partial class XtmfSystem
     {
@@ -25,9 +25,7 @@ namespace XTMF2.Web.Pages.XtmfSystem
         /// <returns></returns>
         protected override async Task OnInitializedAsync()
         {
-            var user = await this.UserManager.FindByIdAsync("local");
-            await SignInManager.SignInAsync(user, true, null);
-            Logger.LogDebug("Code after attempting sign in.");
+
         }
 
 

@@ -13,7 +13,6 @@ namespace XTMF2.Web.Services
         public const string RoleAdmin = "Admin";
         public const string RoleUser = "User";
 
-
         private XTMF2.User XtmfUser { get; set; }
 
         /// <summary>

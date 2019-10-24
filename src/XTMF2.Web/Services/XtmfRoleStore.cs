@@ -27,7 +27,6 @@ public class XtmfRoleStore<TRole> : IRoleStore<TRole> where TRole : class
 
     public void Dispose()
     {
-        // throw new NotImplementedException();
     }
 
     public Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)

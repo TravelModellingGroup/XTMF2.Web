@@ -10,6 +10,10 @@ using Microsoft.Extensions.Options;
 
 namespace XTMF2.Web.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TUser"></typeparam>
     public class XtmfSignInManager<TUser> : SignInManager<TUser> where TUser : class
     {
         /// <summary>
@@ -29,7 +33,6 @@ namespace XTMF2.Web.Services
             IAuthenticationSchemeProvider schemes, 
             IUserConfirmation<TUser> confirmation) : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, confirmation)
         {
-            logger.LogInformation("inside sign in manager '");
         }
 
         /// <summary>

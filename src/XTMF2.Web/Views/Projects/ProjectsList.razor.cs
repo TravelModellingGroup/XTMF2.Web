@@ -1,11 +1,9 @@
-
-using System;
 using System.Collections.Generic;
+using BlazorStrap;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
-using BlazorStrap;
-using XTMF2.Editing;
-namespace XTMF2.Web.Pages.Projects
+
+namespace XTMF2.Web.Views.Projects
 {
 
     /// <summary>

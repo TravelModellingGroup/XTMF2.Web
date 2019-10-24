@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 
-namespace XTMF2.Web.Pages.Project
+namespace XTMF2.Web.Views.Project
 {
     /// <summary>
     /// Single project view (page).
