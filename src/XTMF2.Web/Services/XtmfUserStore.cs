@@ -75,8 +75,8 @@ namespace XTMF2.Web.Services
         /// <returns></returns>
         public Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            var user = _mapper.Map<XtmfUser>(_xtmfRuntime.UserController.GetUserByName(userId));
-            return !(user is null) ? Task.FromResult((TUser) user) : Task.FromResult<TUser>(null);
+            var user = _xtmfRuntime.UserController.GetUserByName(userId);
+            return !(user is null) ? Task.FromResult((TUser)new XtmfUser(user)) : Task.FromResult<TUser>(null);
         }
 
         /// <summary>
