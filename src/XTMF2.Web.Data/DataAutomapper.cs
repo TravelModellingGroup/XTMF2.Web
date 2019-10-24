@@ -17,30 +17,26 @@
 
 using AutoMapper;
 
-namespace XTMF2.Web.Data
-{
-    /// <summary>
-    /// </summary>
-    public class DataAutoMapper
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public DataAutoMapper()
-        {
-            ConfigureAutoMapper();
-        }
+namespace XTMF2.Web.Data {
+	/// <summary>
+	/// </summary>
+	public class DataAutoMapper {
+		/// <summary>
+		/// 
+		/// </summary>
+		public DataAutoMapper () {
+			ConfigureAutoMapper ();
+		}
 
-        /// <summary>
-        /// </summary>
-        public MapperConfiguration Configuration { get; set; }
+		/// <summary>
+		/// </summary>
+		public MapperConfiguration Configuration { get; set; }
 
-        /// <summary>
-        /// </summary>
-        private void ConfigureAutoMapper()
-        {
-            var config = new MapperConfiguration(cfg => { });
-            Configuration = config;
-        }
-    }
+		/// <summary>
+		/// </summary>
+		private void ConfigureAutoMapper () {
+			// configuration will hold future mapping configurations
+			Configuration = new MapperConfiguration (cfg => { });
+		}
+	}
 }

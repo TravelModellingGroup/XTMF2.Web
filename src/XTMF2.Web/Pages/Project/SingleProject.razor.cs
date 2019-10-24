@@ -44,7 +44,7 @@ namespace XTMF2.Web.Pages.Project {
 		///     Initialization function, will attempt to load the referenced project.
 		/// </summary>
 		protected override void OnInitialized () {
-			var error = "";
+			string error = null;
 			if (XtmfRuntime.ProjectController.GetProject (XtmfUser.UserName, ProjectName, out var project, ref error)) {
 				Project = project;
 			} else {
