@@ -1,6 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿//    Copyright 2017-2019 University of Toronto
+// 
+//    This file is part of XTMF2.
+// 
+//    XTMF2 is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    XTMF2 is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
+
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -11,13 +25,11 @@ using Microsoft.Extensions.Options;
 namespace XTMF2.Web.Services
 {
     /// <summary>
-    /// 
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     public class XtmfSignInManager<TUser> : SignInManager<TUser> where TUser : class
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="userManager"></param>
         /// <param name="contextAccessor"></param>
@@ -27,16 +39,16 @@ namespace XTMF2.Web.Services
         /// <param name="schemes"></param>
         /// <param name="confirmation"></param>
         public XtmfSignInManager(UserManager<TUser> userManager, IHttpContextAccessor contextAccessor,
-            IUserClaimsPrincipalFactory<TUser> claimsFactory, 
+            IUserClaimsPrincipalFactory<TUser> claimsFactory,
             IOptions<IdentityOptions> optionsAccessor,
-            ILogger<SignInManager<TUser>> logger, 
-            IAuthenticationSchemeProvider schemes, 
-            IUserConfirmation<TUser> confirmation) : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, confirmation)
+            ILogger<SignInManager<TUser>> logger,
+            IAuthenticationSchemeProvider schemes,
+            IUserConfirmation<TUser> confirmation) : base(userManager, contextAccessor, claimsFactory, optionsAccessor,
+            logger, schemes, confirmation)
         {
         }
 
         /// <summary>
-        ///     
         /// </summary>
         /// <param name="user"></param>
         /// <param name="isPersistent"></param>

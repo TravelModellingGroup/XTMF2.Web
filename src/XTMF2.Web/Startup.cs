@@ -1,18 +1,29 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+//    Copyright 2017-2019 University of Toronto
+// 
+//    This file is part of XTMF2.
+// 
+//    XTMF2 is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    XTMF2 is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
+
 using BlazorQuery.Extensions;
+using BlazorStrap;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BlazorStrap;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
 using XTMF2.Web.Data;
 using XTMF2.Web.Data.Models;
 using XTMF2.Web.Services;
@@ -22,7 +33,6 @@ namespace XTMF2.Web
     public class Startup
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
@@ -40,33 +50,31 @@ namespace XTMF2.Web
             services.AddServerSideBlazor();
             services.AddBlazorQuery();
             services.AddBootstrapCSS();
-            services.AddSingleton<XTMF2.XTMFRuntime>(XTMF2.XTMFRuntime.CreateRuntime());
-            services.AddScoped<XTMF2.User>((provider) =>
+            services.AddSingleton(XTMFRuntime.CreateRuntime());
+            services.AddScoped(provider =>
             {
-                var runtime = provider.GetService<XTMF2.XTMFRuntime>();
+                var runtime = provider.GetService<XTMFRuntime>();
                 return runtime.UserController.GetUserByName("local");
             });
 
             //configure the automapping sercices
-            this.ConfigureAutoMapping(services);
+            ConfigureAutoMapping(services);
 
             //configure the authentication and authorization services
             services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider>();
-            services.AddIdentity<XtmfUser, string>().
-                AddUserStore<XtmfUserStore<XtmfUser>>().
-                AddRoleStore<XtmfRoleStore<string>>().
-                AddSignInManager<XtmfSignInManager<XtmfUser>>();
+            services.AddIdentity<XtmfUser, string>().AddUserStore<XtmfUserStore<XtmfUser>>()
+                .AddRoleStore<XtmfRoleStore<string>>().AddSignInManager<XtmfSignInManager<XtmfUser>>();
         }
 
         /// <summary>
-        /// Creates the automapping configuration between various entities.
+        ///     Creates the automapping configuration between various entities.
         /// </summary>
         /// <param name="services"></param>
         private void ConfigureAutoMapping(IServiceCollection services)
         {
             var dataAutoMapper = new DataAutoMapper();
-            services.AddSingleton<DataAutoMapper>(dataAutoMapper);
-            services.AddSingleton<IMapper>(dataAutoMapper.Configuration.CreateMapper());
+            services.AddSingleton(dataAutoMapper);
+            services.AddSingleton(dataAutoMapper.Configuration.CreateMapper());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

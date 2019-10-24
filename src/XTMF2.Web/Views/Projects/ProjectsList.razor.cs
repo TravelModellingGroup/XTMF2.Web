@@ -1,3 +1,21 @@
+//    Copyright 2017-2019 University of Toronto
+// 
+//    This file is part of XTMF2.
+// 
+//    XTMF2 is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+// 
+//    XTMF2 is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License
+//    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlazorStrap;
@@ -6,78 +24,61 @@ using Microsoft.Extensions.Logging;
 
 namespace XTMF2.Web.Views.Projects
 {
-
     /// <summary>
-    ///  Projects (page) base component. This page lists the currently existing projects
-    /// for the current active user. The user can both add and delete projects from this page.
+    ///     Projects (page) base component. This page lists the currently existing projects
+    ///     for the current active user. The user can both add and delete projects from this page.
     /// </summary>
     public partial class ProjectsList
     {
-
-        [Inject]
-        protected XTMF2.XTMFRuntime XtmfRuntime { get; set; }
-
-        [Inject]
-        protected XTMF2.User XtmfUser { get; set; }
-
-        [Inject]
-        protected ILogger<ProjectsList> Logger { get; set; }
-
-        [Inject]
-        private NavigationManager NavigationManager { get; set; }
-
-
         /// <summary>
-        /// Modal ref for the new project dialog.
+        ///     Modal ref for the new project dialog.
         /// </summary>
         public BSModal NewProjectModal;
 
         /// <summary>
-        /// New project form validation model.
+        ///     New project form validation model.
         /// </summary>
         protected NewProjectModel NewProjectModel = new NewProjectModel();
 
+        [Inject] protected XTMFRuntime XtmfRuntime { get; set; }
+
+        [Inject] protected User XtmfUser { get; set; }
+
+        [Inject] protected ILogger<ProjectsList> Logger { get; set; }
+
+        [Inject] private NavigationManager NavigationManager { get; set; }
+
         /// <summary>
-        /// List of projects for the active user.
+        ///     List of projects for the active user.
         /// </summary>
         public List<XTMF2.Project> Projects { get; set; }
 
         /// <summary>
-        /// 
-        /// </summary>
-        public ProjectsList()
-        {
-
-        }
-
-        /// <summary>
-        /// 
         /// </summary>
         /// <param name="e"></param>
-        public void OpenNewProjectDialog(System.EventArgs e)
+        public void OpenNewProjectDialog(EventArgs e)
         {
-            this.NewProjectModel = new NewProjectModel();
+            NewProjectModel = new NewProjectModel();
             NewProjectModal.Show();
         }
 
 
         /// <summary>
-        /// Initialization for component.
+        ///     Initialization for component.
         /// </summary>
         protected override Task OnInitializedAsync()
         {
             Projects = new List<XTMF2.Project>();
             Projects.AddRange(XtmfRuntime.ProjectController.GetProjects(XtmfUser));
             return base.OnInitializedAsync();
-            
         }
 
         /// <summary>
-        /// Deletes a project for this user.
+        ///     Deletes a project for this user.
         /// </summary>
         public void DeleteProject(XTMF2.Project project)
         {
-            string error = "";
+            var error = "";
             Projects.Remove(project);
             if (XtmfRuntime.ProjectController.DeleteProject(XtmfUser, project, ref error))
             {
@@ -87,22 +88,20 @@ namespace XTMF2.Web.Views.Projects
             {
                 Logger.LogError($"Unable to delete project: {project.Name} - {error}");
             }
-
         }
 
         /// <summary>
-        /// Attempts to create a new project on submission of the new project form.
+        ///     Attempts to create a new project on submission of the new project form.
         /// </summary>
         protected void OnNewProjectFormSubmit()
         {
-            string error = "";
-            if ((XtmfRuntime.ProjectController.CreateNewProject(XtmfUser, NewProjectModel.ProjectName,
-                out var session, ref error)))
+            var error = "";
+            if (XtmfRuntime.ProjectController.CreateNewProject(XtmfUser, NewProjectModel.ProjectName,
+                out var session, ref error))
             {
                 Projects.Add(session.Project);
                 Logger.LogInformation($"New project created: {session.Project.Name}");
-                this.CloseNewProjectDialog();
-
+                CloseNewProjectDialog();
             }
             else
             {
@@ -111,14 +110,12 @@ namespace XTMF2.Web.Views.Projects
         }
 
         /// <summary>
-        /// Closes the new project dialog/
+        ///     Closes the new project dialog/
         /// </summary>
         /// <param name="e"></param>
         protected void CloseNewProjectDialog()
         {
             NewProjectModal.Hide();
         }
-
     }
-
 }
