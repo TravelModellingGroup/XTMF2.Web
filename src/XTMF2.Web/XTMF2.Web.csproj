@@ -6,12 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="BlazorQuery" Version="0.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.1.0-preview1.19508.20" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\XTMF2.Web.Components\XTMF2.Web.Components.csproj" />
+    <ProjectReference Include="..\XTMF2.Web.Data\XTMF2.Web.Data.csproj" />
     <ProjectReference Include="..\XTMF2\src\XTMF2\XTMF2.csproj" />
     <ProjectReference Include="..\XTMF2\src\XTMF2.Interfaces\XTMF2.Interfaces.csproj" />
     <ProjectReference Include="..\XTMF2\src\XTMF2.Run\XTMF2.Run.csproj" />

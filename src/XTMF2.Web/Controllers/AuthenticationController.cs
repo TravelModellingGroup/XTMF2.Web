@@ -15,15 +15,33 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
-using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using XTMF2.Web.Services;
 
-namespace XTMF2.Web.Pages.Projects {
+namespace XTMF2.Web.Controllers {
 	/// <summary>
 	/// </summary>
-	public class NewProjectModel {
+	[Route ("api/[controller]")]
+	public class AuthenticationController : Controller {
+		private readonly AuthenticationService _authenticationService;
+
 		/// <summary>
 		/// </summary>
-		[Required (AllowEmptyStrings = false, ErrorMessage = "You must enter a valid project name.")]
-		public string ProjectName { get; set; }
+		/// <param name="authenticationService"></param>
+		public AuthenticationController (AuthenticationService authenticationService) {
+			_authenticationService = authenticationService;
+		}
+
+		/// <summary>
+		 ///     Login endpoint.
+		 /// </summary>
+		 /// <param name="userName">The username to login.</param>
+		 [HttpPost]
+		 public async Task<IActionResult> Login([FromBody] string userName)
+		 {
+		     await _authenticationService.SignIn(userName);
+		     return new OkObjectResult(User.Identity.IsAuthenticated);
+		 } 
 	}
 }

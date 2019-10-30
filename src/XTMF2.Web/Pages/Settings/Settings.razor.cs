@@ -1,4 +1,4 @@
-﻿//    Copyright 2017-2019 University of Toronto
+//    Copyright 2017-2019 University of Toronto
 // 
 //    This file is part of XTMF2.
 // 
@@ -15,15 +15,6 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
-using System.ComponentModel.DataAnnotations;
-
-namespace XTMF2.Web.Pages.Projects {
-	/// <summary>
-	/// </summary>
-	public class NewProjectModel {
-		/// <summary>
-		/// </summary>
-		[Required (AllowEmptyStrings = false, ErrorMessage = "You must enter a valid project name.")]
-		public string ProjectName { get; set; }
-	}
+namespace XTMF2.Web.Pages.Settings {
+	public partial class Settings { }
 }
