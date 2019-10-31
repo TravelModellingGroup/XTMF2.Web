@@ -15,6 +15,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 
@@ -36,10 +37,12 @@ namespace XTMF2.Web.Pages {
 
 		[Inject] protected ILogger<SingleProject> Logger { get; set; }
 
+        public IReadOnlyCollection<ModelSystemHeader> ModelSystems { get; set; }
+
 		/// <summary>
 		///     The loaded project.
 		/// </summary>
-		protected XTMF2.Project Project { get; set; }
+		protected Project Project { get; set; }
 
 		/// <summary>
 		///     Initialization function, will attempt to load the referenced project.
@@ -48,7 +51,8 @@ namespace XTMF2.Web.Pages {
 			string error = null;
 			if (XtmfRuntime.ProjectController.GetProject (XtmfUser, ProjectName, out var project, ref error)) {
 				Project = project;
-			} else {
+                ModelSystems = project.ModelSystems;
+            } else {
 				Logger.LogError ("Unable to load project, or project not found: " + ProjectName);
 			}
 		}
