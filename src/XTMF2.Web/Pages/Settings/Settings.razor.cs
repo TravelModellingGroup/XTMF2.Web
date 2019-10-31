@@ -15,6 +15,6 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace XTMF2.Web.Pages.Settings {
+namespace XTMF2.Web.Pages {
 	public partial class Settings { }
 }

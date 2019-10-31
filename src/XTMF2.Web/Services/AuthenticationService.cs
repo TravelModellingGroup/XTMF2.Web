@@ -15,9 +15,15 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace XTMF2.Web.Services
 {
@@ -26,33 +32,52 @@ namespace XTMF2.Web.Services
     /// </summary>
     public class AuthenticationService
     {
+        private readonly IConfiguration _configuration;
         private readonly ILogger<AuthenticationService> _logger;
-
-        private readonly SignInManager<XTMF2.User> _signInManager;
-
-        private readonly UserManager<XTMF2.User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
         /// <summary>
+        /// Constructor, parameters filled by container DI.
         /// </summary>
         /// <param name="userManager"></param>
         /// <param name="signInManager"></param>
         /// <param name="logger"></param>
-        public AuthenticationService(UserManager<XTMF2.User> userManager, SignInManager<XTMF2.User> signInManager,
-            ILogger<AuthenticationService> logger)
+        /// <param name="configuration"></param>
+        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager,
+            ILogger<AuthenticationService> logger, IConfiguration configuration)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
+            _configuration = configuration;
         }
 
         /// <summary>
+        /// Performs a sign in action. The passed username will be signed in.
         /// </summary>
         /// <param name="userName">The username to associate the session with.</param>
         /// <param name="password">Currently unused.</param>
-        public async Task SignIn(string userName, string password = null)
+        public async Task<string> SignIn(string userName, string password = null)
         {
             var user = await _userManager.FindByIdAsync(userName);
             await _signInManager.SignInAsync(user, true);
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Name, userName)
+            };
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtExpiryInDays"]));
+
+            var token = new JwtSecurityToken(
+                _configuration["JwtIssuer"],
+                _configuration["JwtAudience"],
+                claims,
+                expires: expiry,
+                signingCredentials: creds
+            );
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

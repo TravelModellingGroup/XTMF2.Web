@@ -15,8 +15,10 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Text;
 using BlazorQuery.Extensions;
 using BlazorStrap;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +26,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using XTMF2.Web.Data;
 using XTMF2.Web.Services;
 
@@ -35,7 +38,6 @@ namespace XTMF2.Web {
 		public Startup (IConfiguration configuration) {
 			Configuration = configuration;
 		}
-
 		public IConfiguration Configuration { get; }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
@@ -50,7 +52,7 @@ namespace XTMF2.Web {
 				var runtime = provider.GetService<XTMFRuntime> ();
 				return runtime.UserController.GetUserByName ("local");
 			});
-
+      
 			//configure the automapping sercices
 			ConfigureAutoMapping (services);
 
@@ -58,6 +60,20 @@ namespace XTMF2.Web {
 			services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider> ();
 			services.AddIdentity<User, string> ().AddUserStore<XtmfUserStore<User>> ()
 				.AddRoleStore<XtmfRoleStore<string>> ().AddSignInManager<XtmfSignInManager<User>> ();
+
+			// add authentication services
+			services.AddAuthentication (JwtBearerDefaults.AuthenticationScheme)
+				.AddJwtBearer (options => {
+					options.TokenValidationParameters = new TokenValidationParameters {
+						ValidateIssuer = true,
+							ValidateAudience = true,
+							ValidateLifetime = true,
+							ValidateIssuerSigningKey = true,
+							ValidIssuer = Configuration["JwtIssuer"],
+							ValidAudience = Configuration["JwtAudience"],
+							IssuerSigningKey = new SymmetricSecurityKey (Encoding.UTF8.GetBytes (Configuration["JwtSecurityKey"]))
+					};
+				});
 		}
 
 		/// <summary>
@@ -79,7 +95,6 @@ namespace XTMF2.Web {
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts ();
 			}
-
 			app.UseHttpsRedirection ();
 			app.UseStaticFiles ();
 			app.UseRouting ();
@@ -87,6 +102,10 @@ namespace XTMF2.Web {
 				endpoints.MapBlazorHub ();
 				endpoints.MapFallbackToPage ("/_Host");
 			});
+
+			//enable authentication and authorization
+			app.UseAuthentication ();
+			app.UseAuthorization ();
 		}
 	}
 }

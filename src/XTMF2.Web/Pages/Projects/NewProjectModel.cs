@@ -17,7 +17,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace XTMF2.Web.Pages.Projects {
+namespace XTMF2.Web.Pages {
 	/// <summary>
 	/// </summary>
 	public class NewProjectModel {
