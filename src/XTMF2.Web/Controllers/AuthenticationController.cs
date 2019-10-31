@@ -31,6 +31,7 @@ namespace XTMF2.Web.Controllers
         private readonly AuthenticationService _authenticationService;
 
         /// <summary>
+        /// Constructor - arguments filled by container DI. 
         /// </summary>
         /// <param name="authenticationService"></param>
         public AuthenticationController(AuthenticationService authenticationService)
@@ -39,7 +40,7 @@ namespace XTMF2.Web.Controllers
         }
 
         /// <summary>
-        ///     Login endpoint.
+        /// Login endpoint.
         /// </summary>
         /// <param name="userName">The username to login.</param>
         [HttpPost]
