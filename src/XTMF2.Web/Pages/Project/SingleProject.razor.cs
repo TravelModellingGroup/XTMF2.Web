@@ -37,6 +37,9 @@ namespace XTMF2.Web.Pages {
 
 		[Inject] protected ILogger<SingleProject> Logger { get; set; }
 
+        /// <summary>
+        /// Model systems belonging to the project
+        /// </summary>
         public IReadOnlyCollection<ModelSystemHeader> ModelSystems { get; set; }
 
 		/// <summary>
@@ -48,11 +51,13 @@ namespace XTMF2.Web.Pages {
 		///     Initialization function, will attempt to load the referenced project.
 		/// </summary>
 		protected override void OnInitialized () {
+            
 			string error = null;
 			if (XtmfRuntime.ProjectController.GetProject (XtmfUser, ProjectName, out var project, ref error)) {
 				Project = project;
                 ModelSystems = project.ModelSystems;
             } else {
+                ModelSystems = new List<ModelSystemHeader>();
 				Logger.LogError ("Unable to load project, or project not found: " + ProjectName);
 			}
 		}

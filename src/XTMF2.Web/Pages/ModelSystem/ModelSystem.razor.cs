@@ -16,9 +16,34 @@
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 
+using System.Threading.Tasks;
+
 namespace XTMF2.Web.Pages
 {
+    /// <summary>
+    /// Root page / component for the model system display.
+    /// </summary>
     public partial class ModelSystem
     {
+        /// <summary>
+        ///     Path parameter that specifies the project name.
+        /// </summary>
+        [Microsoft.AspNetCore.Components.Parameter]
+        public string ProjectName { get; set; }
+
+        /// <summary>
+        ///     Path parameter that specifies the model system name.
+        /// </summary>
+        [Microsoft.AspNetCore.Components.Parameter]
+        public string ModelSystemName { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected override Task OnInitializedAsync()
+        {
+            return base.OnInitializedAsync();
+        }
     }
 }
