@@ -38,6 +38,7 @@ namespace XTMF2.Web.Services
         private readonly UserManager<User> _userManager;
 
         /// <summary>
+        /// Constructor, parameters filled by container DI.
         /// </summary>
         /// <param name="userManager"></param>
         /// <param name="signInManager"></param>
@@ -53,6 +54,7 @@ namespace XTMF2.Web.Services
         }
 
         /// <summary>
+        /// Performs a sign in action. The passed username will be signed in.
         /// </summary>
         /// <param name="userName">The username to associate the session with.</param>
         /// <param name="password">Currently unused.</param>
