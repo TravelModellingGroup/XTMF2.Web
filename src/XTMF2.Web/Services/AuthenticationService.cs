@@ -25,56 +25,57 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
-namespace XTMF2.Web.Services {
-	/// <summary>
-	///     Authentication service for clients. Associates a session with a backed XTMF2 user account.
-	/// </summary>
-	public class AuthenticationService {
-		private readonly ILogger<AuthenticationService> _logger;
+namespace XTMF2.Web.Services
+{
+    /// <summary>
+    ///     Authentication service for clients. Associates a session with a backed XTMF2 user account.
+    /// </summary>
+    public class AuthenticationService
+    {
+        private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthenticationService> _logger;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
-		private readonly SignInManager<XTMF2.User> _signInManager;
+        /// <summary>
+        /// </summary>
+        /// <param name="userManager"></param>
+        /// <param name="signInManager"></param>
+        /// <param name="logger"></param>
+        /// <param name="configuration"></param>
+        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager,
+            ILogger<AuthenticationService> logger, IConfiguration configuration)
+        {
+            _signInManager = signInManager;
+            _userManager = userManager;
+            _logger = logger;
+            _configuration = configuration;
+        }
 
-		private readonly UserManager<XTMF2.User> _userManager;
+        /// <summary>
+        /// </summary>
+        /// <param name="userName">The username to associate the session with.</param>
+        /// <param name="password">Currently unused.</param>
+        public async Task<string> SignIn(string userName, string password = null)
+        {
+            var user = await _userManager.FindByIdAsync(userName);
+            await _signInManager.SignInAsync(user, true);
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Name, userName)
+            };
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtExpiryInDays"]));
 
-		private readonly IConfiguration _configuration;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="userManager"></param>
-		/// <param name="signInManager"></param>
-		/// <param name="logger"></param>
-		/// <param name="configuration"></param>
-		public AuthenticationService (UserManager<XTMF2.User> userManager, SignInManager<XTMF2.User> signInManager,
-			ILogger<AuthenticationService> logger, IConfiguration configuration) {
-			_signInManager = signInManager;
-			_userManager = userManager;
-			_logger = logger;
-			_configuration = configuration;
-		}
-
-		/// <summary>
-		/// </summary>
-		/// <param name="userName">The username to associate the session with.</param>
-		/// <param name="password">Currently unused.</param>
-		public async Task<string> SignIn (string userName, string password = null) {
-			var user = await _userManager.FindByIdAsync (userName);
-			await _signInManager.SignInAsync (user, true);
-			var claims = new [] {
-				new Claim (ClaimTypes.Name, userName)
-			};
-			var key = new SymmetricSecurityKey (Encoding.UTF8.GetBytes (_configuration["JwtSecurityKey"]));
-			var creds = new SigningCredentials (key, SecurityAlgorithms.HmacSha256);
-			var expiry = DateTime.Now.AddDays (Convert.ToInt32 (_configuration["JwtExpiryInDays"]));
-
-			var token = new JwtSecurityToken (
-				_configuration["JwtIssuer"],
-				_configuration["JwtAudience"],
-				claims,
-				expires : expiry,
-				signingCredentials : creds
-			);
-			return new JwtSecurityTokenHandler ().WriteToken (token);
-		}
-	}
+            var token = new JwtSecurityToken(
+                _configuration["JwtIssuer"],
+                _configuration["JwtAudience"],
+                claims,
+                expires: expiry,
+                signingCredentials: creds
+            );
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+    }
 }
