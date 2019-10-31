@@ -19,47 +19,51 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 
+namespace XTMF2.Web.Pages
+{
+    /// <summary>
+    ///     Single project view (page).
+    /// </summary>
+    public partial class SingleProject
+    {
+        [Inject] protected XTMFRuntime XtmfRuntime { get; set; }
 
-namespace XTMF2.Web.Pages {
-	/// <summary>
-	///     Single project view (page).
-	/// </summary>
-	public partial class SingleProject {
-		[Inject] protected XTMFRuntime XtmfRuntime { get; set; }
-
-		[Inject] protected User XtmfUser { get; set; }
-
-		/// <summary>
-		///     Path parameter that specifies the ProjectName
-		/// </summary>
-		[Microsoft.AspNetCore.Components.Parameter]
-		public string ProjectName { get; set; }
-
-		[Inject] protected ILogger<SingleProject> Logger { get; set; }
+        [Inject] protected User XtmfUser { get; set; }
 
         /// <summary>
-        /// Model systems belonging to the project
+        ///     Path parameter that specifies the ProjectName
+        /// </summary>
+        [Microsoft.AspNetCore.Components.Parameter]
+        public string ProjectName { get; set; }
+
+        [Inject] protected ILogger<SingleProject> Logger { get; set; }
+
+        /// <summary>
+        ///     Model systems belonging to the project
         /// </summary>
         public IReadOnlyCollection<ModelSystemHeader> ModelSystems { get; set; }
 
-		/// <summary>
-		///     The loaded project.
-		/// </summary>
-		protected Project Project { get; set; }
+        /// <summary>
+        ///     The loaded project.
+        /// </summary>
+        protected Project Project { get; set; }
 
-		/// <summary>
-		///     Initialization function, will attempt to load the referenced project.
-		/// </summary>
-		protected override void OnInitialized () {
-            
-			string error = null;
-			if (XtmfRuntime.ProjectController.GetProject (XtmfUser, ProjectName, out var project, ref error)) {
-				Project = project;
+        /// <summary>
+        ///     Initialization function, will attempt to load the referenced project.
+        /// </summary>
+        protected override void OnInitialized()
+        {
+            string error = null;
+            if (XtmfRuntime.ProjectController.GetProject(XtmfUser, ProjectName, out var project, ref error))
+            {
+                Project = project;
                 ModelSystems = project.ModelSystems;
-            } else {
+            }
+            else
+            {
                 ModelSystems = new List<ModelSystemHeader>();
-				Logger.LogError ("Unable to load project, or project not found: " + ProjectName);
-			}
-		}
-	}
+                Logger.LogError("Unable to load project, or project not found: " + ProjectName);
+            }
+        }
+    }
 }

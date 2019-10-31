@@ -15,13 +15,14 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
-
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 namespace XTMF2.Web.Pages
 {
     /// <summary>
-    /// Root page / component for the model system display.
+    ///     Root page / component for the model system display.
     /// </summary>
     public partial class ModelSystem
     {
@@ -37,8 +38,13 @@ namespace XTMF2.Web.Pages
         [Microsoft.AspNetCore.Components.Parameter]
         public string ModelSystemName { get; set; }
 
+        [Inject] protected XTMFRuntime XtmfRuntime { get; set; }
+
+        [Inject] protected User XtmfUser { get; set; }
+
+        [Inject] protected ILogger<ProjectsList> Logger { get; set; }
+
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         protected override Task OnInitializedAsync()
