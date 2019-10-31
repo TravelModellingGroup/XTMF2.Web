@@ -21,8 +21,10 @@ using XTMF2.Web.Services;
 
 namespace XTMF2.Web.Controllers {
 	/// <summary>
+	/// Primary authentication controller. Manages endpoints for login and logout.
 	/// </summary>
 	[Route ("api/[controller]")]
+	[ApiController]
 	public class AuthenticationController : Controller {
 		private readonly AuthenticationService _authenticationService;
 
@@ -34,14 +36,13 @@ namespace XTMF2.Web.Controllers {
 		}
 
 		/// <summary>
-		 ///     Login endpoint.
-		 /// </summary>
-		 /// <param name="userName">The username to login.</param>
-		 [HttpPost]
-		 public async Task<IActionResult> Login([FromBody] string userName)
-		 {
-		     await _authenticationService.SignIn(userName);
-		     return new OkObjectResult(User.Identity.IsAuthenticated);
-		 } 
+		///     Login endpoint.
+		/// </summary>
+		/// <param name="userName">The username to login.</param>
+		[HttpPost]
+		public async Task<IActionResult> Login ([FromBody] string userName) {
+			var tokenString = await _authenticationService.SignIn (userName);
+			return Ok (tokenString);
+		}
 	}
 }

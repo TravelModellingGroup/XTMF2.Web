@@ -23,7 +23,7 @@ using BlazorStrap;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 
-namespace XTMF2.Web.Pages.Projects {
+namespace XTMF2.Web.Pages {
 	/// <summary>
 	///     Projects (page) base component. This page lists the currently existing projects
 	///     for the current active user. The user can both add and delete projects from this page.

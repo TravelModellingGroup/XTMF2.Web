@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
-namespace XTMF2.Web.Pages.XtmfSystem {
+namespace XTMF2.Web.Pages {
 	public partial class XtmfSystem {
 		[Inject] public SignInManager<XTMF2.User> SignInManager { get; set; }
 
