@@ -25,6 +25,7 @@ namespace XTMF2.Web.Controllers {
 	/// </summary>
 	[Route ("api/[controller]")]
 	[ApiController]
+
 	public class AuthenticationController : Controller {
 		private readonly AuthenticationService _authenticationService;
 
@@ -44,5 +45,6 @@ namespace XTMF2.Web.Controllers {
 			var tokenString = await _authenticationService.SignIn (userName);
 			return Ok (tokenString);
 		}
+
 	}
 }

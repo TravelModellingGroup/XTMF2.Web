@@ -52,7 +52,7 @@ namespace XTMF2.Web {
 				var runtime = provider.GetService<XTMFRuntime> ();
 				return runtime.UserController.GetUserByName ("local");
 			});
-
+      
 			//configure the automapping sercices
 			ConfigureAutoMapping (services);
 
