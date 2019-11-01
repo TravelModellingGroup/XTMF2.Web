@@ -1,4 +1,4 @@
-﻿//    Copyright 2017-2019 University of Toronto
+//    Copyright 2017-2019 University of Toronto
 // 
 //    This file is part of XTMF2.
 // 
@@ -15,6 +15,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
@@ -22,37 +23,23 @@ using Microsoft.Extensions.Logging;
 namespace XTMF2.Web.Pages
 {
     /// <summary>
-    ///     Root page / component for the model system display.
+    ///     Single project view (page).
     /// </summary>
-    public partial class ModelSystem
+    public partial class LoginPage
     {
-        /// <summary>
-        ///     Path parameter that specifies the project name.
-        /// </summary>
-        [Microsoft.AspNetCore.Components.Parameter]
-        public string ProjectName { get; set; }
-
-        /// <summary>
-        ///     Path parameter that specifies the model system name.
-        /// </summary>
-        [Microsoft.AspNetCore.Components.Parameter]
-        public string ModelSystemName { get; set; }
-
-        [Inject]
-        protected XTMFRuntime XtmfRuntime { get; set; }
-
-        [Inject]
-        protected User XtmfUser { get; set; }
-
         [Inject]
         protected ILogger<ProjectsList> Logger { get; set; }
+
+        [Inject]
+        private HttpClient Http { get; set; }
 
         /// <summary>
         /// </summary>
         /// <returns></returns>
-        protected override Task OnInitializedAsync()
+        public async Task Login()
         {
-            return base.OnInitializedAsync();
+            var test = "";
+            await Http.PostJsonAsync("api/AuthenticationController", test);
         }
     }
 }
