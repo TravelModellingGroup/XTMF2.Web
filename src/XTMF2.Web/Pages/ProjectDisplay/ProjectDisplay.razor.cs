@@ -15,7 +15,6 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
@@ -30,6 +29,7 @@ namespace XTMF2.Web.Pages
     /// </summary>
     public partial class ProjectDisplay
     {
+        private ProjectSession _projectSession;
         private InputRequestDialog InputDialog;
 
         [Inject]
@@ -57,12 +57,10 @@ namespace XTMF2.Web.Pages
         /// </summary>
         protected Project Project { get; set; }
 
-        private ProjectSession _projectSession;
-
         protected void NewModelSystemSubmit(string input)
         {
             string error = null;
-            if (!_projectSession.CreateNewModelSystem(input, out ModelSystemHeader modelSystem, ref error))
+            if (!_projectSession.CreateNewModelSystem(XtmfUser, input, out var modelSystem, ref error))
             {
                 Logger.LogError("Unable to create model system: " + input);
             }
@@ -73,13 +71,20 @@ namespace XTMF2.Web.Pages
         }
 
         /// <summary>
-        /// Callback for deleting the passed model system.
+        ///     Callback for deleting the passed model system.
         /// </summary>
         /// <param name="modelSystem"></param>
         protected void DeleteModelSystem(ModelSystemHeader modelSystem)
         {
             string error = null;
-
+            if (!_projectSession.RemoveModelSystem(XtmfUser, modelSystem, ref error))
+            {
+                Logger.LogError("Unable to remove model system: " + modelSystem.Name);
+            }
+            else
+            {
+                Logger.LogInformation("Model system removed: " + modelSystem.Name);
+            }
         }
 
         /// <summary>
@@ -87,7 +92,7 @@ namespace XTMF2.Web.Pages
         /// </summary>
         protected override Task OnInitializedAsync()
         {
-             string error = null;
+            string error = null;
             if (XtmfRuntime.ProjectController.GetProject(XtmfUser, ProjectName, out var project, ref error))
             {
                 Project = project;
@@ -98,7 +103,8 @@ namespace XTMF2.Web.Pages
             {
                 ModelSystems = new List<ModelSystemHeader>();
                 Logger.LogError("Unable to load project, or project not found: " + ProjectName);
-            } 
+            }
+
             return base.OnInitializedAsync();
         }
     }

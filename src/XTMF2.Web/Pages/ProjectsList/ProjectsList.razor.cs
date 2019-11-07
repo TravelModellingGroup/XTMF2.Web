@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using BlazorStrap;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
+using XTMF2.Controllers;
 using XTMF2.Web.Components.Util;
 
 namespace XTMF2.Web.Pages {
@@ -64,7 +65,7 @@ namespace XTMF2.Web.Pages {
 		///     Initialization for component.
 		/// </summary>
 		protected override Task OnInitializedAsync () {
-			Projects =  XtmfRuntime.ProjectController.GetProjects (XtmfUser);
+			Projects =  ProjectController.GetProjects (XtmfUser);
 			return base.OnInitializedAsync ();
 		}
 
