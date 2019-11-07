@@ -15,20 +15,28 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
+using XTMF2.Editing;
+using XTMF2.Web.Components.Util;
 
 namespace XTMF2.Web.Pages
 {
     /// <summary>
     ///     Single project view (page).
     /// </summary>
-    public partial class SingleProject
+    public partial class ProjectDisplay
     {
-        [Inject] protected XTMFRuntime XtmfRuntime { get; set; }
+        private InputRequestDialog InputDialog;
 
-        [Inject] protected User XtmfUser { get; set; }
+        [Inject]
+        protected XTMFRuntime XtmfRuntime { get; set; }
+
+        [Inject]
+        protected User XtmfUser { get; set; }
 
         /// <summary>
         ///     Path parameter that specifies the ProjectName
@@ -36,34 +44,62 @@ namespace XTMF2.Web.Pages
         [Microsoft.AspNetCore.Components.Parameter]
         public string ProjectName { get; set; }
 
-        [Inject] protected ILogger<SingleProject> Logger { get; set; }
+        [Inject]
+        protected ILogger<ProjectDisplay> Logger { get; set; }
 
         /// <summary>
         ///     Model systems belonging to the project
         /// </summary>
-        public IReadOnlyCollection<ModelSystemHeader> ModelSystems { get; set; }
+        public IReadOnlyCollection<ModelSystemHeader> ModelSystems { get; set; } = new List<ModelSystemHeader>();
 
         /// <summary>
         ///     The loaded project.
         /// </summary>
         protected Project Project { get; set; }
 
+        private ProjectSession _projectSession;
+
+        protected void NewModelSystemSubmit(string input)
+        {
+            string error = null;
+            if (!_projectSession.CreateNewModelSystem(input, out ModelSystemHeader modelSystem, ref error))
+            {
+                Logger.LogError("Unable to create model system: " + input);
+            }
+            else
+            {
+                Logger.LogInformation("Model system created: " + input);
+            }
+        }
+
+        /// <summary>
+        /// Callback for deleting the passed model system.
+        /// </summary>
+        /// <param name="modelSystem"></param>
+        protected void DeleteModelSystem(ModelSystemHeader modelSystem)
+        {
+            string error = null;
+
+        }
+
         /// <summary>
         ///     Initialization function, will attempt to load the referenced project.
         /// </summary>
-        protected override void OnInitialized()
+        protected override Task OnInitializedAsync()
         {
-            string error = null;
+             string error = null;
             if (XtmfRuntime.ProjectController.GetProject(XtmfUser, ProjectName, out var project, ref error))
             {
                 Project = project;
                 ModelSystems = project.ModelSystems;
+                XtmfRuntime.ProjectController.GetProjectSession(XtmfUser, Project, out _projectSession, ref error);
             }
             else
             {
                 ModelSystems = new List<ModelSystemHeader>();
                 Logger.LogError("Unable to load project, or project not found: " + ProjectName);
-            }
+            } 
+            return base.OnInitializedAsync();
         }
     }
 }

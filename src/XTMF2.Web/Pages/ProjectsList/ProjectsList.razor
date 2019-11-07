@@ -32,23 +32,9 @@
         </table>
 
         <BSButton Color="Color.Primary" OnClick="@OpenNewProjectDialog">Create New Project</BSButton>
-        <BSModal @ref="NewProjectModal">
-            <BSForm Model="@NewProjectModel" ValidateOnInit="false" OnValidSubmit="@OnNewProjectFormSubmit">
-                <DataAnnotationsValidator />
-                <BSModalHeader OnClick="@CloseNewProjectDialog">Create new project</BSModalHeader>
-                <BSModalBody>
-                    <BSFormGroup>
-                        <BSLabel For="ProjectName">Project Name</BSLabel>
-                        <BSInput InputType="InputType.Text" Id="ProjectName" @bind-Value="@NewProjectModel.ProjectName" ValidateOnChange="true"></BSInput>
-                        <BSFormFeedback For="@(() => NewProjectModel.ProjectName)" IsTooltip="true" ValidMessage="This is a valid project name." />
-                    </BSFormGroup>
-                </BSModalBody>
-                <BSModalFooter>
-                    <BSButton Color="Color.Primary" ButtonType="ButtonType.Submit">Create</BSButton>
-                    <BSButton Color="Color.Secondary" OnClick="@CloseNewProjectDialog">Cancel</BSButton>
-                </BSModalFooter>
-            </BSForm>
-        </BSModal>
+
+        <InputRequestDialog @ref="InputRequestDialog" DialogTitle="Test" InputName="Project Name" OnSubmit="@OnNewProjectFormSubmit"></InputRequestDialog>
+
     </Content>
 
     <Title>Projects</Title>

@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using BlazorStrap;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
+using XTMF2.Web.Components.Util;
 
 namespace XTMF2.Web.Pages {
 	/// <summary>
@@ -34,10 +35,10 @@ namespace XTMF2.Web.Pages {
 		/// </summary>
 		public BSModal NewProjectModal;
 
-		/// <summary>
-		///     New project form validation model.
-		/// </summary>
-		protected NewProjectModel NewProjectModel = new NewProjectModel ();
+        /// <summary>
+        ///     New project form validation model.
+        /// </summary>
+        protected InputRequestDialog InputRequestDialog;
 
 		[Inject] protected XTMFRuntime XtmfRuntime { get; set; }
 
@@ -56,8 +57,7 @@ namespace XTMF2.Web.Pages {
 		/// </summary>
 		/// <param name="e"></param>
 		public void OpenNewProjectDialog (EventArgs e) {
-			NewProjectModel = new NewProjectModel ();
-			NewProjectModal.Show ();
+			InputRequestDialog.Show();
 		}
 
 		/// <summary>
@@ -83,9 +83,9 @@ namespace XTMF2.Web.Pages {
 		/// <summary>
 		///     Attempts to create a new project on submission of the new project form.
 		/// </summary>
-		protected void OnNewProjectFormSubmit () {
+		protected void OnNewProjectFormSubmit (string input) {
 			string error = null;
-			if (XtmfRuntime.ProjectController.CreateNewProject (XtmfUser, NewProjectModel.ProjectName,
+			if (XtmfRuntime.ProjectController.CreateNewProject (XtmfUser, input,
 					out var session, ref error)) {
 				Logger.LogInformation ($"New project created: {session.Project.Name}");
 				CloseNewProjectDialog ();
@@ -100,6 +100,7 @@ namespace XTMF2.Web.Pages {
 		/// <param name="e"></param>
 		protected void CloseNewProjectDialog () {
 			NewProjectModal.Hide ();
-		}
+
+        }
 	}
 }
