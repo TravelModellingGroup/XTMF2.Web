@@ -46,6 +46,7 @@ namespace XTMF2.Web
                 }).ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
+                    logging.AddBrowserConsole();
                     logging.AddConsole();
                 });
         }

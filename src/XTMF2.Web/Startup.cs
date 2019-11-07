@@ -16,6 +16,7 @@
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Text;
+using Blazor.Extensions.Logging;
 using BlazorQuery.Extensions;
 using BlazorStrap;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -26,6 +27,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using XTMF2.Web.Data;
 using XTMF2.Web.Services;
@@ -56,8 +58,8 @@ namespace XTMF2.Web {
 			//configure the automapping sercices
 			ConfigureAutoMapping (services);
 
-			//configure the authentication and authorization services
-			services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider> ();
+            //configure the authentication and authorization services
+            services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider> ();
 			services.AddIdentity<User, string> ().AddUserStore<XtmfUserStore<User>> ()
 				.AddRoleStore<XtmfRoleStore<string>> ().AddSignInManager<XtmfSignInManager<User>> ();
 
