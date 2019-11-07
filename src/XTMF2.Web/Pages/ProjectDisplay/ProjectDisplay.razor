@@ -35,8 +35,8 @@
                     }
                 </tbody>
             </table>
-            <InputRequestDialog @ref="InputDialog" DialogTitle="Test" InputName="Model System Name" OnSubmit="@NewModelSystemSubmit"></InputRequestDialog>
-            <BSButton Color="Color.Primary" OnClick="@(() => InputDialog.Show())">+ New Model System</BSButton>
+            <InputRequestDialog @ref="_inputDialog" DialogTitle="Test" InputName="Model System Name" OnSubmit="@NewModelSystemSubmit"></InputRequestDialog>
+            <BSButton Color="Color.Primary" OnClick="@(() => _inputDialog.Show())">+ New Model System</BSButton>
         }
         else
         {

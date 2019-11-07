@@ -47,7 +47,7 @@ namespace XTMF2.Web.Components.Util
 
         protected InputModel InputModel = new InputModel();
 
-        private BSModal InputModal;
+        private BSModal _inputModal;
 
         /// <summary>
         ///     Attempts to create a new project on submission of the new project form.
@@ -55,7 +55,7 @@ namespace XTMF2.Web.Components.Util
         protected void OnValidSubmit()
         {
             OnSubmit.InvokeAsync(InputModel.Value);
-            InputModal.Hide();
+            _inputModal.Hide();
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace XTMF2.Web.Components.Util
         /// </summary>
         public void Show()
         {
-            InputModal.Show();
+            _inputModal.Show();
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace XTMF2.Web.Components.Util
         /// </summary>
         public void Hide()
         {
-            InputModal.Hide();
+            _inputModal.Hide();
         }
     }
 

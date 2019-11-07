@@ -30,7 +30,7 @@ namespace XTMF2.Web.Pages
     public partial class ProjectDisplay
     {
         private ProjectSession _projectSession;
-        private InputRequestDialog InputDialog;
+        private InputRequestDialog _inputDialog;
 
         [Inject]
         protected XTMFRuntime XtmfRuntime { get; set; }

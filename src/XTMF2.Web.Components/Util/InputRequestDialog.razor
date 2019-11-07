@@ -1,6 +1,6 @@
 ﻿@using  BlazorStrap
 @using Microsoft.AspNetCore.Components.Forms
-<BSModal @ref="InputModal">
+<BSModal @ref="_inputModal">
     <BSForm Model="@InputModel" ValidateOnInit="false" OnValidSubmit="@OnValidSubmit">
         <DataAnnotationsValidator />
         <BSModalHeader OnClick="@Hide">@DialogTitle</BSModalHeader>
