@@ -1,0 +1,22 @@
+﻿@using  BlazorStrap
+@using Microsoft.AspNetCore.Components.Forms
+<BSModal @ref="_inputModal">
+    <BSForm Model="@InputModel" ValidateOnInit="false" OnValidSubmit="@OnValidSubmit">
+        <DataAnnotationsValidator />
+        <BSModalHeader OnClick="@Hide">@DialogTitle</BSModalHeader>
+        <BSModalBody>
+            <BSFormGroup>
+                <BSLabel For="Input">@InputName</BSLabel>
+                <BSInput InputType="InputType.Text" Id="Input" @bind-Value="@InputModel.Value" ValidateOnChange="true"></BSInput>
+                <BSFormFeedback For="@(() => InputModel.Value)" IsTooltip="true" ValidMessage="This is a valid project name." />
+            </BSFormGroup>
+        </BSModalBody>
+        <BSModalFooter>
+            <BSButton Color="Color.Primary" ButtonType="ButtonType.Submit">Create</BSButton>
+            <BSButton Color="Color.Secondary" OnClick="@Hide">Cancel</BSButton>
+        </BSModalFooter>
+    </BSForm>
+</BSModal>
+
+@code {
+}
