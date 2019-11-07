@@ -105,9 +105,6 @@ namespace XTMF2.Web {
 				endpoints.MapBlazorHub ();
 				endpoints.MapFallbackToPage ("/_Host");
 			});
-
-
-
-		}
+        }
 	}
 }
