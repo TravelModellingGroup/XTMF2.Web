@@ -25,10 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Lib\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ResourceFiles Include="node_modules/notyf/notyf.min.js"/>
     <ResourceFiles Include="node_modules/notyf/notyf.js"/>
   </ItemGroup>
