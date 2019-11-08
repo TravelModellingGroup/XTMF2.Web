@@ -24,9 +24,20 @@
     <PackageReference Include="BlazorStrap" Version="1.1.0-preview1-02" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Lib\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ResourceFiles Include="node_modules/notyf/notyf.min.js"/>
+    <ResourceFiles Include="node_modules/notyf/notyf.js"/>
+  </ItemGroup>
+
   <Target Name="RestoreNpm" BeforeTargets="Restore">
-    <Message Text="Restoring npm packages" Importance="high"></Message>
+    <Message Text="Restoring npm packages..." Importance="high"></Message>
     <Exec Command="npm install --loglevel=error" WorkingDirectory="$(ProjectDir)" />
+    <Message Text="Copying resource files..." Importance="high"></Message>
+    <Copy SourceFiles="@(ResourceFiles)" DestinationFolder="Lib/"></Copy>
   </Target>
 
 </Project>
