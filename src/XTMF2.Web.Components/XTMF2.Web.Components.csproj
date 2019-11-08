@@ -11,19 +11,29 @@
 
   <ItemGroup>
     <PackageReference Include="BlazorQuery" Version="0.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.1.0-preview1.19508.20" />
-    <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.1.0-preview1.19508.20" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.1.0-preview2.19528.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.1.0-preview2.19528.8" />
   </ItemGroup>
-
 
   <ItemGroup>
     <EmbeddedResource Include="*.js" Exclude="wwwroot\*.min.js" LogicalName="xtmf2:js:%(RecursiveDir)%(Filename)%(Extension)" />
     <EmbeddedResource Include="*.css" Exclude="wwwroot\*.min.css" LogicalName="xtmf2:css:%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="BlazorStrap" Version="1.1.0-preview1-02" />
+  </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BlazorStrap" Version="1.0.105" />
+    <ResourceFiles Include="node_modules/notyf/notyf.min.js"/>
+    <ResourceFiles Include="node_modules/notyf/notyf.js"/>
   </ItemGroup>
+
+  <Target Name="RestoreNpm" BeforeTargets="Restore">
+    <Message Text="Restoring npm packages..." Importance="high"></Message>
+    <Exec Command="npm install --loglevel=error" WorkingDirectory="$(ProjectDir)" />
+    <Message Text="Copying resource files..." Importance="high"></Message>
+    <Copy SourceFiles="@(ResourceFiles)" DestinationFolder="Lib/"></Copy>
+  </Target>
 
 </Project>
