@@ -19,5 +19,8 @@ namespace XTMF2.Web.Components
 {
     public partial class ModelSystemEditor
     {
+        [Microsoft.AspNetCore.Components.Parameter]
+        public ModelSystemHeader ModelSystem { get; set; }
+
     }
 }
