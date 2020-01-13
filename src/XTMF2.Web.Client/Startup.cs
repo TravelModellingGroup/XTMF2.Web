@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BlazorClient.Client
+namespace XTMF2.Web.Client
 {
     public class Startup
     {

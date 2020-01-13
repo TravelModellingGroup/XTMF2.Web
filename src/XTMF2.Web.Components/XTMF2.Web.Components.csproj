@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <!-- <AddRazorSupportForMvc>true</AddRazorSupportForMvc> -->
   </PropertyGroup>
 
@@ -12,7 +12,7 @@
   <ItemGroup>
     <PackageReference Include="BlazorQuery" Version="0.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.1.0-preview2.19528.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.1.0-preview2.19528.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.1.0-preview2.19528.8"  />
     <ProjectReference Include="..\XTMF2\src\XTMF2\XTMF2.csproj" />
     <ProjectReference Include="..\XTMF2\src\XTMF2.Interfaces\XTMF2.Interfaces.csproj" />
     <ProjectReference Include="..\XTMF2\src\XTMF2.Run\XTMF2.Run.csproj" />

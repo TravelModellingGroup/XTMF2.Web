@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
   </PropertyGroup>
 
@@ -11,6 +11,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.1.0-preview4.19579.2" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.DevServer" Version="3.1.0-preview4.19579.2" PrivateAssets="all" />
 
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XTMF2.Web.Data\XTMF2.Web.Data.csproj" />
+    <ProjectReference Include="..\XTMF2.Web.Components\XTMF2.Web.Components.csproj" />
   </ItemGroup>
 
 </Project>

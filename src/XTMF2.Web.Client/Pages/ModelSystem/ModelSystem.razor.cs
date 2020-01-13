@@ -50,9 +50,6 @@ namespace XTMF2.Web.Pages
         /// <summary>
         /// </summary>
         /// <returns></returns>
-        protected override Task OnInitializedAsync()
-        {
-            return base.OnInitializedAsync();
-        }
+        
     }
 }

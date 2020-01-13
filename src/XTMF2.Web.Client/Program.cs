@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Blazor.Hosting;
 
-namespace BlazorClient.Client
+namespace XTMF2.Web.Client
 {
     public class Program
     {

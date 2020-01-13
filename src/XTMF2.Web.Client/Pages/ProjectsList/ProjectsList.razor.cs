@@ -30,7 +30,7 @@ namespace XTMF2.Web.Pages {
 	///     Projects (page) base component. This page lists the currently existing projects
 	///     for the current active user. The user can both add and delete projects from this page.
 	/// </summary>
-	public partial class ProjectsList {
+	public partial class ProjectsList : ComponentBase {
 		/// <summary>
 		///     Modal ref for the new project dialog.
 		/// </summary>
@@ -64,7 +64,7 @@ namespace XTMF2.Web.Pages {
 		/// <summary>
 		///     Initialization for component.
 		/// </summary>
-		protected override Task OnInitializedAsync () {
+		protected override Task OnInitializedAsync() {
 			Projects =  ProjectController.GetProjects (XtmfUser);
 			return base.OnInitializedAsync ();
 		}

@@ -22,12 +22,12 @@ using Microsoft.Extensions.Logging;
 using XTMF2.Editing;
 using XTMF2.Web.Components.Util;
 
-namespace XTMF2.Web.Pages
+namespace XTMF2.Web.Pages 
 {
     /// <summary>
     ///     Single project view (page).
     /// </summary>
-    public partial class ProjectDisplay
+    public partial class ProjectDisplay : ComponentBase
     {
         private ProjectSession _projectSession;
         private InputRequestDialog _inputDialog;

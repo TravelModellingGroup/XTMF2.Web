@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-  <ProjectReference Include="..\Client\BlazorClient.Client.csproj" />
-    <ProjectReference Include="..\XTMF2.Web.Components\XTMF2.Web.Components.csproj" />
+  <ProjectReference Include="..\XTMF2.Web.Client\XTMF2.Web.Client.csproj" />
+    
     <ProjectReference Include="..\XTMF2.Web.Data\XTMF2.Web.Data.csproj" />
     <ProjectReference Include="..\XTMF2\src\XTMF2\XTMF2.csproj" />
     <ProjectReference Include="..\XTMF2\src\XTMF2.Interfaces\XTMF2.Interfaces.csproj" />
