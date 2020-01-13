@@ -17,9 +17,9 @@
 
 using Microsoft.AspNetCore.Components;
 
-namespace XTMF2.Web.Components
+namespace XTMF2.Web.Client.Shared
 {
-    public class MainLayoutBase : LayoutComponentBase
+    public class MainLayout : LayoutComponentBase
     {
         [Parameter] public RenderFragment Alert { get; set; }
 
