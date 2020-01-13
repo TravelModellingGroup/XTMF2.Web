@@ -1,0 +1,38 @@
+
+
+<div class="card border-light mb-3">
+    <div class="card-body">
+        <h4 class="card-title">@Title</h4>
+        <div class="row">
+
+            <div class="col-sm-10">
+
+                <div class="content-area">
+                    <div class="row">
+                    </div>
+                    <CascadingValue Value=this>
+
+                        @Content
+                    </CascadingValue>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                @NavContent
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment Content { get; set; }
+
+    [Parameter]
+    public RenderFragment NavContent { get; set; }
+
+    [Parameter]
+    public RenderFragment Title { get; set; }
+
+    [Parameter]
+    public bool ShowSideNav { get; set; }
+}
