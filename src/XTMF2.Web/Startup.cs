@@ -16,6 +16,7 @@
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Text;
+using Blazor.Extensions.Logging;
 using BlazorQuery.Extensions;
 using BlazorStrap;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
