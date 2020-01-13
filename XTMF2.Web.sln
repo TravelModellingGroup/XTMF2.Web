@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XTMF2.Web.Components", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XTMF2.Web.Data", "src\XTMF2.Web.Data\XTMF2.Web.Data.csproj", "{937DD95F-C3A0-4EA0-A52E-5A2280E548C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XTMF2.Web.Client", "src\XTMF2.Web.Client\XTMF2.Web.Client.csproj", "{8A878F17-6A71-4814-A108-4C086D142C15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XTMF2.Web.Client", "src\XTMF2.Web.Client\XTMF2.Web.Client.csproj", "{8A878F17-6A71-4814-A108-4C086D142C15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XTMF2.Web.Server", "src\XTMF2.Web.Server\XTMF2.Web.Server.csproj", "{E64F2DDF-55A0-49CA-BCBF-1DDB6A47795C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XTMF2.Web.Server", "src\XTMF2.Web.Server\XTMF2.Web.Server.csproj", "{E64F2DDF-55A0-49CA-BCBF-1DDB6A47795C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
