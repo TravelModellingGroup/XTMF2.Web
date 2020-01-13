@@ -98,6 +98,7 @@ namespace XTMF2.Web {
 			}
 			app.UseHttpsRedirection ();
 			app.UseStaticFiles ();
+			app.UseClientSideBlazorFiles<XTMF2.Web.Client.Startup>();
 			app.UseRouting ();
             app.UseAuthorization();
             //enable authentication and authorization
@@ -105,6 +106,8 @@ namespace XTMF2.Web {
             app.UseEndpoints (endpoints => {
 				endpoints.MapBlazorHub ();
 				endpoints.MapFallbackToPage ("/_Host");
+				endpoints.MapDefaultControllerRoute();
+				endpoints.MapFallbackToClientSideBlazor<XTMF2.Web.Client.Startup>("index.html");
 			});
         }
 	}
