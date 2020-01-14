@@ -15,12 +15,14 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -49,6 +51,11 @@ namespace XTMF2.Web {
 			services.AddScoped (provider => {
 				var runtime = provider.GetService<XTMFRuntime> ();
 				return runtime.UserController.GetUserByName ("local");
+			});
+
+			services.AddResponseCompression (opts => {
+				opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat (
+					new [] { "application/octet-stream" });
 			});
 
 			services.AddSwaggerDocument ();
