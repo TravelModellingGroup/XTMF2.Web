@@ -44,15 +44,16 @@ namespace XTMF2.Web {
 		// This method gets called by the runtime. Use this method to add services to the container.
 		// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
 		public void ConfigureServices (IServiceCollection services) {
-			services.AddRazorPages ();
-			services.AddServerSideBlazor ();
-			services.AddBlazorQuery ();
-			services.AddBootstrapCSS ();
+			//services.AddRazorPages ();
+			//sawervices.AddBlazorQuery ();
+			//services.AddBootstrapCSS ();
 			services.AddSingleton (XTMFRuntime.CreateRuntime ());
 			services.AddScoped (provider => {
 				var runtime = provider.GetService<XTMFRuntime> ();
 				return runtime.UserController.GetUserByName ("local");
 			});
+
+			services.AddSwaggerDocument();
       
 			//configure the automapping sercices
 			ConfigureAutoMapping (services);
@@ -87,6 +88,7 @@ namespace XTMF2.Web {
 			services.AddSingleton (dataAutoMapper.Configuration.CreateMapper ());
 		}
 
+
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure (IApplicationBuilder app, IWebHostEnvironment env) {
 			if (env.IsDevelopment ()) {
@@ -104,8 +106,8 @@ namespace XTMF2.Web {
             //enable authentication and authorization
             app.UseAuthentication();
             app.UseEndpoints (endpoints => {
-				endpoints.MapBlazorHub ();
-				endpoints.MapFallbackToPage ("/_Host");
+				// endpoints.MapBlazorHub ();
+				// endpoints.MapFallbackToPage ("/_Host");
 				endpoints.MapDefaultControllerRoute();
 				endpoints.MapFallbackToClientSideBlazor<XTMF2.Web.Client.Startup>("index.html");
 			});
