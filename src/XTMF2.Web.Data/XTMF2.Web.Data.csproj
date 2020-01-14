@@ -11,9 +11,6 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\XTMF2\src\XTMF2\XTMF2.csproj" />
-    <ProjectReference Include="..\XTMF2\src\XTMF2.Interfaces\XTMF2.Interfaces.csproj" />
-    <ProjectReference Include="..\XTMF2\src\XTMF2.Run\XTMF2.Run.csproj" />
   </ItemGroup>
 
 
