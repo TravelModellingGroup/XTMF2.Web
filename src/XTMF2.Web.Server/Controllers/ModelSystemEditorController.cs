@@ -8,28 +8,32 @@ using XTMF2.Web.Data.Interfaces;
 
 namespace XTMF2.Web.Controllers
 {
+    /// <summary>
+    /// API controller for the management of model systems (meta). This controller does not contain endpoints for the editing
+    /// of model systems.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjectController : ControllerBase
+    public class ModelSystemController : ControllerBase
     {
         /// <summary>
-        /// Creates a new project from the model passed.
+        /// Creates a new model system from the passed model.
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Create(IProject project) {
+        public ActionResult Create(IModelSystem project) {
 
             return new OkResult();
         }
 
         /// <summary>
-        /// Deletes the specified project.
+        /// Deletes the passed model system.
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
         [HttpDelete]
-        public ActionResult Delete(IProject project) {
+        public ActionResult Delete(IModelSystem project) {
             return new OkResult();
         }
     }

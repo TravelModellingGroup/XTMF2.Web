@@ -16,8 +16,6 @@
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Text;
-using BlazorQuery.Extensions;
-using BlazorStrap;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -53,13 +51,13 @@ namespace XTMF2.Web {
 				return runtime.UserController.GetUserByName ("local");
 			});
 
-			services.AddSwaggerDocument();
-      
+			services.AddSwaggerDocument ();
+
 			//configure the automapping sercices
 			ConfigureAutoMapping (services);
 
-            //configure the authentication and authorization services
-            services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider> ();
+			//configure the authentication and authorization services
+			services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider> ();
 			services.AddIdentity<User, string> ().AddUserStore<XtmfUserStore<User>> ()
 				.AddRoleStore<XtmfRoleStore<string>> ().AddSignInManager<XtmfSignInManager<User>> ();
 
@@ -88,7 +86,6 @@ namespace XTMF2.Web {
 			//services.AddSingleton (dataAutoMapper.Configuration.CreateMapper ());
 		}
 
-
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure (IApplicationBuilder app, IWebHostEnvironment env) {
 			if (env.IsDevelopment ()) {
@@ -100,17 +97,21 @@ namespace XTMF2.Web {
 			}
 			app.UseHttpsRedirection ();
 			app.UseStaticFiles ();
-			app.UseClientSideBlazorFiles<XTMF2.Web.Client.Startup>();
+			//app.UseClientSideBlazorFiles<XTMF2.Web.Client.Startup> ();
 			app.UseRouting ();
-            app.UseAuthorization();
-            //enable authentication and authorization
-            app.UseAuthentication();
-            app.UseEndpoints (endpoints => {
+			app.UseAuthorization ();
+			//enable authentication and authorization
+			app.UseAuthentication ();
+
+			app.UseOpenApi ();
+			app.UseSwaggerUi3 ();
+
+			app.UseEndpoints (endpoints => {
 				// endpoints.MapBlazorHub ();
 				// endpoints.MapFallbackToPage ("/_Host");
-				endpoints.MapDefaultControllerRoute();
-				endpoints.MapFallbackToClientSideBlazor<XTMF2.Web.Client.Startup>("index.html");
+				endpoints.MapDefaultControllerRoute ();
+				//endpoints.MapFallbackToClientSideBlazor<XTMF2.Web.Client.Startup> ("index.html");
 			});
-        }
+		}
 	}
 }
