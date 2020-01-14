@@ -14,27 +14,19 @@ namespace XTMF2.Web.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class ModelSystemController : ControllerBase
+    public class ModelSystemEditorController : ControllerBase
     {
-        /// <summary>
-        /// Creates a new model system from the passed model.
-        /// </summary>
-        /// <param name="project"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public ActionResult Create(IModelSystem project) {
-
-            return new OkResult();
-        }
+        private XTMFRuntime _xtmfRuntime;
 
         /// <summary>
-        /// Deletes the passed model system.
+        /// 
         /// </summary>
-        /// <param name="project"></param>
-        /// <returns></returns>
-        [HttpDelete]
-        public ActionResult Delete(IModelSystem project) {
-            return new OkResult();
+        /// <param name="runtime"></param>
+        public ModelSystemEditorController (XTMFRuntime runtime) {
+            this._xtmfRuntime = runtime;
+
         }
+
+
     }
 }
