@@ -45,5 +45,16 @@ namespace XTMF2.Web.Controllers {
         public ActionResult Delete (IModelSystem project) {
             return new OkResult ();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult Get(IProject project, string name){
+            return new OkResult();
+        }
     }
 }
