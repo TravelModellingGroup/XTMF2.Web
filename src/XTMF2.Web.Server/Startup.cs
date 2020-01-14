@@ -83,9 +83,9 @@ namespace XTMF2.Web {
 		/// </summary>
 		/// <param name="services"></param>
 		private void ConfigureAutoMapping (IServiceCollection services) {
-			var dataAutoMapper = new DataAutoMapper ();
-			services.AddSingleton (dataAutoMapper);
-			services.AddSingleton (dataAutoMapper.Configuration.CreateMapper ());
+			//var dataAutoMapper = new DataAutoMapper ();
+			//services.AddSingleton (dataAutoMapper);
+			//services.AddSingleton (dataAutoMapper.Configuration.CreateMapper ());
 		}
 
 
