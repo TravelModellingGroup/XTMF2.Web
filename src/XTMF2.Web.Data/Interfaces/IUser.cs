@@ -1,6 +1,6 @@
 namespace XTMF2.Web.Data.Interfaces {
 
-    public class IUser {
-        
+    public interface IUser {
+        string Name { get; set; }
     }
 }

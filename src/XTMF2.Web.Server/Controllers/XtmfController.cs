@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace XTMF2.Web.Controllers
 {
     /// <summary>
-    /// API controller for methods and functions related to XTMF.
+    /// API controller for methods and functions related to the XTMF runtime.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]

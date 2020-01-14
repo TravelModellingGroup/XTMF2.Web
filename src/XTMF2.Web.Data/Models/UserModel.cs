@@ -1,10 +1,11 @@
 using XTMF2.Web.Data.Interfaces;
 
-namespace XTMF2.Web.Data.Models {
+namespace XTMF2.Web.Data.Models
+{
 
-    public class UserModel : IUser {
-        
-        
+    public class UserModel : IUser
+    {
+        public string Name { get; set; }
     }
-    
+
 }
