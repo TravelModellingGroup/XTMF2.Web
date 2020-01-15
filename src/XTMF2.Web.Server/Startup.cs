@@ -67,6 +67,7 @@ namespace XTMF2.Web {
 			//configure the automapping sercices
 			ConfigureAutoMapping (services);
 
+			services.AddAuthorization();
 			//configure the authentication and authorization services
 			services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider> ();
 			services.AddIdentity<User, string> ().AddUserStore<XtmfUserStore<User>> ()
@@ -92,9 +93,9 @@ namespace XTMF2.Web {
 		/// </summary>
 		/// <param name="services"></param>
 		private void ConfigureAutoMapping (IServiceCollection services) {
-			//var dataAutoMapper = new DataAutoMapper ();
-			//services.AddSingleton (dataAutoMapper);
-			//services.AddSingleton (dataAutoMapper.Configuration.CreateMapper ());
+			var dataAutoMapper = new DataAutoMapper ();
+			services.AddSingleton (dataAutoMapper);
+			services.AddSingleton (dataAutoMapper.Configuration.CreateMapper ());
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -108,7 +109,7 @@ namespace XTMF2.Web {
 			}
 			app.UseHttpsRedirection ();
 			app.UseStaticFiles ();
-			//app.UseClientSideBlazorFiles<XTMF2.Web.Client.Startup> ();
+		    app.UseClientSideBlazorFiles<XTMF2.Web.Client.Startup> ();
 			app.UseRouting ();
 			app.UseAuthorization ();
 			//enable authentication and authorization
@@ -121,7 +122,7 @@ namespace XTMF2.Web {
 				// endpoints.MapBlazorHub ();
 				// endpoints.MapFallbackToPage ("/_Host");
 				endpoints.MapDefaultControllerRoute ();
-				//endpoints.MapFallbackToClientSideBlazor<XTMF2.Web.Client.Startup> ("index.html");
+				endpoints.MapFallbackToClientSideBlazor<XTMF2.Web.Client.Startup> ("index.html");
 			});
 		}
 	}
