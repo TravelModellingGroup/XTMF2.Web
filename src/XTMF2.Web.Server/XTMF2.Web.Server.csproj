@@ -19,9 +19,9 @@
     <PackageReference Include="NSwag.MSBuild" Version="13.2.1" />
   </ItemGroup>
 
-
-  <Target Name="NSwag" AfterTargets="Build">
-    <Exec WorkingDirectory="$(OutputPath)" Command="$(NSwagExe_Core31) aspnetcore2openapi /input:swagger.json /assembly:XTMF2.Web.Server.dll  /output:$(ProjectDir)\swagger.json" />
+  <!-- target for building swagger.json based on controller definitions -->
+  <Target Name="NSwag">
+    <Exec WorkingDirectory="$(OutputPath)" Command="$(NSwagExe_Core31) aspnetcore2openapi /input:swagger.json /assembly:$(AssemblyName).dll  /output:$(ProjectDir)\swagger.json" />
   </Target>
   <ItemGroup>
 
