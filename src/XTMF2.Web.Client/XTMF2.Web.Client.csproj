@@ -11,8 +11,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.1.0-preview4.19579.2" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.DevServer" Version="3.1.0-preview4.19579.2" PrivateAssets="all" />
     <PackageReference Include="BlazorQuery" Version="0.0.1" />
+    <PackageReference Include="NSwag.MSBuild" Version="13.2.1" />
 
   </ItemGroup>
+
+  <Target Name="NSwag" BeforeTargets="Build">
+    <Exec Command="$(NSwagExe_Core31) openapi2csclient /input:../XTMF2.Web.Server/swagger.json /output:$(ProjectDir)\API\ApiClient.cs" />
+  </Target>
 
   <ItemGroup>
     <ProjectReference Include="..\XTMF2.Web.Data\XTMF2.Web.Data.csproj" />

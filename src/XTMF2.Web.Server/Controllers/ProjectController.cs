@@ -37,12 +37,12 @@ namespace XTMF2.Web.Controllers
             return new OkResult();
         }
 
-        [HttpGet]
+        [HttpGet("{projectName}")]
         public ActionResult Get(string projectName) {
             return new OkResult();
         }
 
-        [HttpGet]
+        [HttpGet()]
         public ActionResult List() {
             return new OkResult();
         }

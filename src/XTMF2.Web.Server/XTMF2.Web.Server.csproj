@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <LangVersion>7.3</LangVersion>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,8 +19,12 @@
     <PackageReference Include="NSwag.MSBuild" Version="13.2.1" />
   </ItemGroup>
 
+
+  <Target Name="NSwag" AfterTargets="Build">
+    <Exec WorkingDirectory="$(OutputPath)" Command="$(NSwagExe_Core31) aspnetcore2openapi /input:swagger.json /assembly:XTMF2.Web.Server.dll  /output:$(ProjectDir)\swagger.json" />
+  </Target>
   <ItemGroup>
-    
+
     <!--<ProjectReference Include="..\XTMF2.Web.Client\XTMF2.Web.Client.csproj" /> -->
     <ProjectReference Include="..\XTMF2.Web.Data\XTMF2.Web.Data.csproj" />
     <ProjectReference Include="..\XTMF2\src\XTMF2\XTMF2.csproj" />

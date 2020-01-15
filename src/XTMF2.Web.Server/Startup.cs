@@ -29,6 +29,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using XTMF2.Web.Data;
+using XTMF2.Web.Server.Services;
 using XTMF2.Web.Services;
 
 namespace XTMF2.Web {
@@ -57,8 +58,11 @@ namespace XTMF2.Web {
 				opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat (
 					new [] { "application/octet-stream" });
 			});
-
-			services.AddSwaggerDocument ();
+			services.AddMvcCore ()
+				.AddApiExplorer ();
+			services.AddSwaggerDocument (document => {
+				document.Title="XTMF2 Web API";
+			});
 
 			//configure the automapping sercices
 			ConfigureAutoMapping (services);
