@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using BlazorStrap;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
+using XTMF2.Web.Client.Api;
 using XTMF2.Web.Components.Util;
 using XTMF2.Web.Data.Models;
 
@@ -36,11 +37,12 @@ namespace XTMF2.Web.Pages {
 		/// </summary>
 		public BSModal NewProjectModal;
 
-        /// <summary>
-        ///     New project form validation model.
-        /// </summary>
-        private InputRequestDialog _inputRequestDialog;
+		/// <summary>
+		///     New project form validation model.
+		/// </summary>
+		private InputRequestDialog _inputRequestDialog;
 
+		[Inject] protected ProjectClient _projectClient { get; set; }
 
 		[Inject] protected UserModel XtmfUser { get; set; }
 
@@ -57,13 +59,14 @@ namespace XTMF2.Web.Pages {
 		/// </summary>
 		/// <param name="e"></param>
 		public void OpenNewProjectDialog (EventArgs e) {
-			// InputRequestDialog.Show();
+			InputRequestDialog.Show ();
 		}
 
 		/// <summary>
 		///     Initialization for component.
 		/// </summary>
-		protected override Task OnInitializedAsync() {
+		protected override Task OnInitializedAsync () {
+
 			// Projects =  ProjectController.GetProjects (XtmfUser);
 			return base.OnInitializedAsync ();
 		}
@@ -101,6 +104,6 @@ namespace XTMF2.Web.Pages {
 		protected void CloseNewProjectDialog () {
 			NewProjectModal.Hide ();
 
-        }
+		}
 	}
 }
