@@ -59,7 +59,7 @@ namespace XTMF2.Web.Pages {
 		/// </summary>
 		/// <param name="e"></param>
 		public void OpenNewProjectDialog (EventArgs e) {
-			InputRequestDialog.Show ();
+			_inputRequestDialog.Show ();
 		}
 
 		/// <summary>
