@@ -16,14 +16,11 @@
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace XTMF2.Web.Pages {
 	public partial class XtmfSystem {
-		[Inject] public SignInManager<XTMF2.User> SignInManager { get; set; }
 
-		[Inject] public UserManager<XTMF2.User> UserManager { get; set; }
 
 		[Inject] protected ILogger<XtmfSystem> Logger { get; set; }
 	}

@@ -15,12 +15,14 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using XTMF2.Web.Data.Models;
+
 namespace XTMF2.Web.Components
 {
     public partial class ModelSystemEditor
     {
         [Microsoft.AspNetCore.Components.Parameter]
-        public ModelSystemHeader ModelSystem { get; set; }
+        public ModelSystemModel ModelSystem { get; set; }
 
     }
 }

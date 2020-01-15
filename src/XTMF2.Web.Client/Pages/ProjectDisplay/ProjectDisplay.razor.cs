@@ -19,24 +19,19 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
-using XTMF2.Editing;
 using XTMF2.Web.Components.Util;
+using XTMF2.Web.Data.Models;
 
-namespace XTMF2.Web.Pages 
-{
+namespace XTMF2.Web.Pages {
     /// <summary>
     ///     Single project view (page).
     /// </summary>
-    public partial class ProjectDisplay : ComponentBase
-    {
-        private ProjectSession _projectSession;
+    public partial class ProjectDisplay : ComponentBase {
+
         private InputRequestDialog _inputDialog;
 
         [Inject]
-        protected XTMFRuntime XtmfRuntime { get; set; }
-
-        [Inject]
-        protected User XtmfUser { get; set; }
+        protected UserModel XtmfUser { get; set; }
 
         /// <summary>
         ///     Path parameter that specifies the ProjectName
@@ -50,15 +45,15 @@ namespace XTMF2.Web.Pages
         /// <summary>
         ///     Model systems belonging to the project
         /// </summary>
-        public IReadOnlyCollection<ModelSystemHeader> ModelSystems { get; set; } = new List<ModelSystemHeader>();
+        public IReadOnlyCollection<ModelSystemModel> ModelSystems { get; set; } = new List<ModelSystemModel> ();
 
         /// <summary>
         ///     The loaded project.
         /// </summary>
-        protected Project Project { get; set; }
+        protected ProjectModel Project { get; set; }
 
-        protected void NewModelSystemSubmit(string input)
-        {
+        protected void NewModelSystemSubmit (string input) {
+            /*
             string error = null;
             if (!_projectSession.CreateNewModelSystem(XtmfUser, input, out var modelSystem, ref error))
             {
@@ -67,15 +62,15 @@ namespace XTMF2.Web.Pages
             else
             {
                 Logger.LogInformation("Model system created: " + input);
-            }
+            } */
         }
 
         /// <summary>
         ///     Callback for deleting the passed model system.
         /// </summary>
         /// <param name="modelSystem"></param>
-        protected void DeleteModelSystem(ModelSystemHeader modelSystem)
-        {
+        protected void DeleteModelSystem (ModelSystemModel modelSystem) {
+            /*
             string error = null;
             if (!_projectSession.RemoveModelSystem(XtmfUser, modelSystem, ref error))
             {
@@ -84,14 +79,14 @@ namespace XTMF2.Web.Pages
             else
             {
                 Logger.LogInformation("Model system removed: " + modelSystem.Name);
-            }
+            } */
         }
 
         /// <summary>
         ///     Initialization function, will attempt to load the referenced project.
         /// </summary>
-        protected override Task OnInitializedAsync()
-        {
+        protected override Task OnInitializedAsync () {
+            /*
             string error = null;
             if (XtmfRuntime.ProjectController.GetProject(XtmfUser, ProjectName, out var project, ref error))
             {
@@ -104,8 +99,8 @@ namespace XTMF2.Web.Pages
                 ModelSystems = new List<ModelSystemHeader>();
                 Logger.LogError("Unable to load project, or project not found: " + ProjectName);
             }
-
-            return base.OnInitializedAsync();
+ */
+            return base.OnInitializedAsync ();
         }
     }
 }

@@ -22,8 +22,8 @@ using System.Threading.Tasks;
 using BlazorStrap;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
-using XTMF2.Controllers;
 using XTMF2.Web.Components.Util;
+using XTMF2.Web.Data.Models;
 
 namespace XTMF2.Web.Pages {
 	/// <summary>
@@ -39,11 +39,10 @@ namespace XTMF2.Web.Pages {
         /// <summary>
         ///     New project form validation model.
         /// </summary>
-        protected InputRequestDialog InputRequestDialog;
+        private InputRequestDialog _inputRequestDialog;
 
-		[Inject] protected XTMFRuntime XtmfRuntime { get; set; }
 
-		[Inject] protected User XtmfUser { get; set; }
+		[Inject] protected UserModel XtmfUser { get; set; }
 
 		[Inject] protected ILogger<ProjectsList> Logger { get; set; }
 
@@ -52,47 +51,47 @@ namespace XTMF2.Web.Pages {
 		/// <summary>
 		///     List of projects for the active user.
 		/// </summary>
-		public ReadOnlyObservableCollection<XTMF2.Project> Projects { get; set; }
+		public ReadOnlyObservableCollection<ProjectModel> Projects { get; set; }
 
 		/// <summary>
 		/// </summary>
 		/// <param name="e"></param>
 		public void OpenNewProjectDialog (EventArgs e) {
-			InputRequestDialog.Show();
+			// InputRequestDialog.Show();
 		}
 
 		/// <summary>
 		///     Initialization for component.
 		/// </summary>
 		protected override Task OnInitializedAsync() {
-			Projects =  ProjectController.GetProjects (XtmfUser);
+			// Projects =  ProjectController.GetProjects (XtmfUser);
 			return base.OnInitializedAsync ();
 		}
 
 		/// <summary>
 		///     Deletes a project for this user.
 		/// </summary>
-		public void DeleteProject (XTMF2.Project project) {
-			string error = null;
+		public void DeleteProject (ProjectModel project) {
+			/* string error = null;
 			if (XtmfRuntime.ProjectController.DeleteProject (XtmfUser, project, ref error)) {
 				Logger.LogInformation ($"Deleted project: {project.Name}");
 			} else {
 				Logger.LogError ($"Unable to delete project: {project.Name} - {error}");
-			}
+			} */
 		}
 
 		/// <summary>
 		///     Attempts to create a new project on submission of the new project form.
 		/// </summary>
 		protected void OnNewProjectFormSubmit (string input) {
-			string error = null;
+			/* string error = null;
 			if (XtmfRuntime.ProjectController.CreateNewProject (XtmfUser, input,
 					out var session, ref error)) {
 				Logger.LogInformation ($"New project created: {session.Project.Name}");
 				CloseNewProjectDialog ();
 			} else {
 				Logger.LogError ($"Unable to create new project:  {error}");
-			}
+			} */
 		}
 
 		/// <summary>

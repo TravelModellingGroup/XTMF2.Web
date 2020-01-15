@@ -18,6 +18,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
+using XTMF2.Web.Data.Models;
 
 namespace XTMF2.Web.Pages
 {
@@ -39,10 +40,7 @@ namespace XTMF2.Web.Pages
         public string ModelSystemName { get; set; }
 
         [Inject]
-        protected XTMFRuntime XtmfRuntime { get; set; }
-
-        [Inject]
-        protected User XtmfUser { get; set; }
+        protected UserModel XtmfUser { get; set; }
 
         [Inject]
         protected ILogger<ProjectsList> Logger { get; set; }
