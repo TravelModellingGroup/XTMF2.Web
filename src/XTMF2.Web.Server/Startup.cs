@@ -45,9 +45,6 @@ namespace XTMF2.Web {
 		// This method gets called by the runtime. Use this method to add services to the container.
 		// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
 		public void ConfigureServices (IServiceCollection services) {
-			//services.AddRazorPages ();
-			//sawervices.AddBlazorQuery ();
-			//services.AddBootstrapCSS ();
 			services.AddSingleton (XTMFRuntime.CreateRuntime ());
 			services.AddScoped (provider => {
 				var runtime = provider.GetService<XTMFRuntime> ();

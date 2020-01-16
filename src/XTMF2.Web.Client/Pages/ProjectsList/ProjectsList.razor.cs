@@ -46,7 +46,9 @@ namespace XTMF2.Web.Pages {
 
 		// [Inject] protected UserModel XtmfUser { get; set; }
 
-		[Inject] protected ILogger<ProjectsList> Logger { get; set; }
+		protected Serilog.ILogger Logger { get; set; } = Serilog.Log.ForContext<ProjectsList>();
+
+		// private static readonly ILogger Log = Serilog.Log.ForContext<Counter>();
 
 		[Inject] private NavigationManager NavigationManager { get; set; }
 
@@ -68,15 +70,19 @@ namespace XTMF2.Web.Pages {
 		protected override Task OnInitializedAsync () {
 
 			// Projects =  ProjectController.GetProjects (XtmfUser);
-
+			Logger.Information($"Projects List loading.");
+			Logger.Error("hello");
 			Projects = new List<ProjectModel> ();
 			return base.OnInitializedAsync ();
+
+			
 		}
 
 		/// <summary>
 		///     Deletes a project for this user.
 		/// </summary>
 		public void DeleteProject (ProjectModel project) {
+			// Logger.LogInformation($"Deleting project: ${project.Name}");
 			/* string error = null;
 			if (XtmfRuntime.ProjectController.DeleteProject (XtmfUser, project, ref error)) {
 				Logger.LogInformation ($"Deleted project: {project.Name}");
