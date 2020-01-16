@@ -10,20 +10,19 @@
 #pragma warning disable 1573 // Disable "CS1573 Parameter '...' has no matching param tag in the XML comment for ...
 #pragma warning disable 1591 // Disable "CS1591 Missing XML comment for publicly visible type or member ..."
 
-namespace XTMF2.Web.Client.Api
+namespace XTMF2.Web.Client
 {
     using System = global::System;
     
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.2.1.0 (NJsonSchema v10.1.3.0 (Newtonsoft.Json v12.0.0.0))")]
     public partial class AuthenticationClient 
     {
-        private string _baseUrl = "";
+        private string _baseUrl = "/";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
     
-        public AuthenticationClient(string baseUrl, System.Net.Http.HttpClient httpClient)
+        public AuthenticationClient(System.Net.Http.HttpClient httpClient)
         {
-            BaseUrl = baseUrl; 
             _httpClient = httpClient; 
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
         }
@@ -214,13 +213,12 @@ namespace XTMF2.Web.Client.Api
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.2.1.0 (NJsonSchema v10.1.3.0 (Newtonsoft.Json v12.0.0.0))")]
     public partial class ModelSystemClient 
     {
-        private string _baseUrl = "";
+        private string _baseUrl = "/";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
     
-        public ModelSystemClient(string baseUrl, System.Net.Http.HttpClient httpClient)
+        public ModelSystemClient(System.Net.Http.HttpClient httpClient)
         {
-            BaseUrl = baseUrl; 
             _httpClient = httpClient; 
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
         }
@@ -556,13 +554,12 @@ namespace XTMF2.Web.Client.Api
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.2.1.0 (NJsonSchema v10.1.3.0 (Newtonsoft.Json v12.0.0.0))")]
     public partial class ProjectClient 
     {
-        private string _baseUrl = "";
+        private string _baseUrl = "/";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
     
-        public ProjectClient(string baseUrl, System.Net.Http.HttpClient httpClient)
+        public ProjectClient(System.Net.Http.HttpClient httpClient)
         {
-            BaseUrl = baseUrl; 
             _httpClient = httpClient; 
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
         }

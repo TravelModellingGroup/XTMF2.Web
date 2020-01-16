@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <Target Name="NSwag">
-    <Exec Command="$(NSwagExe_Core31) openapi2csclient /input:../XTMF2.Web.Server/swagger.json /output:$(ProjectDir)\API\ApiClient.cs" />
+    <Exec Command="$(NSwagExe_Core31) openapi2csclient /input:../XTMF2.Web.Server/swagger.json /output:$(ProjectDir)\API\ApiClient.cs /AspNetNamespace:XTMF2.Web.Client.Api" />
   </Target>
 
   <ItemGroup>

@@ -5,6 +5,7 @@
     "title": "XTMF2 Web API",
     "version": "1.0.0"
   },
+  "basePath": "/",
   "paths": {
     "/api/Authentication": {
       "post": {
