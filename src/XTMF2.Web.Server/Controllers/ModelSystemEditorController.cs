@@ -6,16 +6,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using XTMF2.Web.Data.Interfaces;
 
-namespace XTMF2.Web.Controllers
-{
+namespace XTMF2.Web.Controllers {
     /// <summary>
     /// API controller for the management of model systems (meta). This controller does not contain endpoints for the editing
     /// of model systems.
     /// </summary>
-    [Route("api/[controller]")]
+    [Route ("api/[controller]")]
     [ApiController]
-    public class ModelSystemEditorController : ControllerBase
-    {
+    public class ModelSystemEditorController : ControllerBase {
         private XTMFRuntime _xtmfRuntime;
 
         /// <summary>
@@ -27,6 +25,16 @@ namespace XTMF2.Web.Controllers
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult Get () {
+            return new OkResult ();
+        }
 
     }
 }
