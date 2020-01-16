@@ -7,5 +7,8 @@ namespace XTMF2.Web.Pages {
 	/// </summary>
 	public partial class Login {
 
+		[Inject]
+		protected ILogger<Login> Logger { get; set; }
+
 	}
 }
