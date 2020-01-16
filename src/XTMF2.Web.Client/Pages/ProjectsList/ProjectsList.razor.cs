@@ -44,7 +44,7 @@ namespace XTMF2.Web.Pages {
 
 		[Inject] protected ProjectClient _projectClient { get; set; }
 
-		[Inject] protected UserModel XtmfUser { get; set; }
+		// [Inject] protected UserModel XtmfUser { get; set; }
 
 		[Inject] protected ILogger<ProjectsList> Logger { get; set; }
 
@@ -53,7 +53,7 @@ namespace XTMF2.Web.Pages {
 		/// <summary>
 		///     List of projects for the active user.
 		/// </summary>
-		public ReadOnlyObservableCollection<ProjectModel> Projects { get; set; }
+		public List<ProjectModel> Projects { get; set; }
 
 		/// <summary>
 		/// </summary>
@@ -68,6 +68,8 @@ namespace XTMF2.Web.Pages {
 		protected override Task OnInitializedAsync () {
 
 			// Projects =  ProjectController.GetProjects (XtmfUser);
+
+			Projects = new List<ProjectModel> ();
 			return base.OnInitializedAsync ();
 		}
 
