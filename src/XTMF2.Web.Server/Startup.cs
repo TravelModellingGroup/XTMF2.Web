@@ -32,95 +32,110 @@ using XTMF2.Web.Data;
 using XTMF2.Web.Server.Services;
 using XTMF2.Web.Services;
 
-namespace XTMF2.Web {
-	public class Startup {
-		/// <summary>
-		/// </summary>
-		/// <param name="configuration"></param>
-		public Startup (IConfiguration configuration) {
-			Configuration = configuration;
-		}
-		public IConfiguration Configuration { get; }
+namespace XTMF2.Web.Server
+{
+    public class Startup
+    {
+        /// <summary>
+        /// </summary>
+        /// <param name="configuration"></param>
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+        public IConfiguration Configuration { get; }
 
-		// This method gets called by the runtime. Use this method to add services to the container.
-		// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-		public void ConfigureServices (IServiceCollection services) {
-			services.AddSingleton (XTMFRuntime.CreateRuntime ());
-			services.AddScoped (provider => {
-				var runtime = provider.GetService<XTMFRuntime> ();
-				return runtime.UserController.GetUserByName ("local");
-			});
+        // This method gets called by the runtime. Use this method to add services to the container.
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSingleton(XTMFRuntime.CreateRuntime());
+			services.AddSingleton<IConfiguration>(Configuration);
+            services.AddScoped(provider =>
+            {
+                var runtime = provider.GetService<XTMFRuntime>();
+                return runtime.UserController.GetUserByName("local");
+            });
 
-			services.AddResponseCompression (opts => {
-				opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat (
-					new [] { "application/octet-stream" });
-			});
-			services.AddMvcCore ()
-				.AddApiExplorer ();
-			services.AddSwaggerDocument (document => {
-				document.Title="XTMF2 Web API";
-			});
+            services.AddResponseCompression(opts =>
+            {
+                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                    new[] { "application/octet-stream" });
+            });
+            services.AddMvcCore()
+                .AddApiExplorer();
+            services.AddSwaggerDocument(document =>
+            {
+                document.Title = "XTMF2 Web API";
+            });
 
-			//configure the automapping sercices
-			ConfigureAutoMapping (services);
+            services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Trace); });
+            //configure the automapping sercices
+            ConfigureAutoMapping(services);
 
-			services.AddAuthorization();
-			//configure the authentication and authorization services
-			services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider> ();
-			services.AddIdentity<User, string> ().AddUserStore<XtmfUserStore<User>> ()
-				.AddRoleStore<XtmfRoleStore<string>> ().AddSignInManager<XtmfSignInManager<User>> ();
+            services.AddAuthorization();
+            //configure the authentication and authorization services
+            services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider>();
+            services.AddIdentity<User, string>().AddUserStore<XtmfUserStore<User>>()
+                .AddRoleStore<XtmfRoleStore<string>>().AddSignInManager<XtmfSignInManager<User>>();
 
-			// add authentication services
-			services.AddAuthentication (JwtBearerDefaults.AuthenticationScheme)
-				.AddJwtBearer (options => {
-					options.TokenValidationParameters = new TokenValidationParameters {
-						ValidateIssuer = true,
-							ValidateAudience = true,
-							ValidateLifetime = true,
-							ValidateIssuerSigningKey = true,
-							ValidIssuer = Configuration["JwtIssuer"],
-							ValidAudience = Configuration["JwtAudience"],
-							IssuerSigningKey = new SymmetricSecurityKey (Encoding.UTF8.GetBytes (Configuration["JwtSecurityKey"]))
-					};
-				});
-		}
+            // add authentication services
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["JwtIssuer"],
+                        ValidAudience = Configuration["JwtAudience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
+                    };
+                });
+        }
 
-		/// <summary>
-		///     Creates the automapping configuration between various entities.
-		/// </summary>
-		/// <param name="services"></param>
-		private void ConfigureAutoMapping (IServiceCollection services) {
-			var dataAutoMapper = new DataAutoMapper ();
-			services.AddSingleton (dataAutoMapper);
-			services.AddSingleton (dataAutoMapper.Configuration.CreateMapper ());
-		}
+        /// <summary>
+        ///     Creates the automapping configuration between various entities.
+        /// </summary>
+        /// <param name="services"></param>
+        private void ConfigureAutoMapping(IServiceCollection services)
+        {
+            var dataAutoMapper = new DataAutoMapper();
+            services.AddSingleton(dataAutoMapper);
+            services.AddSingleton(dataAutoMapper.Configuration.CreateMapper());
+        }
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure (IApplicationBuilder app, IWebHostEnvironment env) {
-			if (env.IsDevelopment ()) {
-				app.UseDeveloperExceptionPage ();
-			} else {
-				app.UseExceptionHandler ("/Home/Error");
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-				app.UseHsts ();
-			}
-			app.UseHttpsRedirection ();
-			app.UseStaticFiles ();
-		    app.UseClientSideBlazorFiles<XTMF2.Web.Client.Startup> ();
-			app.UseRouting ();
-			app.UseAuthorization ();
-			//enable authentication and authorization
-			app.UseAuthentication ();
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment()) {
+                app.UseDeveloperExceptionPage();
+            }
+            else {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseClientSideBlazorFiles<XTMF2.Web.Client.Startup>();
+            app.UseRouting();
+            app.UseAuthorization();
+            //enable authentication and authorization
+            app.UseAuthentication();
 
-			app.UseOpenApi ();
-			app.UseSwaggerUi3 ();
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
-			app.UseEndpoints (endpoints => {
-				// endpoints.MapBlazorHub ();
-				// endpoints.MapFallbackToPage ("/_Host");
-				endpoints.MapDefaultControllerRoute ();
-				endpoints.MapFallbackToClientSideBlazor<XTMF2.Web.Client.Startup> ("index.html");
-			});
-		}
-	}
+            app.UseEndpoints(endpoints =>
+            {
+                // endpoints.MapBlazorHub ();
+                // endpoints.MapFallbackToPage ("/_Host");
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapFallbackToClientSideBlazor<XTMF2.Web.Client.Startup>("index.html");
+            });
+        }
+    }
 }

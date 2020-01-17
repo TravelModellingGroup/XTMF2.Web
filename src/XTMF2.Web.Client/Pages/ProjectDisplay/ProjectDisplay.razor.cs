@@ -22,7 +22,7 @@ using Microsoft.Extensions.Logging;
 using XTMF2.Web.Components.Util;
 using XTMF2.Web.Data.Models;
 
-namespace XTMF2.Web.Pages {
+namespace XTMF2.Web.Client.Pages {
     /// <summary>
     ///     Single project view (page).
     /// </summary>

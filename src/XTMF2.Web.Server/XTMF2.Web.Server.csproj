@@ -8,15 +8,16 @@
 
   <PropertyGroup>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <!--<PackageReference Include="BlazorQuery" Version="0.0.1" /> -->
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Server" Version="3.1.0-preview4.19579.2" />
-    <PackageReference Include="NSwag.AspNetCore" Version="13.2.1" />
-    <PackageReference Include="NSwag.MSBuild" Version="13.2.1" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.2.2" />
+    <PackageReference Include="NSwag.MSBuild" Version="13.2.2" />
   </ItemGroup>
 
   <!-- target for building swagger.json based on controller definitions -->

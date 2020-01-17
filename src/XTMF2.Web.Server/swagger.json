@@ -1,270 +1,415 @@
-﻿{
-  "x-generator": "NSwag v13.2.1.0 (NJsonSchema v10.1.3.0 (Newtonsoft.Json v12.0.0.0))",
-  "swagger": "2.0",
-  "info": {
-    "title": "XTMF2 Web API",
-    "version": "1.0.0"
-  },
-  "basePath": "/",
-  "paths": {
-    "/api/Authentication": {
-      "post": {
-        "tags": [
-          "Authentication"
-        ],
-        "operationId": "Authentication_Login",
-        "consumes": [
-          "application/json",
-          "text/json",
-          "application/*+json"
-        ],
-        "parameters": [
-          {
-            "name": "userName",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": true,
-            "description": "",
-            "schema": {
-              "type": "file"
-            }
-          }
-        }
-      }
-    },
-    "/api/ModelSystem": {
-      "post": {
-        "tags": [
-          "ModelSystem"
-        ],
-        "operationId": "ModelSystem_Create",
-        "consumes": [
-          "application/json",
-          "text/json",
-          "application/*+json"
-        ],
-        "parameters": [
-          {
-            "name": "project",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/IModelSystem"
-            },
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": true,
-            "description": "",
-            "schema": {
-              "type": "file"
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "ModelSystem"
-        ],
-        "operationId": "ModelSystem_Delete",
-        "consumes": [
-          "application/json",
-          "text/json",
-          "application/*+json"
-        ],
-        "parameters": [
-          {
-            "name": "project",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/IModelSystem"
-            },
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": true,
-            "description": "",
-            "schema": {
-              "type": "file"
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "ModelSystem"
-        ],
-        "operationId": "ModelSystem_Get",
-        "consumes": [
-          "application/json",
-          "text/json",
-          "application/*+json"
-        ],
-        "parameters": [
-          {
-            "name": "project",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/IProject"
-            },
-            "x-nullable": false
-          },
-          {
-            "type": "string",
-            "name": "name",
-            "in": "query",
-            "x-nullable": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": true,
-            "description": "",
-            "schema": {
-              "type": "file"
-            }
-          }
-        }
-      }
-    },
-    "/api/Project": {
-      "post": {
-        "tags": [
-          "Project"
-        ],
-        "operationId": "Project_Create",
-        "consumes": [
-          "application/json",
-          "text/json",
-          "application/*+json"
-        ],
-        "parameters": [
-          {
-            "name": "project",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/IProject"
-            },
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": true,
-            "description": "",
-            "schema": {
-              "type": "file"
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Project"
-        ],
-        "operationId": "Project_List",
-        "responses": {
-          "200": {
-            "x-nullable": true,
-            "description": "",
-            "schema": {
-              "type": "file"
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Project"
-        ],
-        "operationId": "Project_Delete",
-        "consumes": [
-          "application/json",
-          "text/json",
-          "application/*+json"
-        ],
-        "parameters": [
-          {
-            "name": "project",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/IProject"
-            },
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": true,
-            "description": "",
-            "schema": {
-              "type": "file"
-            }
-          }
-        }
-      }
-    },
-    "/api/Project/{projectName}": {
-      "get": {
-        "tags": [
-          "Project"
-        ],
-        "operationId": "Project_Get",
-        "parameters": [
-          {
-            "type": "string",
-            "name": "projectName",
-            "in": "path",
-            "required": true,
-            "x-nullable": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": true,
-            "description": "",
-            "schema": {
-              "type": "file"
-            }
-          }
-        }
-      }
-    }
-  },
-  "definitions": {
-    "IModelSystem": {
-      "type": "object",
-      "x-abstract": true,
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "IProject": {
-      "type": "object",
-      "x-abstract": true,
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      }
-    }
-  }
+{
+	"x-generator": "NSwag v13.2.1.0 (NJsonSchema v10.1.3.0 (Newtonsoft.Json v12.0.0.0))",
+	"swagger": "2.0",
+	"info": {
+		"title": "XTMF2 Web API",
+		"version": "1.0.0"
+	},
+	"basePath": "/",
+	"paths": {
+		"/api/Authentication": {
+			"post": {
+				"tags": ["Authentication"],
+				"operationId": "Authentication_Login",
+				"parameters": [
+					{
+						"name": "userName",
+						"in": "body",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"x-nullable": true
+					}
+				],
+				"responses": {
+					"200": {
+						"x-nullable": true,
+						"description": "",
+						"schema": {
+							"type": "file"
+						}
+					}
+				}
+			}
+		},
+		"/api/ModelSystem": {
+			"post": {
+				"tags": ["ModelSystem"],
+				"operationId": "ModelSystem_Create",
+				"parameters": [
+					{
+						"type": "string",
+						"name": "Name",
+						"in": "query",
+						"x-nullable": true
+					}
+				],
+				"responses": {
+					"200": {
+						"x-nullable": true,
+						"description": "",
+						"schema": {
+							"type": "file"
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["ModelSystem"],
+				"operationId": "ModelSystem_Delete",
+				"parameters": [
+					{
+						"type": "string",
+						"name": "Name",
+						"in": "query",
+						"x-nullable": true
+					}
+				],
+				"responses": {
+					"200": {
+						"x-nullable": true,
+						"description": "",
+						"schema": {
+							"type": "file"
+						}
+					}
+				}
+			},
+			"get": {
+				"tags": ["ModelSystem"],
+				"operationId": "ModelSystem_Get",
+				"parameters": [
+					{
+						"type": "string",
+						"name": "Name",
+						"in": "query",
+						"x-nullable": true
+					},
+					{
+						"type": "string",
+						"name": "name",
+						"in": "query",
+						"required": true,
+						"x-nullable": true
+					}
+				],
+				"responses": {
+					"200": {
+						"x-nullable": true,
+						"description": "",
+						"schema": {
+							"type": "file"
+						}
+					}
+				}
+			}
+		},
+		"/api/ModelSystemEditor": {
+			"get": {
+				"tags": ["ModelSystemEditor"],
+				"operationId": "ModelSystemEditor_Get",
+				"responses": {
+					"200": {
+						"x-nullable": true,
+						"description": "",
+						"schema": {
+							"type": "file"
+						}
+					}
+				}
+			}
+		},
+		"/api/Project": {
+			"post": {
+				"tags": ["Project"],
+				"operationId": "Project_Create",
+				"parameters": [
+					{
+						"type": "string",
+						"name": "Name",
+						"in": "query",
+						"x-nullable": true
+					},
+					{
+						"type": "string",
+						"name": "Description",
+						"in": "query",
+						"x-nullable": true
+					},
+					{
+						"type": "string",
+						"name": "ProjectFilePath",
+						"in": "query",
+						"x-nullable": true
+					},
+					{
+						"type": "string",
+						"name": "ProjectDirectory",
+						"in": "query",
+						"x-nullable": true
+					},
+					{
+						"type": "object",
+						"name": "Owner",
+						"in": "query",
+						"x-schema": {
+							"$ref": "#/definitions/User"
+						},
+						"x-nullable": true
+					},
+					{
+						"type": "array",
+						"name": "AdditionalUsers",
+						"in": "query",
+						"collectionFormat": "multi",
+						"x-nullable": true,
+						"items": {
+							"$ref": "#/definitions/User"
+						}
+					},
+					{
+						"type": "object",
+						"name": "ModelSystems",
+						"in": "query",
+						"x-schema": {
+							"$ref": "#/definitions/ReadOnlyObservableCollectionOfModelSystemHeader"
+						},
+						"x-nullable": true
+					},
+					{
+						"type": "string",
+						"name": "RunsDirectory",
+						"in": "query",
+						"x-nullable": true
+					},
+					{
+						"type": "string",
+						"name": "DefaultRunDirectory",
+						"in": "query",
+						"x-nullable": true
+					},
+					{
+						"type": "boolean",
+						"name": "HasCustomRunDirectory",
+						"in": "query",
+						"x-nullable": false
+					}
+				],
+				"responses": {
+					"200": {
+						"x-nullable": true,
+						"description": "",
+						"schema": {
+							"type": "file"
+						}
+					}
+				}
+			},
+			"get": {
+				"tags": ["Project"],
+				"operationId": "Project_List",
+				"responses": {
+					"200": {
+						"x-nullable": true,
+						"description": "",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Project"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Project"],
+				"operationId": "Project_Delete",
+				"parameters": [
+					{
+						"type": "string",
+						"name": "Name",
+						"in": "query",
+						"x-nullable": true
+					},
+					{
+						"type": "string",
+						"name": "Description",
+						"in": "query",
+						"x-nullable": true
+					},
+					{
+						"type": "string",
+						"name": "ProjectFilePath",
+						"in": "query",
+						"x-nullable": true
+					},
+					{
+						"type": "string",
+						"name": "ProjectDirectory",
+						"in": "query",
+						"x-nullable": true
+					},
+					{
+						"type": "object",
+						"name": "Owner",
+						"in": "query",
+						"x-schema": {
+							"$ref": "#/definitions/User"
+						},
+						"x-nullable": true
+					},
+					{
+						"type": "array",
+						"name": "AdditionalUsers",
+						"in": "query",
+						"collectionFormat": "multi",
+						"x-nullable": true,
+						"items": {
+							"$ref": "#/definitions/User"
+						}
+					},
+					{
+						"type": "object",
+						"name": "ModelSystems",
+						"in": "query",
+						"x-schema": {
+							"$ref": "#/definitions/ReadOnlyObservableCollectionOfModelSystemHeader"
+						},
+						"x-nullable": true
+					},
+					{
+						"type": "string",
+						"name": "RunsDirectory",
+						"in": "query",
+						"x-nullable": true
+					},
+					{
+						"type": "string",
+						"name": "DefaultRunDirectory",
+						"in": "query",
+						"x-nullable": true
+					},
+					{
+						"type": "boolean",
+						"name": "HasCustomRunDirectory",
+						"in": "query",
+						"x-nullable": false
+					}
+				],
+				"responses": {
+					"200": {
+						"x-nullable": true,
+						"description": "",
+						"schema": {
+							"type": "file"
+						}
+					}
+				}
+			}
+		},
+		"/api/Project/{projectName}": {
+			"get": {
+				"tags": ["Project"],
+				"operationId": "Project_Get",
+				"parameters": [
+					{
+						"type": "string",
+						"name": "projectName",
+						"in": "path",
+						"required": true,
+						"x-nullable": false
+					}
+				],
+				"responses": {
+					"200": {
+						"x-nullable": true,
+						"description": "",
+						"schema": {
+							"$ref": "#/definitions/Project"
+						}
+					}
+				}
+			}
+		}
+	},
+	"definitions": {
+		"User": {
+			"type": "object",
+			"required": ["IsAdmin"],
+			"properties": {
+				"UserName": {
+					"type": "string"
+				},
+				"IsAdmin": {
+					"type": "boolean"
+				},
+				"AvailableProjects": {
+					"$ref": "#/definitions/ReadOnlyObservableCollectionOfProject"
+				},
+				"UserPath": {
+					"type": "string"
+				}
+			}
+		},
+		"ReadOnlyObservableCollectionOfProject": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/Project"
+			}
+		},
+		"Project": {
+			"type": "object",
+			"required": ["HasCustomRunDirectory"],
+			"properties": {
+				"Name": {
+					"type": "string"
+				},
+				"Description": {
+					"type": "string"
+				},
+				"ProjectFilePath": {
+					"type": "string"
+				},
+				"ProjectDirectory": {
+					"type": "string"
+				},
+				"Owner": {
+					"$ref": "#/definitions/User"
+				},
+				"AdditionalUsers": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/User"
+					}
+				},
+				"ModelSystems": {
+					"$ref": "#/definitions/ReadOnlyObservableCollectionOfModelSystemHeader"
+				},
+				"RunsDirectory": {
+					"type": "string"
+				},
+				"HasCustomRunDirectory": {
+					"type": "boolean"
+				}
+			}
+		},
+		"ReadOnlyObservableCollectionOfModelSystemHeader": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/ModelSystemHeader"
+			}
+		},
+		"ModelSystemHeader": {
+			"type": "object",
+			"properties": {
+				"Name": {
+					"type": "string"
+				},
+				"Description": {
+					"type": "string"
+				}
+			}
+		}
+	}
 }

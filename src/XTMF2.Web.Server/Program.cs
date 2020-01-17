@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace XTMF2.Web
+namespace XTMF2.Web.Server
 {
     public class Program
     {

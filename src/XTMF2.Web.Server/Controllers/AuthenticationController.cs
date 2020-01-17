@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using XTMF2.Web.Services;
 
-namespace XTMF2.Web.Controllers
+namespace XTMF2.Web.Server.Controllers
 {
     /// <summary>
     ///     Primary authentication controller. Manages endpoints for login and logout.

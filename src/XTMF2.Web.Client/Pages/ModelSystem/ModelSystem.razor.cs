@@ -43,11 +43,8 @@ namespace XTMF2.Web.Pages
         protected UserModel XtmfUser { get; set; }
 
         [Inject]
-        protected ILogger<ProjectsList> Logger { get; set; }
+        protected ILogger<ModelSystem> Logger { get; set; }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
         
     }
 }
