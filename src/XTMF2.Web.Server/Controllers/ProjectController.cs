@@ -104,6 +104,7 @@ namespace XTMF2.Web.Server.Controllers
         /// <param name="projectName">The name of the project to delete.</param>
         /// <returns></returns>
         [HttpDelete("{projectName}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Delete(string projectName)
         {
             var error = default(string);

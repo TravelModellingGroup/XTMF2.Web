@@ -15,6 +15,7 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using XTMF2.Web.Data.Interfaces;
 
@@ -43,6 +44,8 @@ namespace XTMF2.Web.Server.Controllers
         /// <param name="project"></param>
         /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult Create(IModelSystem project)
         {
             return new OkResult();
@@ -65,6 +68,7 @@ namespace XTMF2.Web.Server.Controllers
         /// <param name="name"></param>
         /// <returns></returns>
         [HttpGet("{projectName}/{modelSystemName}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<ModelSystemHeader> Get(string projectName, string modelSystemName)
         {
             return new OkResult();

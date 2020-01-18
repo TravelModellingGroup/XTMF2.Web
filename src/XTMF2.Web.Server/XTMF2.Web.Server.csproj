@@ -22,7 +22,7 @@
 
   <!-- target for building swagger.json based on controller definitions -->
   <Target Name="NSwag">
-    <Exec WorkingDirectory="$(OutputPath)" Command="$(NSwagExe_Core31) aspnetcore2openapi /assembly:$(AssemblyName).dll /output:$(ProjectDir)\swagger.json "  />
+    <Exec Command="$(NSwagExe_Core31) run nswag.json" />
   </Target>
   <ItemGroup>
 
