@@ -1,18 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <!-- <AddRazorSupportForMvc>true</AddRazorSupportForMvc> -->
+    <RazorLangVersion>3.0</RazorLangVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BlazorQuery" Version="0.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.1.0-preview2.19528.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.1.0-preview2.19528.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.1.0-preview4.19579.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.1.0-preview4.19579.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,7 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BlazorStrap" Version="1.1.0-preview1-02" />
+    <PackageReference Include="BlazorStrap" Version="1.1.101" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XTMF2.Web.Data\XTMF2.Web.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

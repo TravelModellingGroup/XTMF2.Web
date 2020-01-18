@@ -15,14 +15,36 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 using XTMF2.Web.Data.Models;
 
-namespace XTMF2.Web.Components
+namespace XTMF2.Web.Pages
 {
-    public partial class ModelSystemEditor
+    /// <summary>
+    ///     Root page / component for the model system display.
+    /// </summary>
+    public partial class ModelSystem
     {
+        /// <summary>
+        ///     Path parameter that specifies the project name.
+        /// </summary>
         [Microsoft.AspNetCore.Components.Parameter]
-        public ModelSystemModel ModelSystem { get; set; }
+        public string ProjectName { get; set; }
 
+        /// <summary>
+        ///     Path parameter that specifies the model system name.
+        /// </summary>
+        [Microsoft.AspNetCore.Components.Parameter]
+        public string ModelSystemName { get; set; }
+
+        [Inject]
+        protected UserModel XtmfUser { get; set; }
+
+        [Inject]
+        protected ILogger<ModelSystem> Logger { get; set; }
+
+        
     }
 }

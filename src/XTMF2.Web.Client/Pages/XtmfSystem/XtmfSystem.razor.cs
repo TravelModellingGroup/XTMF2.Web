@@ -1,4 +1,4 @@
-﻿//    Copyright 2017-2019 University of Toronto
+//    Copyright 2017-2019 University of Toronto
 // 
 //    This file is part of XTMF2.
 // 
@@ -15,14 +15,13 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
-using XTMF2.Web.Data.Models;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
-namespace XTMF2.Web.Components
-{
-    public partial class ModelSystemEditor
-    {
-        [Microsoft.AspNetCore.Components.Parameter]
-        public ModelSystemModel ModelSystem { get; set; }
+namespace XTMF2.Web.Pages {
+	public partial class XtmfSystem {
 
-    }
+
+		[Inject] protected ILogger<XtmfSystem> Logger { get; set; }
+	}
 }
