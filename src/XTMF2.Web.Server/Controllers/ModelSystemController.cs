@@ -15,27 +15,38 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using XTMF2.Web.Data.Interfaces;
+using XTMF2.Web.Data.Models;
 
-namespace XTMF2.Web.Server.Controllers
-{
+namespace XTMF2.Web.Server.Controllers {
     /// <summary>
     ///     API controller for the editing of model systems.
     /// </summary>
-    [Route("api/[controller]")]
+    [Route ("api/[controller]")]
     [ApiController]
-    public class ModelSystemController : ControllerBase
-    {
-        private XTMFRuntime _xtmfRuntime;
+    public class ModelSystemController : ControllerBase {
+        private readonly XTMFRuntime _xtmfRuntime;
+        private readonly ILogger<ModelSystemController> _logger;
+        private readonly User _user;
+        private readonly IMapper _mapper;
 
         /// <summary>
+        /// 
         /// </summary>
         /// <param name="runtime"></param>
-        public ModelSystemController(XTMFRuntime runtime)
-        {
+        /// <param name="user"></param>
+        /// <param name="logger"></param>
+        /// <param name="mapper"></param>
+        public ModelSystemController (XTMFRuntime runtime, User user, ILogger<ModelSystemController> logger,
+            IMapper mapper) {
             _xtmfRuntime = runtime;
+            _user = user;
+            _logger = logger;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -44,11 +55,10 @@ namespace XTMF2.Web.Server.Controllers
         /// <param name="project"></param>
         /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult Create(IModelSystem project)
-        {
-            return new OkResult();
+        [ProducesResponseType (StatusCodes.Status201Created)]
+        [ProducesResponseType (StatusCodes.Status422UnprocessableEntity)]
+        public ActionResult Create (IModelSystem project) {
+            return new OkResult ();
         }
 
         /// <summary>
@@ -57,9 +67,8 @@ namespace XTMF2.Web.Server.Controllers
         /// <param name="project"></param>
         /// <returns></returns>
         [HttpDelete]
-        public ActionResult Delete(IModelSystem project)
-        {
-            return new OkResult();
+        public ActionResult Delete (IModelSystem project) {
+            return new OkResult ();
         }
 
         /// <summary>
@@ -67,11 +76,21 @@ namespace XTMF2.Web.Server.Controllers
         /// <param name="project"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        [HttpGet("{projectName}/{modelSystemName}")]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<ModelSystemHeader> Get(string projectName, string modelSystemName)
-        {
-            return new OkResult();
+        [HttpGet ("{projectName}/{modelSystemName}")]
+        [ProducesResponseType (StatusCodes.Status404NotFound)]
+        [ProducesResponseType (StatusCodes.Status200OK)]
+        public ActionResult<ModelSystemHeader> Get (string projectName, string modelSystemName) {
+            string error = default (string);
+            if (!_xtmfRuntime.ProjectController.GetProject (_user.UserName, projectName, out var project, ref error)) {
+                return new NotFoundObjectResult (error);
+            }
+            if (!_xtmfRuntime.ProjectController.GetProjectSession (_user, project, out var projectSession, ref error)) {
+                return new NotFoundObjectResult (error);
+            }
+            if (!projectSession.GetModelSystemHeader (_user, modelSystemName, out var modelSystemHeader, ref error)) {
+                return new NotFoundObjectResult (error);
+            }
+            return new OkObjectResult (_mapper.Map<ModelSystemModel> (modelSystemHeader));
         }
     }
 }

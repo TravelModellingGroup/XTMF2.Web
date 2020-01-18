@@ -69,7 +69,7 @@ namespace XTMF2.Web.Client.Pages
         {
             Logger.Information("Projects List loading.");
             var projects = await ProjectClient.ListAsync();
-            Projects = new List<ProjectModel>();
+            Projects.AddRange(projects);
         }
 
         /// <summary>

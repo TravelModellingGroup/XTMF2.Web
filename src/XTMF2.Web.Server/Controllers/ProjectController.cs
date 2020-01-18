@@ -15,35 +15,37 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using XTMF2.Web.Data.Models;
 
-namespace XTMF2.Web.Server.Controllers
-{
+namespace XTMF2.Web.Server.Controllers {
     /// <summary>
     ///     API Controller for project related actions.
     /// </summary>
-    [Route("api/[controller]")]
+    [Route ("api/[controller]")]
     [ApiController]
-    public class ProjectController : ControllerBase
-    {
+    public class ProjectController : ControllerBase {
         private readonly ILogger<ProjectController> _logger;
         private readonly User _user;
         private readonly XTMFRuntime _xtmfRuntime;
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// </summary>
         /// <param name="runtime"></param>
         /// <param name="user"></param>
         /// <param name="logger"></param>
-        public ProjectController(XTMFRuntime runtime, User user, ILogger<ProjectController> logger)
-        {
+        public ProjectController (XTMFRuntime runtime, User user, ILogger<ProjectController> logger,
+            IMapper mapper) {
             _xtmfRuntime = runtime;
             _user = user;
             _logger = logger;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -52,21 +54,19 @@ namespace XTMF2.Web.Server.Controllers
         /// <param name="projectName"></param>
         /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Create(string projectName)
-        {
-            var error = default(string);
-            if (!_xtmfRuntime.ProjectController.CreateNewProject(_user, projectName,
-                out var session, ref error))
-            {
-                _logger.LogError($"Unable to create project: {session.Project.Name}\n" +
-                                 $"Error: {error}");
-                return new BadRequestObjectResult(error);
+        [ProducesResponseType (StatusCodes.Status201Created)]
+        [ProducesResponseType (StatusCodes.Status422UnprocessableEntity)]
+        public IActionResult Create (string projectName) {
+            var error = default (string);
+            if (!_xtmfRuntime.ProjectController.CreateNewProject (_user, projectName,
+                    out var session, ref error)) {
+                _logger.LogError ($"Unable to create project: {session.Project.Name}\n" +
+                    $"Error: {error}");
+                return new UnprocessableEntityObjectResult (error);
             }
 
-            _logger.LogInformation($"New project created: {session.Project.Name}");
-            return new CreatedResult(nameof(ProjectController), projectName);
+            _logger.LogInformation ($"New project created: {session.Project.Name}");
+            return new CreatedResult (nameof (ProjectController), projectName);
         }
 
         /// <summary>
@@ -74,17 +74,16 @@ namespace XTMF2.Web.Server.Controllers
         /// </summary>
         /// <param name="projectName"></param>
         /// <returns></returns>
-        [HttpGet("{projectName}")]
-        public ActionResult<ProjectModel> Get(string projectName)
-        {
+        [HttpGet ("{projectName}")]
+        [ProducesResponseType (StatusCodes.Status404NotFound)]
+        [ProducesResponseType (StatusCodes.Status200OK)]
+        public ActionResult<ProjectModel> Get (string projectName) {
             string error = default;
-            if (!_xtmfRuntime.ProjectController.GetProject(_user.UserName, projectName,
-                out var project, ref error))
-            {
-                return new NotFoundResult();
+            if (!_xtmfRuntime.ProjectController.GetProject (_user.UserName, projectName,
+                    out var project, ref error)) {
+                return new NotFoundResult ();
             }
-
-            return new OkObjectResult(project);
+            return new OkObjectResult (_mapper.Map<ProjectModel> (project));
         }
 
         /// <summary>
@@ -92,10 +91,10 @@ namespace XTMF2.Web.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult<IEnumerable<ProjectModel>> List()
-        {
-            var projects = XTMF2.Controllers.ProjectController.GetProjects(_user);
-            return new OkObjectResult(projects);
+        [ProducesResponseType (StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<ProjectModel>> List () {
+            var projects = XTMF2.Controllers.ProjectController.GetProjects (_user);
+            return new OkObjectResult (_mapper.Map<List<ProjectModel>> (projects));
         }
 
         /// <summary>
@@ -103,24 +102,24 @@ namespace XTMF2.Web.Server.Controllers
         /// </summary>
         /// <param name="projectName">The name of the project to delete.</param>
         /// <returns></returns>
-        [HttpDelete("{projectName}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult Delete(string projectName)
-        {
-            var error = default(string);
-            if (!_xtmfRuntime.ProjectController.GetProject(_user, projectName, out var xtmfProject, ref error))
-            {
-                return new NotFoundResult();
+        [HttpDelete ("{projectName}")]
+        [ProducesResponseType (StatusCodes.Status200OK)]
+        [ProducesResponseType (StatusCodes.Status404NotFound)]
+        [ProducesResponseType (StatusCodes.Status422UnprocessableEntity)]
+        public IActionResult Delete (string projectName) {
+            var error = default (string);
+            if (!_xtmfRuntime.ProjectController.GetProject (_user, projectName, out var xtmfProject, ref error)) {
+                return new NotFoundObjectResult (error);
             }
 
-            if (!_xtmfRuntime.ProjectController.DeleteProject(_user, xtmfProject, ref error))
-            {
-                _logger.LogError($"Unable to delete project: {projectName}\n" +
-                                 $"Error: {error}");
-            }
+            if (!_xtmfRuntime.ProjectController.DeleteProject (_user, xtmfProject, ref error)) {
+                _logger.LogError ($"Unable to delete project: {projectName}\n" +
+                    $"Error: {error}");
+                return new UnprocessableEntityObjectResult (error);
 
-            _logger.LogInformation($"Project deleted: {projectName}");
-            return new OkResult();
+            }
+            _logger.LogInformation ($"Project deleted: {projectName}");
+            return new OkResult ();
         }
     }
 }

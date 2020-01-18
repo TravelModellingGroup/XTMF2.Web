@@ -50,6 +50,11 @@
           "text/json",
           "application/*+json"
         ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "parameters": [
           {
             "name": "project",
@@ -62,11 +67,14 @@
           }
         ],
         "responses": {
-          "200": {
-            "x-nullable": true,
+          "201": {
+            "description": ""
+          },
+          "400": {
+            "x-nullable": false,
             "description": "",
             "schema": {
-              "type": "file"
+              "$ref": "#/definitions/ProblemDetails"
             }
           }
         }
@@ -131,11 +139,11 @@
           }
         ],
         "responses": {
-          "200": {
+          "404": {
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/ModelSystemHeader"
+              "$ref": "#/definitions/ProblemDetails"
             }
           }
         }
@@ -260,37 +268,13 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": true,
-            "description": "",
-            "schema": {
-              "type": "file"
-            }
+            "description": ""
           }
         }
       }
     }
   },
   "definitions": {
-    "IModelSystem": {
-      "type": "object",
-      "x-abstract": true,
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "ModelSystemHeader": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        }
-      }
-    },
     "ProblemDetails": {
       "type": "object",
       "properties": {
@@ -313,6 +297,15 @@
         "extensions": {
           "type": "object",
           "additionalProperties": {}
+        }
+      }
+    },
+    "IModelSystem": {
+      "type": "object",
+      "x-abstract": true,
+      "properties": {
+        "name": {
+          "type": "string"
         }
       }
     },

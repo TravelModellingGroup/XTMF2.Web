@@ -20,32 +20,28 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using XTMF2.Web.Client.Api;
 
-namespace XTMF2.Web.Client
-{
+namespace XTMF2.Web.Client {
     /// <summary>
     /// Startup for client Blazor
     /// </summary>
-    public class Startup
-    {
+    public class Startup {
         /// <summary>
         /// Configure services to be used.
         /// </summary>
         /// <param name="services"></param>
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddSingleton(typeof(AuthenticationClient));
-            services.AddSingleton(typeof(ProjectClient));
-            services.AddSingleton(typeof(ModelSystemClient));
-            services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Trace); });
+        public void ConfigureServices (IServiceCollection services) {
+            services.AddSingleton (typeof (AuthenticationClient), new AuthenticationClient ("https://localhost:5001/", new System.Net.Http.HttpClient ()));
+            services.AddSingleton (typeof (ProjectClient), new ProjectClient ("https://localhost:5001/", new System.Net.Http.HttpClient ()));
+            services.AddSingleton (typeof (ModelSystemClient), new ModelSystemClient ("https://localhost:5001/", new System.Net.Http.HttpClient ()));
+            services.AddLogging (builder => { builder.SetMinimumLevel (LogLevel.Trace); });
         }
 
         /// <summary>
         /// Configure application components.
         /// </summary>
         /// <param name="app"></param>
-        public void Configure(IComponentsApplicationBuilder app)
-        {
-            app.AddComponent<App>("app");
+        public void Configure (IComponentsApplicationBuilder app) {
+            app.AddComponent<App> ("app");
         }
     }
 }

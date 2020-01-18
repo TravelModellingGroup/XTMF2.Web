@@ -17,6 +17,7 @@
 
 using System.Linq;
 using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -102,9 +103,7 @@ namespace XTMF2.Web.Server
         /// <param name="services"></param>
         private void ConfigureAutoMapping(IServiceCollection services)
         {
-            var dataAutoMapper = new DataAutoMapper();
-            services.AddSingleton(dataAutoMapper);
-            services.AddSingleton(dataAutoMapper.Configuration.CreateMapper());
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
