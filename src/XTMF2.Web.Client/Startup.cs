@@ -30,9 +30,9 @@ namespace XTMF2.Web.Client {
         /// </summary>
         /// <param name="services"></param>
         public void ConfigureServices (IServiceCollection services) {
-            services.AddSingleton (typeof (AuthenticationClient), new AuthenticationClient ("https://localhost:5001/", new System.Net.Http.HttpClient ()));
-            services.AddSingleton (typeof (ProjectClient), new ProjectClient ("https://localhost:5001/", new System.Net.Http.HttpClient ()));
-            services.AddSingleton (typeof (ModelSystemClient), new ModelSystemClient ("https://localhost:5001/", new System.Net.Http.HttpClient ()));
+            services.AddSingleton<AuthenticationClient> ();
+            services.AddSingleton<ProjectClient> ();
+            services.AddSingleton<ModelSystemClient> ();
             services.AddLogging (builder => { builder.SetMinimumLevel (LogLevel.Trace); });
         }
 

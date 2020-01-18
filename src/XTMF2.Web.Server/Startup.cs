@@ -124,7 +124,7 @@ namespace XTMF2.Web.Server
             app.UseAuthorization();
             //enable authentication and authorization
             app.UseAuthentication();
-
+            app.UseBlazorDebugging();
             app.UseOpenApi();
             app.UseSwaggerUi3();
 

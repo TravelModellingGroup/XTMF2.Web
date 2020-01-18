@@ -2,17 +2,13 @@
   "runtime": "NetCore31",
   "defaultVariables": null,
   "documentGenerator": {
-    "aspNetCoreToOpenApi": {
-      "project": "XTMF2.Web.Server.csproj",
-      "msBuildProjectExtensionsPath": null,
-      "configuration": null,
-      "runtime": null,
-      "targetFramework": null,
-      "noBuild": false,
-      "verbose": true,
-      "workingDirectory": null,
-      "requireParametersWithoutDefault": false,
-      "apiGroupNames": null,
+    "webApiToOpenApi": {
+      "controllerNames": [],
+      "isAspNetCore": true,
+      "resolveJsonOptions": false,
+      "defaultUrlTemplate": "api/{controller}/{id?}",
+      "addMissingPathParameters": false,
+      "includedVersions": null,
       "defaultPropertyNameHandling": "Default",
       "defaultReferenceTypeNullHandling": "Null",
       "defaultDictionaryValueReferenceTypeNullHandling": "NotNull",
@@ -31,7 +27,7 @@
       "serviceBasePath": "/",
       "serviceSchemes": [],
       "infoTitle": "XTMF2 Web Api",
-      "infoDescription": null,
+      "infoDescription": "",
       "infoVersion": "1.0.0",
       "documentTemplate": null,
       "documentProcessorTypes": [],
@@ -46,9 +42,11 @@
       "createWebHostBuilderMethod": null,
       "startupType": null,
       "allowNullableBodyParameters": true,
-      "output": "swagger.json",
+      "output": null,
       "outputType": "Swagger2",
-      "assemblyPaths": [],
+      "assemblyPaths": [
+        "bin/Debug/netcoreapp3.1/XTMF2.Web.Server.dll"
+      ],
       "assemblyConfig": null,
       "referencePaths": [],
       "useNuGetCache": false
