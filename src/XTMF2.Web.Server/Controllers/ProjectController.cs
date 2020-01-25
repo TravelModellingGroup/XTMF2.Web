@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -29,6 +30,7 @@ namespace XTMF2.Web.Server.Controllers {
     /// </summary>
     [Route ("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProjectController : ControllerBase {
         private readonly ILogger<ProjectController> _logger;
         private readonly User _user;
