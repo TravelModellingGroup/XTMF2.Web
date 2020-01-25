@@ -295,7 +295,7 @@ namespace XTMF2.Web.Client.Api
                             return;
                         }
                         else
-                        if (status_ == "400") 
+                        if (status_ == "422") 
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("A server side error occurred.", (int)response_.StatusCode, responseText_, headers_, null);
@@ -441,6 +441,11 @@ namespace XTMF2.Web.Client.Api
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("A server side error occurred.", (int)response_.StatusCode, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == "200") 
+                        {
+                            return;
                         }
                         else
                         if (status_ != "200" && status_ != "204")
@@ -826,7 +831,7 @@ namespace XTMF2.Web.Client.Api
                             return;
                         }
                         else
-                        if (status_ == "400") 
+                        if (status_ == "422") 
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("A server side error occurred.", (int)response_.StatusCode, responseText_, headers_, null);
@@ -889,6 +894,12 @@ namespace XTMF2.Web.Client.Api
                         ProcessResponse(client_, response_);
     
                         var status_ = ((int)response_.StatusCode).ToString();
+                        if (status_ == "404") 
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("A server side error occurred.", (int)response_.StatusCode, responseText_, headers_, null);
+                        }
+                        else
                         if (status_ == "200") 
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<ProjectModel>>(response_, headers_).ConfigureAwait(false);
@@ -1029,6 +1040,18 @@ namespace XTMF2.Web.Client.Api
                         if (status_ == "200") 
                         {
                             return;
+                        }
+                        else
+                        if (status_ == "404") 
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("A server side error occurred.", (int)response_.StatusCode, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == "422") 
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("A server side error occurred.", (int)response_.StatusCode, responseText_, headers_, null);
                         }
                         else
                         if (status_ != "200" && status_ != "204")

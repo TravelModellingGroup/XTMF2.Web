@@ -15,6 +15,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AutoMapper;
@@ -29,7 +30,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using NSwag;
 using NSwag.AspNetCore;
+using NSwag.Generation.Processors.Security;
 using XTMF2.Web.Data;
 using XTMF2.Web.Server.Services;
 using XTMF2.Web.Services;
@@ -115,16 +118,7 @@ namespace XTMF2.Web.Server {
             app.UseAuthentication ();
             app.UseBlazorDebugging ();
             app.UseOpenApi ();
-            app.UseSwaggerUi3 (settings => {
-                settings.OAuth2Client = new OAuth2ClientSettings {
-                ClientId = "foo",
-                ClientSecret = "bar",
-                AppName = "my_app",
-                Realm = "my_realm",
-                AdditionalQueryStringParameters = { { "foo", "bar" }
-                }
-                };
-            });
+            app.UseSwaggerUi3 ();
 
             app.UseEndpoints (endpoints => {
                 // endpoints.MapBlazorHub ();
