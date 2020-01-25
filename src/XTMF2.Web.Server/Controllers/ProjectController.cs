@@ -31,6 +31,7 @@ namespace XTMF2.Web.Server.Controllers {
     /// </summary>
     [Route ("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProjectController : ControllerBase {
         private readonly ILogger<ProjectController> _logger;
         private readonly User _user;
@@ -77,6 +78,8 @@ namespace XTMF2.Web.Server.Controllers {
         /// <param name="projectName"></param>
         /// <returns></returns>
         [HttpGet ("{projectName}")]
+        [ProducesResponseType (StatusCodes.Status404NotFound)]
+        [ProducesResponseType (typeof (ProjectModel), StatusCodes.Status201Created)]
         public ActionResult<ProjectModel> Get (string projectName) {
             string error = default;
             if (!_xtmfRuntime.ProjectController.GetProject (_user.UserName, projectName,
@@ -92,7 +95,7 @@ namespace XTMF2.Web.Server.Controllers {
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType (StatusCodes.Status404NotFound)]
-        [ProducesResponseType (typeof(IEnumerable<ProjectModel>),StatusCodes.Status200OK)]
+        [ProducesResponseType (typeof (IEnumerable<ProjectModel>), StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<ProjectModel>> List () {
             var projects = XTMF2.Controllers.ProjectController.GetProjects (_user);
             return new OkObjectResult (_mapper.Map<List<ProjectModel>> (projects));

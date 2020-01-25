@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -63,9 +64,6 @@ namespace XTMF2.Web.Server {
             });
             services.AddMvcCore ()
                 .AddApiExplorer ();
-            services.AddSwaggerDocument (document => {
-                document.Title = "XTMF2 Web API";
-            });
 
             services.AddLogging (builder => { builder.SetMinimumLevel (LogLevel.Trace); });
             //configure the automapping sercices
@@ -77,19 +75,35 @@ namespace XTMF2.Web.Server {
             services.AddIdentity<User, string> ().AddUserStore<XtmfUserStore<User>> ()
                 .AddRoleStore<XtmfRoleStore<string>> ().AddSignInManager<XtmfSignInManager<User>> ();
 
-            // add authentication services
-            services.AddAuthentication (JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer (options => {
-                    options.TokenValidationParameters = new TokenValidationParameters {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["JwtIssuer"],
-                    ValidAudience = Configuration["JwtAudience"],
-                    IssuerSigningKey = new SymmetricSecurityKey (Encoding.UTF8.GetBytes (Configuration["JwtSecurityKey"]))
+            services.AddAuthentication (x => {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer (x => {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey (Encoding.ASCII.GetBytes ("REPLACE")),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
                     };
                 });
+
+            services.AddOpenApiDocument (document => {
+
+                document.AddSecurity ("JWT", Enumerable.Empty<string> (), new OpenApiSecurityScheme {
+                    Type = OpenApiSecuritySchemeType.ApiKey,
+                        Name = "Authorization",
+                        In = OpenApiSecurityApiKeyLocation.Header,
+                        Description = "Type into the textbox: Bearer {your JWT token}."
+                });
+
+                document.OperationProcessors.Add (
+                    new AspNetCoreOperationSecurityScopeProcessor ("JWT"));
+
+            });
+
         }
 
         /// <summary>
@@ -118,7 +132,16 @@ namespace XTMF2.Web.Server {
             app.UseAuthentication ();
             app.UseBlazorDebugging ();
             app.UseOpenApi ();
-            app.UseSwaggerUi3 ();
+            app.UseSwaggerUi3 (settings => {
+                settings.OAuth2Client = new OAuth2ClientSettings {
+                ClientId = "foo",
+                ClientSecret = "bar",
+                AppName = "my_app",
+                Realm = "my_realm",
+                AdditionalQueryStringParameters = { { "foo", "bar" }
+                }
+                };
+            });
 
             app.UseEndpoints (endpoints => {
                 // endpoints.MapBlazorHub ();
