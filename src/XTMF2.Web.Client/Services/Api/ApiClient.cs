@@ -14,7 +14,7 @@ using XTMF2.Web.Client.Util;
 #pragma warning disable 1573 // Disable "CS1573 Parameter '...' has no matching param tag in the XML comment for ...
 #pragma warning disable 1591 // Disable "CS1591 Missing XML comment for publicly visible type or member ..."
 
-namespace XTMF2.Web.Client.Services
+namespace XTMF2.Web.Client.Services.Api
 {
     using System = global::System;
     

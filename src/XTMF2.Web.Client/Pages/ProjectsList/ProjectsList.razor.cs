@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 using BlazorStrap;
 using Microsoft.AspNetCore.Components;
 using Serilog;
-using XTMF2.Web.Client.Services;
+using XTMF2.Web.Client.Services.Api;
 using XTMF2.Web.Components.Util;
 using XTMF2.Web.Data.Models;
 
@@ -42,7 +42,6 @@ namespace XTMF2.Web.Client.Pages {
         public BSModal NewProjectModal;
 
         [Inject] protected ProjectClient ProjectClient { get; set; }
-
 
         protected ILogger Logger { get; set; } = Log.ForContext<ProjectsList> ();
 

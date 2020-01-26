@@ -15,10 +15,12 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Net.Http;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using XTMF2.Web.Client.Services;
+using XTMF2.Web.Client.Services.Api;
 
 namespace XTMF2.Web.Client {
     /// <summary>
@@ -30,9 +32,13 @@ namespace XTMF2.Web.Client {
         /// </summary>
         /// <param name="services"></param>
         public void ConfigureServices (IServiceCollection services) {
-            services.AddSingleton<AuthenticationClient> ();
-            services.AddSingleton<ProjectClient> ();
-            services.AddSingleton<ModelSystemClient> ();
+            services.AddScoped<AuthorizationService> ();
+            services.AddScoped<AuthenticationClient> ();
+            services.AddScoped<ProjectClient> (provider => {
+                return new ProjectClient (provider.GetService<System.Net.Http.HttpClient> (),
+                    provider.GetService<AuthorizationService> ());
+            });
+            services.AddScoped<ModelSystemClient> ();
             services.AddLogging (builder => { builder.SetMinimumLevel (LogLevel.Trace); });
         }
 

@@ -64,7 +64,7 @@
       "generateExceptionClasses": true,
       "exceptionClass": "ApiException",
       "wrapDtoExceptions": true,
-      "useHttpClientCreationMethod": false,
+      "useHttpClientCreationMethod": true,
       "httpClientType": "System.Net.Http.HttpClient",
       "useHttpRequestMessageCreationMethod": true,
       "useBaseUrl": true,
@@ -101,7 +101,7 @@
       "wrapResponseMethods": [],
       "generateResponseClasses": true,
       "responseClass": "SwaggerResponse",
-      "namespace": "XTMF2.Web.Client.Services",
+      "namespace": "XTMF2.Web.Client.Services.Api",
       "requiredPropertiesMustBeDefined": true,
       "dateType": "System.DateTimeOffset",
       "jsonConverters": null,
@@ -138,7 +138,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "../XTMF2.Web.Client/Services/ApiClient.cs"
+      "output": "../XTMF2.Web.Client/Services/Api/ApiClient.cs"
     }
   }
 }
