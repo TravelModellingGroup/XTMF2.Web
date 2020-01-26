@@ -30,6 +30,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.AspNetCore;
@@ -38,7 +39,6 @@ using XTMF2.Web.Data;
 using XTMF2.Web.Server.Services;
 using XTMF2.Web.Services;
 using XTMF2.Web.Services.Interfaces;
-using Microsoft.IdentityModel.Logging;
 namespace XTMF2.Web.Server {
     public class Startup {
         /// <summary>
@@ -69,14 +69,14 @@ namespace XTMF2.Web.Server {
             services.AddLogging (builder => { builder.SetMinimumLevel (LogLevel.Trace); });
             //configure the automapping sercices
             ConfigureAutoMapping (services);
-
+            services.AddHttpContextAccessor ();
             services.AddAuthorization ();
             //configure the authentication and authorization services
             services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider> ();
             services.AddIdentity<User, string> ().AddUserStore<XtmfUserStore<User>> ()
                 .AddRoleStore<XtmfRoleStore<string>> ().AddSignInManager<XtmfSignInManager<User>> ();
 
-            services.AddScoped(typeof(IAuthenticationService),typeof(AuthenticationService));
+            services.AddScoped (typeof (IAuthenticationService), typeof (AuthenticationService));
 
             services.AddAuthentication (x => {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -85,7 +85,7 @@ namespace XTMF2.Web.Server {
                 .AddJwtBearer (x => {
                     x.RequireHttpsMetadata = false;
                     x.SaveToken = true;
-                    
+
                     x.TokenValidationParameters = new TokenValidationParameters {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey (Encoding.ASCII.GetBytes (Configuration["JwtSecurityKey"])),

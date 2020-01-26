@@ -54,7 +54,7 @@
   },
   "codeGenerators": {
     "openApiToCSharpClient": {
-      "clientBaseClass": null,
+      "clientBaseClass": "BaseClient",
       "configurationClass": null,
       "generateClientClasses": true,
       "generateClientInterfaces": false,
@@ -66,7 +66,7 @@
       "wrapDtoExceptions": true,
       "useHttpClientCreationMethod": false,
       "httpClientType": "System.Net.Http.HttpClient",
-      "useHttpRequestMessageCreationMethod": false,
+      "useHttpRequestMessageCreationMethod": true,
       "useBaseUrl": true,
       "generateBaseUrlProperty": true,
       "generateSyncMethods": false,
@@ -86,7 +86,8 @@
       "operationGenerationMode": "MultipleClientsFromOperationId",
       "additionalNamespaceUsages": [
         "XTMF2.Web.Data.Models",
-        "XTMF2.Web.Data.Interfaces"
+        "XTMF2.Web.Data.Interfaces",
+        "XTMF2.Web.Client.Util"
       ],
       "additionalContractNamespaceUsages": [],
       "generateOptionalParameters": false,
@@ -100,7 +101,7 @@
       "wrapResponseMethods": [],
       "generateResponseClasses": true,
       "responseClass": "SwaggerResponse",
-      "namespace": "XTMF2.Web.Client.Api",
+      "namespace": "XTMF2.Web.Client.Services",
       "requiredPropertiesMustBeDefined": true,
       "dateType": "System.DateTimeOffset",
       "jsonConverters": null,
@@ -137,7 +138,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "../XTMF2.Web.Client/Api/ApiClient.cs"
+      "output": "../XTMF2.Web.Client/Services/ApiClient.cs"
     }
   }
 }

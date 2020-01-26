@@ -66,7 +66,8 @@ namespace XTMF2.Web.Server.Controllers {
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete ("{projectName}/{modelSystemName}")]
+        [ProducesResponseType (StatusCodes.Status404NotFound)]
         public ActionResult Delete (IModelSystem project) {
             return new OkResult ();
         }
@@ -78,8 +79,8 @@ namespace XTMF2.Web.Server.Controllers {
         /// <returns></returns>
         [HttpGet ("{projectName}/{modelSystemName}")]
         [ProducesResponseType (StatusCodes.Status404NotFound)]
-        [ProducesResponseType (StatusCodes.Status200OK)]
-        public ActionResult<ModelSystemHeader> Get (string projectName, string modelSystemName) {
+        [ProducesResponseType (typeof (ModelSystemModel), StatusCodes.Status200OK)]
+        public ActionResult<ModelSystemModel> Get (string projectName, string modelSystemName) {
             string error = default (string);
             if (!_xtmfRuntime.ProjectController.GetProject (_user.UserName, projectName, out var project, ref error)) {
                 return new NotFoundObjectResult (error);

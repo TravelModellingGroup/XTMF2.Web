@@ -56,10 +56,10 @@ namespace XTMF2.Web.Server.Controllers {
         /// Login endpoint.
         /// </summary>
         /// <param name="userName">The username to login.</param>
-        [HttpPost ("authenticate")]
+        [HttpPost ("logout")]
         public async Task<IActionResult> Logout () {
-            var tokenString = await _authenticationService.SignOut();
-            return Ok (tokenString);
+            await _authenticationService.SignOut(null);
+            return Ok ();
         }
     }
 }

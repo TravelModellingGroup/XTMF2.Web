@@ -26,13 +26,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using XTMF2.Web.Services.Interfaces;
 
-namespace XTMF2.Web.Services
-{
+namespace XTMF2.Web.Services {
     /// <summary>
     ///     Authentication service for clients. Associates a session with a backed XTMF2 user account.
     /// </summary>
-    public class AuthenticationService : IAuthenticationService
-    {
+    public class AuthenticationService : IAuthenticationService {
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthenticationService> _logger;
         private readonly SignInManager<User> _signInManager;
@@ -45,9 +43,8 @@ namespace XTMF2.Web.Services
         /// <param name="signInManager"></param>
         /// <param name="logger"></param>
         /// <param name="configuration"></param>
-        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager,
-            ILogger<AuthenticationService> logger, IConfiguration configuration)
-        {
+        public AuthenticationService (UserManager<User> userManager, SignInManager<User> signInManager,
+            ILogger<AuthenticationService> logger, IConfiguration configuration) {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
@@ -59,28 +56,26 @@ namespace XTMF2.Web.Services
         /// </summary>
         /// <param name="userName">The username to associate the session with.</param>
         /// <param name="password">Currently unused.</param>
-        public async Task<string> SignIn(string userName, string password = null)
-        {
-            var user = await _userManager.FindByIdAsync(userName);
-            await _signInManager.SignInAsync(user, true);
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.Name, userName)
+        public async Task<string> SignIn (string userName, string password = null) {
+            var user = await _userManager.FindByIdAsync (userName);
+            await _signInManager.SignInAsync (user, true);
+            var claims = new [] {
+                new Claim (ClaimTypes.Name, userName)
             };
-            Console.WriteLine(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]).Length);
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
-            Console.WriteLine(key);
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
-            var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtExpiryInDays"]));
+            Console.WriteLine (Encoding.UTF8.GetBytes (_configuration["JwtSecurityKey"]).Length);
+            var key = new SymmetricSecurityKey (Encoding.UTF8.GetBytes (_configuration["JwtSecurityKey"]));
+            Console.WriteLine (key);
+            var creds = new SigningCredentials (key, SecurityAlgorithms.HmacSha512);
+            var expiry = DateTime.Now.AddDays (Convert.ToInt32 (_configuration["JwtExpiryInDays"]));
 
-            var token = new JwtSecurityToken(
+            var token = new JwtSecurityToken (
                 _configuration["JwtIssuer"],
                 _configuration["JwtAudience"],
                 claims,
-                expires: expiry,
-                signingCredentials: creds
+                expires : expiry,
+                signingCredentials : creds
             );
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return new JwtSecurityTokenHandler ().WriteToken (token);
         }
 
         /// <summary>
@@ -88,9 +83,8 @@ namespace XTMF2.Web.Services
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task SignOut(User user)
-        {
-            return await _signInManager.SignOutAsync();
+        public async Task SignOut (User user) {
+            await _signInManager.SignOutAsync ();
         }
     }
 }

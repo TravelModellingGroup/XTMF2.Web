@@ -18,7 +18,7 @@
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using XTMF2.Web.Client.Api;
+using XTMF2.Web.Client.Services;
 
 namespace XTMF2.Web.Client {
     /// <summary>
