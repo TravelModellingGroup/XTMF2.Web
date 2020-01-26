@@ -37,7 +37,8 @@ using NSwag.Generation.Processors.Security;
 using XTMF2.Web.Data;
 using XTMF2.Web.Server.Services;
 using XTMF2.Web.Services;
-
+using XTMF2.Web.Services.Interfaces;
+using Microsoft.IdentityModel.Logging;
 namespace XTMF2.Web.Server {
     public class Startup {
         /// <summary>
@@ -75,6 +76,8 @@ namespace XTMF2.Web.Server {
             services.AddIdentity<User, string> ().AddUserStore<XtmfUserStore<User>> ()
                 .AddRoleStore<XtmfRoleStore<string>> ().AddSignInManager<XtmfSignInManager<User>> ();
 
+            services.AddScoped(typeof(IAuthenticationService),typeof(AuthenticationService));
+
             services.AddAuthentication (x => {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -82,9 +85,10 @@ namespace XTMF2.Web.Server {
                 .AddJwtBearer (x => {
                     x.RequireHttpsMetadata = false;
                     x.SaveToken = true;
+                    
                     x.TokenValidationParameters = new TokenValidationParameters {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey (Encoding.ASCII.GetBytes ("REPLACE")),
+                        IssuerSigningKey = new SymmetricSecurityKey (Encoding.ASCII.GetBytes (Configuration["JwtSecurityKey"])),
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
@@ -103,6 +107,8 @@ namespace XTMF2.Web.Server {
                     new AspNetCoreOperationSecurityScopeProcessor ("JWT"));
 
             });
+
+            IdentityModelEventSource.ShowPII = true;
 
         }
 
@@ -132,16 +138,7 @@ namespace XTMF2.Web.Server {
             app.UseAuthentication ();
             app.UseBlazorDebugging ();
             app.UseOpenApi ();
-            app.UseSwaggerUi3 (settings => {
-                settings.OAuth2Client = new OAuth2ClientSettings {
-                ClientId = "foo",
-                ClientSecret = "bar",
-                AppName = "my_app",
-                Realm = "my_realm",
-                AdditionalQueryStringParameters = { { "foo", "bar" }
-                }
-                };
-            });
+            app.UseSwaggerUi3 ();
 
             app.UseEndpoints (endpoints => {
                 // endpoints.MapBlazorHub ();
