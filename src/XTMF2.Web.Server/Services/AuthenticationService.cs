@@ -1,4 +1,4 @@
-﻿//     Copyright 2017-2020 University of Toronto
+//     Copyright 2017-2020 University of Toronto
 // 
 //     This file is part of XTMF2.
 // 
@@ -69,10 +69,8 @@ namespace XTMF2.Web.Server.Services
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
-
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
             var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtExpiryInDays"]));
-
             var token = new JwtSecurityToken(
                 _configuration["JwtIssuer"],
                 _configuration["JwtAudience"],

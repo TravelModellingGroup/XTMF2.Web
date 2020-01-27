@@ -15,6 +15,7 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+
 using System.ComponentModel.DataAnnotations;
 using XTMF2.Web.Data.Interfaces;
 
@@ -22,7 +23,9 @@ namespace XTMF2.Web.Data.Models
 {
     public class UserModel : IUser
     {
+
         [Required]
+
         public string Name { get; set; }
     }
 }

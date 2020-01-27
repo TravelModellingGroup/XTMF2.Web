@@ -91,7 +91,6 @@ namespace XTMF2.Web.Server.Controllers
             {
                 return new NotFoundResult();
             }
-
             return new OkObjectResult(_mapper.Map<ProjectModel>(project));
         }
 

@@ -16,5 +16,6 @@
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace XTMF2.Web.Client.Pages {
+
 	public partial class Settings { }
 }

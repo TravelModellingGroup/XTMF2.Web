@@ -25,7 +25,7 @@ namespace XTMF2.Web.Data.Models
     public class ModelSystemModel : IModelSystem
     {
         public string Description { get; set; }
-
+        
         [Required]
         public string Name { get; set; }
     }

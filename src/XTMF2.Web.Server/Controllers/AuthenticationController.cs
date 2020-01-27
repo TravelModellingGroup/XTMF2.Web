@@ -1,4 +1,4 @@
-﻿//     Copyright 2017-2020 University of Toronto
+//     Copyright 2017-2020 University of Toronto
 // 
 //     This file is part of XTMF2.
 // 
@@ -48,6 +48,7 @@ namespace XTMF2.Web.Server.Controllers
         /// <param name="userName">The username to login.</param>
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate(string userName)
+
         {
             var tokenString = await _authenticationService.SignIn(userName);
             return Ok(tokenString);

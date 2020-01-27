@@ -154,6 +154,7 @@ namespace XTMF2.Web.Server
                 app.UseHsts();
             }
 
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseClientSideBlazorFiles<Client.Startup>();
