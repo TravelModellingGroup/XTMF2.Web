@@ -15,32 +15,36 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Net.Http;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using XTMF2.Web.Client.Api;
+using XTMF2.Web.Client.Services;
+using XTMF2.Web.Client.Services.Api;
 
 namespace XTMF2.Web.Client
 {
     /// <summary>
-    /// Startup for client Blazor
+    ///     Startup for client Blazor
     /// </summary>
     public class Startup
     {
         /// <summary>
-        /// Configure services to be used.
+        ///     Configure services to be used.
         /// </summary>
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(typeof(AuthenticationClient));
-            services.AddSingleton(typeof(ProjectClient));
-            services.AddSingleton(typeof(ModelSystemClient));
+            services.AddScoped<AuthorizationService>();
+            services.AddScoped<AuthenticationClient>();
+            services.AddScoped(provider => new ProjectClient(provider.GetService<HttpClient>(),
+                provider.GetService<AuthorizationService>()));
+            services.AddScoped<ModelSystemClient>();
             services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Trace); });
         }
 
         /// <summary>
-        /// Configure application components.
+        ///     Configure application components.
         /// </summary>
         /// <param name="app"></param>
         public void Configure(IComponentsApplicationBuilder app)

@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 using BlazorStrap;
 using Microsoft.AspNetCore.Components;
 using Serilog;
-using XTMF2.Web.Client.Api;
+using XTMF2.Web.Client.Services.Api;
 using XTMF2.Web.Components.Util;
 using XTMF2.Web.Data.Models;
 
@@ -52,7 +52,7 @@ namespace XTMF2.Web.Client.Pages
         /// <summary>
         ///     List of projects for the active user.
         /// </summary>
-        public List<ProjectModel> Projects { get; set; } = new List<ProjectModel>();
+        public List<ProjectModel> Projects { get; } = new List<ProjectModel>();
 
         /// <summary>
         /// </summary>
@@ -69,15 +69,16 @@ namespace XTMF2.Web.Client.Pages
         {
             Logger.Information("Projects List loading.");
             var projects = await ProjectClient.ListAsync();
-            Projects = new List<ProjectModel>();
+            Projects.AddRange(projects);
         }
 
         /// <summary>
         ///     Deletes a project for this user.
         /// </summary>
-        public void DeleteProject(ProjectModel project)
+        public async void DeleteProject(ProjectModel project)
         {
-            throw new NotImplementedException();
+            await ProjectClient.DeleteAsync(project.Name);
+            Projects.Remove(project);
         }
 
         /// <summary>
@@ -85,9 +86,10 @@ namespace XTMF2.Web.Client.Pages
         /// </summary>
         protected async void OnNewProjectFormSubmit(string input)
         {
-            await ProjectClient.CreateAsync(input);
-            Logger.Information("Project created");
-            
+            var model = await ProjectClient.CreateAsync(input);
+            Projects.Add(model);
+            Logger.Information($"Project {input} has been created.");
+
         }
 
         /// <summary>

@@ -15,18 +15,25 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Threading.Tasks;
 
-using System.ComponentModel.DataAnnotations;
-
-using XTMF2.Web.Data.Interfaces;
-
-namespace XTMF2.Web.Data.Models
+namespace XTMF2.Web.Server.Services.Interfaces
 {
-    public class ProjectModel : IProject
+    /// <summary>
+    ///     Authentication service for clients. Associates a session with a backed XTMF2 user account.
+    /// </summary>
+    public interface IAuthenticationService
     {
+        /// <summary>
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        Task<string> SignIn(string userName, string password = null);
 
-        [Required]
-
-        public string Name { get; set; }
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
+        Task SignOut();
     }
 }
