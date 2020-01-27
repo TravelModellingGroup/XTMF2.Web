@@ -19,11 +19,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AutoMapper;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
@@ -35,10 +35,9 @@ using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
-using XTMF2.Web.Data;
 using XTMF2.Web.Server.Services;
+using XTMF2.Web.Server.Services.Interfaces;
 using XTMF2.Web.Services;
-using XTMF2.Web.Services.Interfaces;
 namespace XTMF2.Web.Server {
     public class Startup {
         /// <summary>
@@ -77,6 +76,17 @@ namespace XTMF2.Web.Server {
                 .AddRoleStore<XtmfRoleStore<string>> ().AddSignInManager<XtmfSignInManager<User>> ();
 
             services.AddScoped (typeof (IAuthenticationService), typeof (AuthenticationService));
+
+            services.AddScoped<User>( (providers) =>
+            {
+                var context = (IHttpContextAccessor)providers.GetService(typeof(IHttpContextAccessor));
+                var userManager = (UserManager < User > )providers.GetService(typeof(UserManager<User>));
+                var user = userManager.FindByNameAsync(context.HttpContext.User.Claims.FirstOrDefault()?.Value);
+                return ((XTMFRuntime) providers.GetService(typeof(XTMFRuntime))).UserController.Users.FirstOrDefault();
+                //return user;
+            });
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddAuthentication (x => {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

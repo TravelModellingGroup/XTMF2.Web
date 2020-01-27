@@ -20,17 +20,19 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using XTMF2.Web.Services.Interfaces;
+using XTMF2.Web.Server.Services;
 
 namespace XTMF2.Web.Services {
     /// <summary>
     ///     Authentication service for clients. Associates a session with a backed XTMF2 user account.
     /// </summary>
-    public class AuthenticationService : IAuthenticationService {
+    public class AuthenticationService : XTMF2.Web.Server.Services.Interfaces.IAuthenticationService
+    {
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthenticationService> _logger;
         private readonly SignInManager<User> _signInManager;
@@ -62,9 +64,9 @@ namespace XTMF2.Web.Services {
             var claims = new [] {
                 new Claim (ClaimTypes.Name, userName)
             };
-            Console.WriteLine (Encoding.UTF8.GetBytes (_configuration["JwtSecurityKey"]).Length);
+
             var key = new SymmetricSecurityKey (Encoding.UTF8.GetBytes (_configuration["JwtSecurityKey"]));
-            Console.WriteLine (key);
+
             var creds = new SigningCredentials (key, SecurityAlgorithms.HmacSha512);
             var expiry = DateTime.Now.AddDays (Convert.ToInt32 (_configuration["JwtExpiryInDays"]));
 
@@ -81,9 +83,8 @@ namespace XTMF2.Web.Services {
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="user"></param>
         /// <returns></returns>
-        public async Task SignOut (User user) {
+        public async Task SignOut () {
             await _signInManager.SignOutAsync ();
         }
     }

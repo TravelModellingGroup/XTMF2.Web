@@ -316,30 +316,32 @@ namespace XTMF2.Web.Client.Services.Api
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
     
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task CreateAsync(string name)
+        public System.Threading.Tasks.Task<ModelSystemModel> CreateAsync(string projectName, ModelSystemModel modelSystemModel)
         {
-            return CreateAsync(name, System.Threading.CancellationToken.None);
+            return CreateAsync(projectName, modelSystemModel, System.Threading.CancellationToken.None);
         }
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task CreateAsync(string name, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<ModelSystemModel> CreateAsync(string projectName, ModelSystemModel modelSystemModel, System.Threading.CancellationToken cancellationToken)
         {
+            if (projectName == null)
+                throw new System.ArgumentNullException("projectName");
+    
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/ModelSystem?");
-            if (name != null) 
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("Name") + "=").Append(System.Uri.EscapeDataString(ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/ModelSystem/project/{projectName}");
+            urlBuilder_.Replace("{projectName}", System.Uri.EscapeDataString(ConvertToString(projectName, System.Globalization.CultureInfo.InvariantCulture)));
     
             var client_ = _httpClient;
             try
             {
                 using (var request_ = await CreateHttpRequestMessageAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(modelSystemModel, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
     
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
@@ -359,15 +361,16 @@ namespace XTMF2.Web.Client.Services.Api
                         ProcessResponse(client_, response_);
     
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "201") 
-                        {
-                            return;
-                        }
-                        else
                         if (status_ == "422") 
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("A server side error occurred.", (int)response_.StatusCode, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == "201") 
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ModelSystemModel>(response_, headers_).ConfigureAwait(false);
+                            return objectResponse_.Object;
                         }
                         else
                         if (status_ != "200" && status_ != "204")
@@ -375,6 +378,8 @@ namespace XTMF2.Web.Client.Services.Api
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
+            
+                        return default(ModelSystemModel);
                     }
                     finally
                     {
@@ -854,14 +859,14 @@ namespace XTMF2.Web.Client.Services.Api
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
     
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task CreateAsync(string projectName)
+        public System.Threading.Tasks.Task<ProjectModel> CreateAsync(string projectName)
         {
             return CreateAsync(projectName, System.Threading.CancellationToken.None);
         }
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task CreateAsync(string projectName, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<ProjectModel> CreateAsync(string projectName, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Project?");
@@ -875,6 +880,7 @@ namespace XTMF2.Web.Client.Services.Api
                 {
                     request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
     
                     PrepareRequest(client_, request_, urlBuilder_);
                     var url_ = urlBuilder_.ToString();
@@ -894,15 +900,16 @@ namespace XTMF2.Web.Client.Services.Api
                         ProcessResponse(client_, response_);
     
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "201") 
-                        {
-                            return;
-                        }
-                        else
                         if (status_ == "422") 
                         {
                             string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("A server side error occurred.", (int)response_.StatusCode, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == "201") 
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProjectModel>(response_, headers_).ConfigureAwait(false);
+                            return objectResponse_.Object;
                         }
                         else
                         if (status_ != "200" && status_ != "204")
@@ -910,6 +917,8 @@ namespace XTMF2.Web.Client.Services.Api
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
                             throw new ApiException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
+            
+                        return default(ProjectModel);
                     }
                     finally
                     {
@@ -1245,7 +1254,8 @@ namespace XTMF2.Web.Client.Services.Api
         [Newtonsoft.Json.JsonProperty("Description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Description { get; set; }
     
-        [Newtonsoft.Json.JsonProperty("Name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("Name", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
         public string Name { get; set; }
     
     

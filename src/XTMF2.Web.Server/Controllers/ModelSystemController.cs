@@ -15,6 +15,7 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -54,10 +55,23 @@ namespace XTMF2.Web.Server.Controllers {
         /// </summary>
         /// <param name="project"></param>
         /// <returns></returns>
-        [HttpPost]
-        [ProducesResponseType (StatusCodes.Status201Created)]
+        [HttpPost("project/{projectName}")]
         [ProducesResponseType (StatusCodes.Status422UnprocessableEntity)]
-        public ActionResult Create (IModelSystem project) {
+        [ProducesResponseType(typeof(ModelSystemModel),StatusCodes.Status201Created)]
+        public ActionResult Create (string projectName, [FromBody] ModelSystemModel modelSystemModel) {
+            if (!ModelState.IsValid)
+            {
+                return new UnprocessableEntityObjectResult(ModelState.Values.ToArray());
+            }
+            string error = default(string);
+            if (!_xtmfRuntime.ProjectController.GetProject(_user.UserName, projectName, out var project, ref error))
+            {
+                return new NotFoundObjectResult(error);
+            }
+            if (!_xtmfRuntime.ProjectController.GetProjectSession(_user, project, out var projectSession, ref error))
+            {
+                return new NotFoundObjectResult(error);
+            }
             return new OkResult ();
         }
 

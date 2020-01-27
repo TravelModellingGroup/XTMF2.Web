@@ -17,16 +17,18 @@
 
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using XTMF2.Web.Server.Services.Interfaces;
 using XTMF2.Web.Services;
-using XTMF2.Web.Services.Interfaces;
 
-namespace XTMF2.Web.Server.Controllers {
+namespace XTMF2.Web.Server.Controllers
+{
     /// <summary>
     ///     Primary authentication controller. Manages endpoints for login and logout.
     /// </summary>
-    [Route ("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticationController : Controller {
+    public class AuthenticationController : Controller
+    {
 
         private readonly XTMFRuntime _xtmf;
 
@@ -37,7 +39,8 @@ namespace XTMF2.Web.Server.Controllers {
         /// </summary>
         /// <param name="authenticationService"></param>
         /// <param name="xtmf"></param>
-        public AuthenticationController (IAuthenticationService authenticationService, XTMFRuntime xtmf) {
+        public AuthenticationController(IAuthenticationService authenticationService, XTMFRuntime xtmf)
+        {
             _authenticationService = authenticationService;
             _xtmf = xtmf;
         }
@@ -46,20 +49,22 @@ namespace XTMF2.Web.Server.Controllers {
         /// Login endpoint.
         /// </summary>
         /// <param name="userName">The username to login.</param>
-        [HttpPost ("authenticate")]
-        public async Task<IActionResult> Authenticate (string userName) {
-            var tokenString = await _authenticationService.SignIn (userName);
-            return Ok (tokenString);
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> Authenticate(string userName)
+        {
+            var tokenString = await _authenticationService.SignIn(userName);
+            return Ok(tokenString);
         }
 
         /// <summary>
         /// Login endpoint.
         /// </summary>
         /// <param name="userName">The username to login.</param>
-        [HttpPost ("logout")]
-        public async Task<IActionResult> Logout () {
-            await _authenticationService.SignOut(null);
-            return Ok ();
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _authenticationService.SignOut();
+            return Ok();
         }
     }
 }
