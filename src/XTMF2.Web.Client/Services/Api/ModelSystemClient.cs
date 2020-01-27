@@ -15,31 +15,34 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using XTMF2.Web.Client.Services;
+using System.Text;
+using XTMF2.Web.Client.Util;
 
-namespace XTMF2.Web.Client.Util
+namespace XTMF2.Web.Client.Services.Api
 {
-    /// <summary>
-    ///     Base API client with share logic for manipulating request header variables before being sent to the server.
-    /// </summary>
-    public class BaseClient
+    public partial class ModelSystemClient : BaseClient
     {
-        protected AuthorizationService AuthorizationService { get; set; }
+        /// <summary>
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <param name="authorization"></param>
+        /// <returns></returns>
+        public ModelSystemClient(HttpClient httpClient, AuthorizationService authorization) : this(httpClient)
+        {
+            AuthorizationService = authorization;
+        }
 
         /// <summary>
-        /// Required base method from client generation, this provides a custom mechanism to create the HttpRequest
-        /// object and insert any values needed.
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="client"></param>
+        /// <param name="request"></param>
+        /// <param name="urlBuilder"></param>
         /// <returns></returns>
-        public Task<HttpRequestMessage> CreateHttpRequestMessageAsync(CancellationToken token)
+        partial void PrepareRequest(HttpClient client, HttpRequestMessage request, StringBuilder urlBuilder)
         {
-            var req = new HttpRequestMessage();
-            req.Headers.Add("TestHeader", "XTMF2");
-            return Task.FromResult(req);
+            // empty body, authorization specific handling will flow through here
         }
     }
 }

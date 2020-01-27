@@ -22,12 +22,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace XTMF2.Web.Services
+namespace XTMF2.Web.Server.Services
 {
     /// <summary>
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
-    public class XtmfSignInManager<TUser> : SignInManager<XTMF2.User> where TUser : class
+    public class XtmfSignInManager<TUser> : SignInManager<User> where TUser : class
     {
         /// <summary>
         /// </summary>
@@ -38,12 +38,12 @@ namespace XTMF2.Web.Services
         /// <param name="logger"></param>
         /// <param name="schemes"></param>
         /// <param name="confirmation"></param>
-        public XtmfSignInManager(UserManager<XTMF2.User> userManager, IHttpContextAccessor contextAccessor,
-            IUserClaimsPrincipalFactory<XTMF2.User> claimsFactory,
+        public XtmfSignInManager(UserManager<User> userManager, IHttpContextAccessor contextAccessor,
+            IUserClaimsPrincipalFactory<User> claimsFactory,
             IOptions<IdentityOptions> optionsAccessor,
-            ILogger<SignInManager<XTMF2.User>> logger,
+            ILogger<SignInManager<User>> logger,
             IAuthenticationSchemeProvider schemes,
-            IUserConfirmation<XTMF2.User> confirmation) : base(userManager, contextAccessor, claimsFactory, optionsAccessor,
+            IUserConfirmation<User> confirmation) : base(userManager, contextAccessor, claimsFactory, optionsAccessor,
             logger, schemes, confirmation)
         {
         }
@@ -54,7 +54,7 @@ namespace XTMF2.Web.Services
         /// <param name="isPersistent"></param>
         /// <param name="authenticationMethod"></param>
         /// <returns></returns>
-        public override Task SignInAsync(XTMF2.User user, bool isPersistent, string authenticationMethod = null)
+        public override Task SignInAsync(User user, bool isPersistent, string authenticationMethod = null)
         {
             return base.SignInAsync(user, isPersistent, authenticationMethod);
         }

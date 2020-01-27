@@ -1,21 +1,20 @@
-//    Copyright 2017-2019 University of Toronto
+//     Copyright 2017-2020 University of Toronto
 // 
-//    This file is part of XTMF2.
+//     This file is part of XTMF2.
 // 
-//    XTMF2 is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
+//     XTMF2 is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
 // 
-//    XTMF2 is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
+//     XTMF2 is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
 // 
-//    You should have received a copy of the GNU General Public License
-//    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
+//     You should have received a copy of the GNU General Public License
+//     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AutoMapper;
@@ -33,128 +32,145 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
-using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
 using XTMF2.Web.Server.Services;
 using XTMF2.Web.Server.Services.Interfaces;
-using XTMF2.Web.Services;
-namespace XTMF2.Web.Server {
-    public class Startup {
+
+namespace XTMF2.Web.Server
+{
+    public class Startup
+    {
+        public IConfiguration Configuration { get; }
+
         /// <summary>
         /// </summary>
         /// <param name="configuration"></param>
-        public Startup (IConfiguration configuration) {
+        public Startup(IConfiguration configuration)
+        {
             Configuration = configuration;
         }
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices (IServiceCollection services) {
-            services.AddSingleton (XTMFRuntime.CreateRuntime ());
-            services.AddSingleton<IConfiguration> (Configuration);
-            services.AddScoped (provider => {
-                var runtime = provider.GetService<XTMFRuntime> ();
-                return runtime.UserController.GetUserByName ("local");
-            });
-
-            services.AddResponseCompression (opts => {
-                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat (
-                    new [] { "application/octet-stream" });
-            });
-            services.AddMvcCore ()
-                .AddApiExplorer ();
-
-            services.AddLogging (builder => { builder.SetMinimumLevel (LogLevel.Trace); });
-            //configure the automapping sercices
-            ConfigureAutoMapping (services);
-            services.AddHttpContextAccessor ();
-            services.AddAuthorization ();
-            //configure the authentication and authorization services
-            services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider> ();
-            services.AddIdentity<User, string> ().AddUserStore<XtmfUserStore<User>> ()
-                .AddRoleStore<XtmfRoleStore<string>> ().AddSignInManager<XtmfSignInManager<User>> ();
-
-            services.AddScoped (typeof (IAuthenticationService), typeof (AuthenticationService));
-
-            services.AddScoped<User>( (providers) =>
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSingleton(XTMFRuntime.CreateRuntime());
+            services.AddSingleton(Configuration);
+            services.AddScoped(provider =>
             {
-                var context = (IHttpContextAccessor)providers.GetService(typeof(IHttpContextAccessor));
-                var userManager = (UserManager < User > )providers.GetService(typeof(UserManager<User>));
-                var user = userManager.FindByNameAsync(context.HttpContext.User.Claims.FirstOrDefault()?.Value);
+                var runtime = provider.GetService<XTMFRuntime>();
+                return runtime.UserController.GetUserByName("local");
+            });
+
+            services.AddResponseCompression(opts =>
+            {
+                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                    new[] {"application/octet-stream"});
+            });
+            services.AddMvcCore()
+                .AddApiExplorer();
+
+            services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Trace); });
+            //configure the automapping services
+            ConfigureAutoMapping(services);
+            services.AddHttpContextAccessor();
+            services.AddAuthorization();
+            //configure the authentication and authorization services
+            services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider>();
+            services.AddIdentity<User, string>().AddUserStore<XtmfUserStore<User>>()
+                .AddRoleStore<XtmfRoleStore<string>>().AddSignInManager<XtmfSignInManager<User>>();
+
+            services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
+
+            services.AddScoped(providers =>
+            {
+                /* This section of code is commented out temporarily until some further changes are mae on the client */
+                /*
+                var context = (IHttpContextAccessor) providers.GetService(typeof(IHttpContextAccessor));
+                var userManager = (UserManager<User>) providers.GetService(typeof(UserManager<User>));
+                var user = userManager.FindByNameAsync(context.HttpContext.User.Claims.FirstOrDefault()?.Value); */
                 return ((XTMFRuntime) providers.GetService(typeof(XTMFRuntime))).UserController.Users.FirstOrDefault();
-                //return user;
             });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddAuthentication (x => {
+            services.AddAuthentication(x =>
+                {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                .AddJwtBearer (x => {
+                .AddJwtBearer(x =>
+                {
                     x.RequireHttpsMetadata = false;
                     x.SaveToken = true;
 
-                    x.TokenValidationParameters = new TokenValidationParameters {
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey (Encoding.ASCII.GetBytes (Configuration["JwtSecurityKey"])),
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["JwtSecurityKey"])),
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
                 });
 
-            services.AddOpenApiDocument (document => {
-
-                document.AddSecurity ("JWT", Enumerable.Empty<string> (), new OpenApiSecurityScheme {
+            services.AddOpenApiDocument(document =>
+            {
+                document.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+                {
                     Type = OpenApiSecuritySchemeType.ApiKey,
-                        Name = "Authorization",
-                        In = OpenApiSecurityApiKeyLocation.Header,
-                        Description = "Type into the textbox: Bearer {your JWT token}."
+                    Name = "Authorization",
+                    In = OpenApiSecurityApiKeyLocation.Header,
+                    Description = "Type into the textbox: Bearer {your JWT token}."
                 });
 
-                document.OperationProcessors.Add (
-                    new AspNetCoreOperationSecurityScopeProcessor ("JWT"));
-
+                document.OperationProcessors.Add(
+                    new AspNetCoreOperationSecurityScopeProcessor("JWT"));
             });
 
             IdentityModelEventSource.ShowPII = true;
-
         }
 
         /// <summary>
         ///     Creates the automapping configuration between various entities.
         /// </summary>
         /// <param name="services"></param>
-        private void ConfigureAutoMapping (IServiceCollection services) {
-            services.AddAutoMapper (typeof (Startup));
+        private void ConfigureAutoMapping(IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure (IApplicationBuilder app, IWebHostEnvironment env) {
-            if (env.IsDevelopment ()) {
-                app.UseDeveloperExceptionPage ();
-            } else {
-                app.UseExceptionHandler ("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts ();
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
             }
-            app.UseHttpsRedirection ();
-            app.UseStaticFiles ();
-            app.UseClientSideBlazorFiles<XTMF2.Web.Client.Startup> ();
-            app.UseRouting ();
-            app.UseAuthorization ();
-            //enable authentication and authorization
-            app.UseAuthentication ();
-            app.UseBlazorDebugging ();
-            app.UseOpenApi ();
-            app.UseSwaggerUi3 ();
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
-            app.UseEndpoints (endpoints => {
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseClientSideBlazorFiles<Client.Startup>();
+            app.UseRouting();
+            app.UseAuthorization();
+            //enable authentication and authorization
+            app.UseAuthentication();
+            app.UseBlazorDebugging();
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
+
+            app.UseEndpoints(endpoints =>
+            {
                 // endpoints.MapBlazorHub ();
                 // endpoints.MapFallbackToPage ("/_Host");
-                endpoints.MapDefaultControllerRoute ();
-                endpoints.MapFallbackToClientSideBlazor<XTMF2.Web.Client.Startup> ("index.html");
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapFallbackToClientSideBlazor<Client.Startup>("index.html");
             });
         }
     }
