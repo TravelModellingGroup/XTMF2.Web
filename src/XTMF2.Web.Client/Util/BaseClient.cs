@@ -10,7 +10,7 @@ namespace XTMF2.Web.Client.Util {
     /// </summary>
     public class BaseClient {
 
-        protected AuthorizationService AuthorizationService { get; set; }
+        protected XtmfAuthStateProvider AuthStateProvider { get; set; }
 
         /// <summary>
         /// 

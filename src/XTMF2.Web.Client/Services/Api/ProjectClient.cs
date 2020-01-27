@@ -10,9 +10,9 @@ namespace XTMF2.Web.Client.Services.Api {
         /// <param name="httpClient"></param>
         /// <param name="authorization"></param>
         /// <returns></returns>
-        public ProjectClient (System.Net.Http.HttpClient httpClient, AuthorizationService authorization) : this (httpClient) {
+        public ProjectClient (System.Net.Http.HttpClient httpClient, XtmfAuthStateProvider authStateProvider) : this (httpClient) {
             Console.WriteLine ("In here with information about the authorization state");
-            AuthorizationService = authorization;
+            AuthStateProvider = authStateProvider;
         }
 
         /// <summary>
