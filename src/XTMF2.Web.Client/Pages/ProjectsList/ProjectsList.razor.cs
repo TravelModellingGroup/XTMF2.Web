@@ -52,7 +52,7 @@ namespace XTMF2.Web.Client.Pages
         /// <summary>
         ///     List of projects for the active user.
         /// </summary>
-        public List<ProjectModel> Projects { get; set; } = new List<ProjectModel>();
+        public List<ProjectModel> Projects { get; } = new List<ProjectModel>();
 
         /// <summary>
         /// </summary>
@@ -88,7 +88,7 @@ namespace XTMF2.Web.Client.Pages
         {
             var model = await ProjectClient.CreateAsync(input);
             Projects.Add(model);
-            Logger.Information("Project created");
+            Logger.Information($"Project {input} has been created.");
 
         }
 
