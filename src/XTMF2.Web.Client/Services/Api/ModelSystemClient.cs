@@ -15,25 +15,34 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
-using System.Threading.Tasks;
+using System;
+using System.Net.Http;
+using System.Text;
+using XTMF2.Web.Client.Util;
 
-namespace XTMF2.Web.Server.Services.Interfaces
+namespace XTMF2.Web.Client.Services.Api
 {
-    /// <summary>
-    ///     Authentication service for clients. Associates a session with a backed XTMF2 user account.
-    /// </summary>
-    public interface IAuthenticationService
+    public partial class ModelSystemClient : BaseClient
     {
         /// <summary>
         /// </summary>
-        /// <param name="userName"></param>
-        /// <param name="password"></param>
+        /// <param name="httpClient"></param>
+        /// <param name="authorization"></param>
         /// <returns></returns>
-        Task<string> SignIn(string userName, string password = null);
+        public ModelSystemClient(HttpClient httpClient, AuthorizationService authorization) : this(httpClient)
+        {
+            AuthorizationService = authorization;
+        }
 
         /// <summary>
         /// </summary>
+        /// <param name="client"></param>
+        /// <param name="request"></param>
+        /// <param name="urlBuilder"></param>
         /// <returns></returns>
-        Task SignOut();
+        partial void PrepareRequest(HttpClient client, HttpRequestMessage request, StringBuilder urlBuilder)
+        {
+            // empty body, authorization specific handling will flow through here
+        }
     }
 }

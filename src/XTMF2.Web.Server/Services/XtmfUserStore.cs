@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 
-namespace XTMF2.Web.Services
+namespace XTMF2.Web.Server.Services
 {
     /// <summary>
     /// </summary>

@@ -24,13 +24,15 @@ using Microsoft.Extensions.Logging;
 using XTMF2.Web.Client.Services;
 using XTMF2.Web.Client.Services.Api;
 
-namespace XTMF2.Web.Client {
+namespace XTMF2.Web.Client
+{
     /// <summary>
-    /// Startup for client Blazor
+    ///     Startup for client Blazor
     /// </summary>
-    public class Startup {
+    public class Startup
+    {
         /// <summary>
-        /// Configure services to be used.
+        ///     Configure services to be used.
         /// </summary>
         /// <param name="services"></param>
         public void ConfigureServices (IServiceCollection services) {
@@ -47,11 +49,12 @@ namespace XTMF2.Web.Client {
         }
 
         /// <summary>
-        /// Configure application components.
+        ///     Configure application components.
         /// </summary>
         /// <param name="app"></param>
-        public void Configure (IComponentsApplicationBuilder app) {
-            app.AddComponent<App> ("app");
+        public void Configure(IComponentsApplicationBuilder app)
+        {
+            app.AddComponent<App>("app");
         }
     }
 }
