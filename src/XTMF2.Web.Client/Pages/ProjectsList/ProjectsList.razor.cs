@@ -44,7 +44,7 @@ namespace XTMF2.Web.Client.Pages {
 
         [Inject] protected ProjectClient ProjectClient { get; set; }
 
-        protected ILogger Logger { get; set; } = Log.ForContext<ProjectsList> ();
+        protected ILogger Logger { get; } = Log.ForContext<ProjectsList> ();
 
         [Inject] private NavigationManager NavigationManager { get; set; }
 
@@ -66,7 +66,7 @@ namespace XTMF2.Web.Client.Pages {
         protected override async Task OnInitializedAsync () {
             Logger.Information ("Projects List loading.");
             var projects = await ProjectClient.ListAsync ();
-            Projects.AddRange(projects);
+            Projects.AddRange (projects);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace XTMF2.Web.Client.Pages {
             await ProjectClient.DeleteAsync (project.Name);
             Projects.Remove (project);
             Logger.Information ($"Project {project.Name} has been deleted.");
-            this.StateHasChanged();
+            this.StateHasChanged ();
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace XTMF2.Web.Client.Pages {
             var model = await ProjectClient.CreateAsync (input);
             Projects.Add (model);
             Logger.Information ($"Project {input} has been created.");
-            this.StateHasChanged();
+            this.StateHasChanged ();
 
         }
 
