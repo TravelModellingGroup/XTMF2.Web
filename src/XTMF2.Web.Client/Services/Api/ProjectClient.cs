@@ -22,6 +22,9 @@ using XTMF2.Web.Client.Util;
 
 namespace XTMF2.Web.Client.Services.Api
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class ProjectClient : BaseClient
     {
         /// <summary>
@@ -29,9 +32,8 @@ namespace XTMF2.Web.Client.Services.Api
         /// <param name="httpClient"></param>
         /// <param name="authorization"></param>
         /// <returns></returns>
-        public ProjectClient(HttpClient httpClient, AuthorizationService authorization) : this(httpClient)
-        {
-            AuthorizationService = authorization;
+        public ProjectClient (System.Net.Http.HttpClient httpClient, XtmfAuthStateProvider authStateProvider) : this (httpClient) {
+            AuthStateProvider = authStateProvider;
         }
 
         /// <summary>

@@ -16,6 +16,8 @@
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Net.Http;
+using Blazored.SessionStorage;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -33,14 +35,17 @@ namespace XTMF2.Web.Client
         ///     Configure services to be used.
         /// </summary>
         /// <param name="services"></param>
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddScoped<AuthorizationService>();
-            services.AddScoped<AuthenticationClient>();
-            services.AddScoped(provider => new ProjectClient(provider.GetService<HttpClient>(),
-                provider.GetService<AuthorizationService>()));
-            services.AddScoped<ModelSystemClient>();
-            services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Trace); });
+        public void ConfigureServices (IServiceCollection services) {
+            services.AddScoped<AuthenticationClient> ();
+            services.AddScoped<ProjectClient> (provider => {
+                return new ProjectClient (provider.GetService<System.Net.Http.HttpClient> (),
+                    provider.GetService<XtmfAuthStateProvider> ());
+            });
+            services.AddAuthorizationCore ();
+            services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider> ();
+            services.AddScoped<ModelSystemClient> ();
+            services.AddLogging (builder => { builder.SetMinimumLevel (LogLevel.Trace); });
+            services.AddBlazoredSessionStorage ();
         }
 
         /// <summary>
