@@ -11,6 +11,7 @@ namespace XTMF2.Web.Client.Services {
         private AuthenticationClient _client;
         private ISessionStorageService _storage;
         private ILogger<AuthenticationService> _logger;
+        private XtmfAuthStateProvider _authProvider;
 
         /// <summary>
         /// 
@@ -18,10 +19,12 @@ namespace XTMF2.Web.Client.Services {
         /// <param name="client"></param>
         /// <param name="storage"></param>
         /// <param name="logger"></param>
-        public AuthenticationService(AuthenticationClient client, ISessionStorageService storage, ILogger<AuthenticationService> logger) {
+        /// <param name="authProvider"></param>
+        public AuthenticationService(AuthenticationClient client, ISessionStorageService storage, ILogger<AuthenticationService> logger, XtmfAuthStateProvider authProvider) {
             _client = client;
             _storage = storage;
             _logger = logger;
+            _authProvider = authProvider
         }
 
         /// <summary>
