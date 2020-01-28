@@ -27,7 +27,7 @@ namespace XTMF2.Web.Server.Controllers {
     /// <summary>
     ///     API controller for the editing of model systems.
     /// </summary>
-    [Route("api/[controller]")]
+    [Route ("api/[controller]")]
     [ApiController]
     public class ModelSystemController : ControllerBase {
 
@@ -71,8 +71,8 @@ namespace XTMF2.Web.Server.Controllers {
                 return new NotFoundObjectResult(error);
             }
 
-            projectSession.CreateNewModelSystem(user, modelSystemModel.Name, out var modelSystem, ref error);
-            return new CreatedResult(nameof(ModelSystemController), _mapper.Map<ModelSystemModel>(modelSystem));
+            projectSession.CreateNewModelSystem (user, modelSystemModel.Name, out var modelSystem, ref error);
+            return new CreatedResult (nameof (ModelSystemController), _mapper.Map<ModelSystemModel> (modelSystem));
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace XTMF2.Web.Server.Controllers {
                 return new NotFoundObjectResult(error);
             }
 
-            return new OkObjectResult(_mapper.Map<ModelSystemModel>(modelSystemHeader));
+            return new OkObjectResult (_mapper.Map<ModelSystemModel> (modelSystemHeader));
         }
     }
 }
