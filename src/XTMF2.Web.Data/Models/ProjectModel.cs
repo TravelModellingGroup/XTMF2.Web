@@ -17,7 +17,6 @@
 
 
 using System.ComponentModel.DataAnnotations;
-
 using XTMF2.Web.Data.Interfaces;
 
 namespace XTMF2.Web.Data.Models

@@ -1,7 +1,7 @@
 
 @namespace XTMF2.Web.Client.Shared
 @using Microsoft.AspNetCore.Components.Authorization
-
+@using Blazored.SessionStorage
 
 <div class="card border-light mb-3">
     <div class="card-body">
@@ -43,14 +43,4 @@
     [Parameter]
     public bool ShowSideNav { get; set; }
 
-    [Inject]
-    private ISessionStorageService Storage { get; set;}
-
-    protected override async Task OnInitializedAsync() {
-        
-        await Storage.SetItemAsync("name", "John Smith");
-        await Storage.SetItemAsync("name2", "Brendan Reilly");
-        var name = await Storage.GetItemAsync<string>("name");
-        Console.WriteLine("Read from storage: " + name);
-    }
 }

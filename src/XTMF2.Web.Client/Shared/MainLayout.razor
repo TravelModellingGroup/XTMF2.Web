@@ -64,6 +64,8 @@
 </div>
 
 @code {
+    [Inject]
+    private ISessionStorageService Storage { get; set;}
         protected override async Task OnInitializedAsync() {
         
         await Storage.SetItemAsync("name", "John Smith");

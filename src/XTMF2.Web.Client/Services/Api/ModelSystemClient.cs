@@ -29,9 +29,9 @@ namespace XTMF2.Web.Client.Services.Api
         /// <param name="httpClient"></param>
         /// <param name="authorization"></param>
         /// <returns></returns>
-        public ModelSystemClient(HttpClient httpClient, AuthorizationService authorization) : this(httpClient)
+        public ModelSystemClient(HttpClient httpClient, XtmfAuthStateProvider authStateProvider) : this(httpClient)
         {
-            AuthorizationService = authorization;
+            AuthStateProvider = authStateProvider;
         }
 
         /// <summary>
