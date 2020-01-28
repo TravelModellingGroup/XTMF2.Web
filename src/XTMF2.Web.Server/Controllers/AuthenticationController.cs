@@ -16,18 +16,17 @@
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using XTMF2.Web.Server.Services.Interfaces;
 
-namespace XTMF2.Web.Server.Controllers
-{
+namespace XTMF2.Web.Server.Controllers {
     /// <summary>
     ///     Primary authentication controller. Manages endpoints for login and logout.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticationController : Controller
-    {
+    public class AuthenticationController : Controller {
         private readonly IAuthenticationService _authenticationService;
 
         private readonly XTMFRuntime _xtmf;
@@ -36,8 +35,7 @@ namespace XTMF2.Web.Server.Controllers
         /// </summary>
         /// <param name="authenticationService"></param>
         /// <param name="xtmf"></param>
-        public AuthenticationController(IAuthenticationService authenticationService, XTMFRuntime xtmf)
-        {
+        public AuthenticationController(IAuthenticationService authenticationService, XTMFRuntime xtmf) {
             _authenticationService = authenticationService;
             _xtmf = xtmf;
         }
@@ -46,20 +44,33 @@ namespace XTMF2.Web.Server.Controllers
         ///     Login endpoint.
         /// </summary>
         /// <param name="userName">The username to login.</param>
-        [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate(string userName)
-
-        {
+        [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Login(string userName) {
             var tokenString = await _authenticationService.SignIn(userName);
             return Ok(tokenString);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="authorization"></param>
+        /// <returns></returns>
+        [HttpPut("login")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        public IActionResult TestLogin(string userName, [FromHeader] string authorization) {
+            return Ok(true);
         }
 
         /// <summary>
         ///     Login endpoint.
         /// </summary>
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
-        {
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Logout() {
             await _authenticationService.SignOut();
             return Ok();
         }

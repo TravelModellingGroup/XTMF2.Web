@@ -27,7 +27,7 @@ namespace XTMF2.Web.Server.Controllers {
     /// <summary>
     ///     API controller for the editing of model systems.
     /// </summary>
-    [Route ("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ModelSystemController : ControllerBase {
 
@@ -40,7 +40,7 @@ namespace XTMF2.Web.Server.Controllers {
         /// <param name="runtime"></param>
         /// <param name="logger"></param>
         /// <param name="mapper"></param>
-        public ModelSystemController (XTMFRuntime runtime, User user, ILogger<ModelSystemController> logger,
+        public ModelSystemController(XTMFRuntime runtime, User user, ILogger<ModelSystemController> logger,
             IMapper mapper) {
             _xtmfRuntime = runtime;
             _logger = logger;
@@ -54,25 +54,25 @@ namespace XTMF2.Web.Server.Controllers {
         /// <param name="modelSystemModel"></param>
         /// <param name="user"></param>
         /// <returns></returns>
-        [HttpPost ("project/{projectName}")]
-        [ProducesResponseType (StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType (typeof (ModelSystemModel), StatusCodes.Status201Created)]
-        public ActionResult Create (string projectName, [FromBody] ModelSystemModel modelSystemModel, [FromServices] User user) {
+        [HttpPost("project/{projectName}")]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(typeof(ModelSystemModel), StatusCodes.Status201Created)]
+        public ActionResult Create(string projectName, [FromBody] ModelSystemModel modelSystemModel, [FromServices] User user) {
             if (!ModelState.IsValid) {
-                return new UnprocessableEntityObjectResult (ModelState.Values.ToArray ());
+                return new UnprocessableEntityObjectResult(ModelState.Values.ToArray());
             }
 
-            var error = default (string);
-            if (!_xtmfRuntime.ProjectController.GetProject (user.UserName, projectName, out var project, ref error)) {
-                return new NotFoundObjectResult (error);
+            var error = default(string);
+            if (!_xtmfRuntime.ProjectController.GetProject(user.UserName, projectName, out var project, ref error)) {
+                return new NotFoundObjectResult(error);
             }
 
-            if (!_xtmfRuntime.ProjectController.GetProjectSession (user, project, out var projectSession, ref error)) {
-                return new NotFoundObjectResult (error);
+            if (!_xtmfRuntime.ProjectController.GetProjectSession(user, project, out var projectSession, ref error)) {
+                return new NotFoundObjectResult(error);
             }
 
-            projectSession.CreateNewModelSystem (user, modelSystemModel.Name, out var modelSystem, ref error);
-            return new CreatedResult (nameof (ModelSystemController), _mapper.Map<ModelSystemModel> (modelSystem));
+            projectSession.CreateNewModelSystem(user, modelSystemModel.Name, out var modelSystem, ref error);
+            return new CreatedResult(nameof(ModelSystemController), _mapper.Map<ModelSystemModel>(modelSystem));
         }
 
         /// <summary>
@@ -82,11 +82,11 @@ namespace XTMF2.Web.Server.Controllers {
         /// <param name="modelSystemName"></param>
         /// <param name="user"></param>
         /// <returns></returns>
-        [HttpDelete ("projects/{projectName}/model-systems/{modelSystemName}")]
-        [ProducesResponseType (StatusCodes.Status404NotFound)]
-        [ProducesResponseType (StatusCodes.Status200OK)]
-        public ActionResult Delete (string projectName, string modelSystemName, [FromServices] User user) {
-            return new OkResult ();
+        [HttpDelete("projects/{projectName}/model-systems/{modelSystemName}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult Delete(string projectName, string modelSystemName, [FromServices] User user) {
+            return new OkResult();
         }
 
         /// <summary>
@@ -94,24 +94,24 @@ namespace XTMF2.Web.Server.Controllers {
         /// <param name="project"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        [HttpGet ("projects/{projectName}/model-systems/{modelSystemName}")]
-        [ProducesResponseType (StatusCodes.Status404NotFound)]
-        [ProducesResponseType (typeof (ModelSystemModel), StatusCodes.Status200OK)]
-        public ActionResult<ModelSystemModel> Get (string projectName, string modelSystemName, [FromServices] User user) {
+        [HttpGet("projects/{projectName}/model-systems/{modelSystemName}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ModelSystemModel), StatusCodes.Status200OK)]
+        public ActionResult<ModelSystemModel> Get(string projectName, string modelSystemName, [FromServices] User user) {
             string error = default;
-            if (!_xtmfRuntime.ProjectController.GetProject (user.UserName, projectName, out var project, ref error)) {
-                return new NotFoundObjectResult (error);
+            if (!_xtmfRuntime.ProjectController.GetProject(user.UserName, projectName, out var project, ref error)) {
+                return new NotFoundObjectResult(error);
             }
 
-            if (!_xtmfRuntime.ProjectController.GetProjectSession (user, project, out var projectSession, ref error)) {
-                return new NotFoundObjectResult (error);
+            if (!_xtmfRuntime.ProjectController.GetProjectSession(user, project, out var projectSession, ref error)) {
+                return new NotFoundObjectResult(error);
             }
 
-            if (!projectSession.GetModelSystemHeader (user, modelSystemName, out var modelSystemHeader, ref error)) {
-                return new NotFoundObjectResult (error);
+            if (!projectSession.GetModelSystemHeader(user, modelSystemName, out var modelSystemHeader, ref error)) {
+                return new NotFoundObjectResult(error);
             }
 
-            return new OkObjectResult (_mapper.Map<ModelSystemModel> (modelSystemHeader));
+            return new OkObjectResult(_mapper.Map<ModelSystemModel>(modelSystemHeader));
         }
     }
 }
