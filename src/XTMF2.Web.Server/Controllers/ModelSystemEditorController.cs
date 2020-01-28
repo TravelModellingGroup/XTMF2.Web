@@ -15,10 +15,10 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace XTMF2.Web.Server.Controllers
-{
+namespace XTMF2.Web.Server.Controllers {
     /// <summary>
     ///     API controller for the management of model systems (meta). This controller does not contain endpoints for the
     ///     editing
@@ -26,15 +26,13 @@ namespace XTMF2.Web.Server.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class ModelSystemEditorController : ControllerBase
-    {
+    public class ModelSystemEditorController : ControllerBase {
         private XTMFRuntime _xtmfRuntime;
 
         /// <summary>
         /// </summary>
         /// <param name="runtime"></param>
-        public ModelSystemEditorController(XTMFRuntime runtime)
-        {
+        public ModelSystemEditorController(XTMFRuntime runtime) {
             _xtmfRuntime = runtime;
         }
 
@@ -43,9 +41,48 @@ namespace XTMF2.Web.Server.Controllers
         /// <param name="project"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        [HttpGet]
-        public ActionResult Get()
-        {
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPost("projects/{projectName/{model-systems/{modelSystemName}/open-session")]
+        public ActionResult OpenSession(string projectName, string modelSystemName, [FromServices] User user) {
+            string error = default;
+            if(!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime,user,projectName,modelSystemName,out var modelSystemHeader, ref error)) {
+                return new NotFoundObjectResult(error);
+            }
+            if(!Utils.XtmfUtils.GetProjectSession(_xtmfRuntime, user, projectName, out var projectSession, ref error)) {
+                return new NotFoundObjectResult(error);
+            }
+            if(!projectSession.EditModelSystem(user,modelSystemHeader,out var session, ref error)) {
+                return new UnprocessableEntityObjectResult(error);
+            }
+            return new OkResult();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="modelSystemName"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPost("projects/{projectName/{model-systems/{modelSystemName}/end-session")]
+        public ActionResult EndSession(string projectName, string modelSystemName, [FromServices] User user) {
+            string error = default;
+            if(!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime,user,projectName,modelSystemName,out var modelSystemHeader, ref error)) {
+                return new NotFoundObjectResult(error);
+            }
+            if(!Utils.XtmfUtils.GetProjectSession(_xtmfRuntime, user, projectName, out var projectSession, ref error)) {
+                return new NotFoundObjectResult(error);
+            }
+            if(!projectSession.EditModelSystem(user,modelSystemHeader,out var session, ref error)) {
+                return new UnprocessableEntityObjectResult(error);
+            }
+            //dispose of the session
+            session.Dispose();
             return new OkResult();
         }
     }
