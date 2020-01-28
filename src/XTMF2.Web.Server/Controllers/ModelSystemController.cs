@@ -63,11 +63,11 @@ namespace XTMF2.Web.Server.Controllers {
             }
 
             var error = default (string);
-            if (!_xtmfRuntime.ProjectController.GetProject (_user.UserName, projectName, out var project, ref error)) {
+            if (!_xtmfRuntime.ProjectController.GetProject (user.UserName, projectName, out var project, ref error)) {
                 return new NotFoundObjectResult (error);
             }
 
-            if (!_xtmfRuntime.ProjectController.GetProjectSession (_user, project, out var projectSession, ref error)) {
+            if (!_xtmfRuntime.ProjectController.GetProjectSession (user, project, out var projectSession, ref error)) {
                 return new NotFoundObjectResult (error);
             }
 
@@ -99,15 +99,15 @@ namespace XTMF2.Web.Server.Controllers {
         [ProducesResponseType (typeof (ModelSystemModel), StatusCodes.Status200OK)]
         public ActionResult<ModelSystemModel> Get (string projectName, string modelSystemName, [FromServices] User user) {
             string error = default;
-            if (!_xtmfRuntime.ProjectController.GetProject (_user.UserName, projectName, out var project, ref error)) {
+            if (!_xtmfRuntime.ProjectController.GetProject (user.UserName, projectName, out var project, ref error)) {
                 return new NotFoundObjectResult (error);
             }
 
-            if (!_xtmfRuntime.ProjectController.GetProjectSession (_user, project, out var projectSession, ref error)) {
+            if (!_xtmfRuntime.ProjectController.GetProjectSession (user, project, out var projectSession, ref error)) {
                 return new NotFoundObjectResult (error);
             }
 
-            if (!projectSession.GetModelSystemHeader (_user, modelSystemName, out var modelSystemHeader, ref error)) {
+            if (!projectSession.GetModelSystemHeader (user, modelSystemName, out var modelSystemHeader, ref error)) {
                 return new NotFoundObjectResult (error);
             }
 
