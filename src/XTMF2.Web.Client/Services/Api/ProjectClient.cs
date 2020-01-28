@@ -22,6 +22,9 @@ using XTMF2.Web.Client.Util;
 
 namespace XTMF2.Web.Client.Services.Api
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class ProjectClient : BaseClient
     {
         /// <summary>

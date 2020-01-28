@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace XTMF2.Web.Client.Services {
 
+    /// <summary>
+    /// Client authentication state provider.
+    /// </summary>
     public class XtmfAuthStateProvider : AuthenticationStateProvider {
         public XtmfAuthStateProvider () {
 
@@ -16,7 +19,7 @@ namespace XTMF2.Web.Client.Services {
         /// <returns></returns>
         public override Task<AuthenticationState> GetAuthenticationStateAsync () {
             var identity = new ClaimsIdentity (new [] {
-                new Claim (ClaimTypes.Name, "mrfibuli"),
+                new Claim (ClaimTypes.Name, string.Empty),
                 }, string.Empty) {
 
             };
