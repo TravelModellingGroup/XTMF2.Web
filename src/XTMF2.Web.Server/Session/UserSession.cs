@@ -1,19 +1,18 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
-namespace XTMF2.Web.Server.State
-{
+namespace XTMF2.Web.Server.Session {
 
     /// <summary>
     /// Holds the session state for an active user. Maintains references to projects and other
     /// related items.
     /// </summary>
-    public class SessionState
-    {
+    public class UserSession {
         /// <summary>
         /// The XTMF User object associated with this session
         /// </summary>
         /// <value></value>
-        public User User { get; private set; }
+        public User User { get; }
 
         /// <summary>
         /// Reference store for projects created / referenced during this session.
@@ -21,15 +20,15 @@ namespace XTMF2.Web.Server.State
         /// <typeparam name="string"></typeparam>
         /// <typeparam name="Project"></typeparam>
         /// <returns></returns>
-        public Dictionary<string, Project> Projects { get; } = new Dictionary<string, Project>();
+        public ReadOnlyObservableCollection<Project> Projects { get; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="user"></param>
-        public SessionState(User user)
-        {
+        public UserSession(User user) {
             this.User = user;
+            this.Projects = XTMF2.Controllers.ProjectController.GetProjects(user);
         }
     }
 }
