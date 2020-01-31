@@ -17,7 +17,7 @@ jobs:
       - name: Pull XTMF2
         working-directory: src/XTMF2
         run: |
-          git pull
+          git pull origin dev
       - name: Build with dotnet
         run: |
           dotnet build --configuration Release
