@@ -11,13 +11,10 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.101
-      - name: Submodule Update
-        run: |
-          git submodule update --recursive --remote
-      - name: Pull XTMF2
+      - name: XTMF2 Submodule
         working-directory: src/XTMF2
         run: |
-          git pull origin dev
+          git submodule update --init --recursive
       - name: Build with dotnet
         run: |
           dotnet build --configuration Release
