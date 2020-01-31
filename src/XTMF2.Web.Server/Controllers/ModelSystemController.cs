@@ -22,7 +22,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using XTMF2.Web.Data.Interfaces;
 using XTMF2.Web.Data.Models;
-using XTMF2.Web.Server.State;
+using XTMF2.Web.Server.Session;
 
 namespace XTMF2.Web.Server.Controllers {
     /// <summary>
@@ -35,7 +35,6 @@ namespace XTMF2.Web.Server.Controllers {
         private readonly ILogger<ModelSystemController> _logger;
         private readonly IMapper _mapper;
         private readonly XTMFRuntime _xtmfRuntime;
-        private readonly SessionState _sessionState;
 
         /// <summary>
         /// </summary>
