@@ -39,7 +39,7 @@ namespace XTMF2.Web.UnitTests.Controllers
         /// Tests creating a user, and that the controller returns the correct response type.
         /// </summary>
         [Fact]
-        public void CreatePost_ReturnsValid_WhenProjectCreated()
+        public void CreatePost_ReturnsCreatedResult_WhenProjectCreated()
         {
             var config = new MapperConfiguration(cfg =>
             {
@@ -50,7 +50,7 @@ namespace XTMF2.Web.UnitTests.Controllers
             var logger = Mock.Of<ILogger<ProjectController>>();
             var controller = new ProjectController(runtime, logger, mapper);
             var user = runtime.UserController.GetUserByName("TempUser");
-            var result = controller.Create("projectName",user);
+            var result = controller.Create("projectName", user);
             var projects = controller.List(user);
 
             //assert
@@ -58,6 +58,28 @@ namespace XTMF2.Web.UnitTests.Controllers
             Assert.IsAssignableFrom<OkObjectResult>(projects.Result);
             Assert.Single(((List<ProjectModel>)((OkObjectResult)projects.Result).Value));
 
+        }
+
+        /// <summary>
+        /// Tests deleting a single project
+        /// </summary>
+        [Fact]
+        public void DeletePost_ReturnsValid_WhenProjectDeleted()
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<ProjectProfile>();
+            });
+            var mapper = config.CreateMapper();
+            var runtime = TestHelper.CreateTestContext();
+            var logger = Mock.Of<ILogger<ProjectController>>();
+            var controller = new ProjectController(runtime, logger, mapper);
+            var user = runtime.UserController.GetUserByName("TempUser");
+            controller.Create("projectName", user);
+            var result = controller.Delete("projectName", user);
+
+            //assert
+            Assert.IsAssignableFrom<OkResult>(result);
         }
 
     }
