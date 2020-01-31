@@ -4,17 +4,21 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: windows-2019   
+    runs-on: windows-2019
     steps:
-    - uses: actions/checkout@v1
-    - name: Setup .NetCore
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.101
-    - name: Build with dotnet
-      run: |
-        git submodule update --recursive --remote
-        dotnet build --configuration Release
-    - name: Unit Tests
-      run: |
-        dotnet test
+      - uses: actions/checkout@v1
+      - name: Setup .NetCore
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
+      - name: Pull XTMF2
+        working-directory: .src/XTMF2
+        run: |
+          git submodule update --recursive --remote
+          git pull
+      - name: Build with dotnet
+        run: |
+          dotnet build --configuration Release
+      - name: Unit Tests
+        run: |
+          dotnet test
