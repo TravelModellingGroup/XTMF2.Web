@@ -153,11 +153,9 @@ namespace XTMF2.Web.Server
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseClientSideBlazorFiles<Client.Startup>();
+            app.UseClientSideBlazorFiles<Client.Program>();
             app.UseRouting();
             app.UseAuthorization();
             //enable authentication and authorization
@@ -165,13 +163,12 @@ namespace XTMF2.Web.Server
             app.UseBlazorDebugging();
             app.UseOpenApi();
             app.UseSwaggerUi3();
-
             app.UseEndpoints(endpoints =>
             {
                 // endpoints.MapBlazorHub ();
                 // endpoints.MapFallbackToPage ("/_Host");
                 endpoints.MapDefaultControllerRoute();
-                endpoints.MapFallbackToClientSideBlazor<Client.Startup>("index.html");
+                endpoints.MapFallbackToClientSideBlazor<Client.Program>("index.html");
             });
         }
     }

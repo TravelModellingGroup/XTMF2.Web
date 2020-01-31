@@ -1,17 +1,20 @@
 using System;
 using System.Threading.Tasks;
 using Blazored.SessionStorage;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Logging;
 using XTMF2.Web.Client.Services.Api;
 
-namespace XTMF2.Web.Client.Services {
+namespace XTMF2.Web.Client.Services
+{
 
-    public class AuthenticationService {
+    public class AuthenticationService
+    {
 
         private AuthenticationClient _client;
         private ISessionStorageService _storage;
         private ILogger<AuthenticationService> _logger;
-        private XtmfAuthStateProvider _authProvider;
+        private AuthenticationStateProvider _authProvider;
 
         /// <summary>
         /// 
@@ -20,33 +23,38 @@ namespace XTMF2.Web.Client.Services {
         /// <param name="storage"></param>
         /// <param name="logger"></param>
         /// <param name="authProvider"></param>
-        public AuthenticationService(AuthenticationClient client, ISessionStorageService storage, ILogger<AuthenticationService> logger, XtmfAuthStateProvider authProvider) {
+        public AuthenticationService(AuthenticationClient client, ISessionStorageService storage, ILogger<AuthenticationService> logger,
+        AuthenticationStateProvider authProvider)
+        {
             _client = client;
             _storage = storage;
             _logger = logger;
-            _authProvider = authProvider
+            _authProvider = authProvider;
         }
 
         /// <summary>
-        /// 
+        /// Tests the login state of the current stored user.
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> TestLoginAsync() {
+        public async Task<bool> TestLoginAsync()
+        {
             return await _client.TestLoginAsync(await _storage.GetItemAsync<string>("uerName"), await _storage.GetItemAsync<string>("token"));
         }
 
         /// <summary>
-        /// 
+        /// Performs a login action.
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public async Task<bool> LoginAsync(string userName) {
+        public async Task<bool> LoginAsync(string userName)
+        {
             try {
                 var result = await _client.LoginAsync("local");
                 await _storage.SetItemAsync("token", result);
                 await _storage.SetItemAsync("userName", userName);
 
-            } catch (ApiException exception) {
+            }
+            catch (ApiException exception) {
                 _logger.LogError("Invalid login.", exception);
                 return false;
             }
@@ -57,7 +65,8 @@ namespace XTMF2.Web.Client.Services {
         /// 
         /// </summary>
         /// <returns></returns>
-        public async void LogoutAsync() {
+        public async void LogoutAsync()
+        {
             await _client.LogoutAsync();
         }
 

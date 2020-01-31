@@ -44,7 +44,7 @@ namespace XTMF2.Web.Server.Controllers {
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpPost("projects/{projectName/{model-systems/{modelSystemName}/open-session")]
+        [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/open-session")]
         public ActionResult OpenSession(string projectName, string modelSystemName, [FromServices] User user) {
             string error = default;
             if(!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime,user,projectName,modelSystemName,out var modelSystemHeader, ref error)) {
@@ -69,7 +69,7 @@ namespace XTMF2.Web.Server.Controllers {
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpPost("projects/{projectName/{model-systems/{modelSystemName}/end-session")]
+        [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/end-session")]
         public ActionResult EndSession(string projectName, string modelSystemName, [FromServices] User user) {
             string error = default;
             if(!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime,user,projectName,modelSystemName,out var modelSystemHeader, ref error)) {

@@ -16,10 +16,17 @@
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Blazor.Hosting;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Debugging;
-
+using XTMF2.Web.Client.Services;
+using XTMF2.Web.Client.Services.Api;
+using Blazored.SessionStorage;
 namespace XTMF2.Web.Client
 {
     /// <summary>
@@ -30,10 +37,33 @@ namespace XTMF2.Web.Client
         /// <summary>
         /// </summary>
         /// <param name="args"></param>
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             ConfigureLogger();
-            CreateHostBuilder(args).Build().Run();
+            var builder = CreateHostBuilder(args);
+            AddServices(builder.Services);
+            builder.RootComponents.Add<App>("app");
+            await builder.Build().RunAsync();
+        }
+
+        /// <summary>
+        /// Configure client side services.
+        /// </summary>
+        /// <param name="services"></param>
+        private static void AddServices(IServiceCollection services)
+        {
+            services.AddScoped<AuthenticationClient>();
+            services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider>();
+            services.AddScoped<ProjectClient>(provider =>
+            {
+                return new ProjectClient(provider.GetService<System.Net.Http.HttpClient>(),
+                    (XtmfAuthStateProvider)provider.GetService<AuthenticationStateProvider>());
+            });
+            services.AddAuthorizationCore();
+            services.AddScoped<ModelSystemClient>();
+            services.AddScoped<AuthenticationService>();
+            services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Trace); });
+            services.AddBlazoredSessionStorage();
         }
 
         /// <summary>
@@ -53,10 +83,10 @@ namespace XTMF2.Web.Client
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args)
+        public static WebAssemblyHostBuilder CreateHostBuilder(string[] args)
         {
-            return BlazorWebAssemblyHost.CreateDefaultBuilder()
-                .UseBlazorStartup<Startup>();
+            var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            return builder;
         }
     }
 }
