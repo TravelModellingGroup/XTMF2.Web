@@ -20,7 +20,7 @@ namespace XTMF2.Web.UnitTests.Controllers {
 
         public ModelSystemControllerUnitTests() {
             var config = new MapperConfiguration(cfg => {
-                cfg.AddProfile<ProjectProfile>();
+                cfg.AddProfile<ModelSystemProfile>();
             });
             _mapper = config.CreateMapper();
             _runtime = TestHelper.CreateTestContext();
