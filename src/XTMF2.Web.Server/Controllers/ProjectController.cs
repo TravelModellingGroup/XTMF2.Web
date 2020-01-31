@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using XTMF2.Web.Data.Models;
+using XTMF2.Web.Server.State;
 
 namespace XTMF2.Web.Server.Controllers
 {
@@ -35,6 +36,7 @@ namespace XTMF2.Web.Server.Controllers
         private readonly ILogger<ProjectController> _logger;
         private readonly IMapper _mapper;
         private readonly XTMFRuntime _xtmfRuntime;
+        private readonly SessionState _state;
 
         /// <summary>
         /// </summary>
@@ -43,11 +45,13 @@ namespace XTMF2.Web.Server.Controllers
         /// <param name="mapper"></param>
         public ProjectController(XTMFRuntime runtime,
             ILogger<ProjectController> logger,
+            SessionState state,
             IMapper mapper)
         {
             _xtmfRuntime = runtime;
             _logger = logger;
             _mapper = mapper;
+            _state = state;
         }
 
         /// <summary>
@@ -64,8 +68,7 @@ namespace XTMF2.Web.Server.Controllers
         {
             var error = default(string);
             if (!_xtmfRuntime.ProjectController.CreateNewProject(user, projectName,
-                out var session, ref error))
-            {
+                out var session, ref error)) {
                 _logger.LogError($"Unable to create project: {session.Project.Name}\n" +
                                  $"Error: {error}");
                 return new UnprocessableEntityObjectResult(error);
@@ -87,8 +90,7 @@ namespace XTMF2.Web.Server.Controllers
         {
             string error = default;
             if (!_xtmfRuntime.ProjectController.GetProject(user.UserName, projectName,
-                out var project, ref error))
-            {
+                out var project, ref error)) {
                 return new NotFoundResult();
             }
             return new OkObjectResult(_mapper.Map<ProjectModel>(project));
@@ -121,13 +123,11 @@ namespace XTMF2.Web.Server.Controllers
         public IActionResult Delete(string projectName, [FromServices] User user)
         {
             var error = default(string);
-            if (!_xtmfRuntime.ProjectController.GetProject(user, projectName, out var xtmfProject, ref error))
-            {
+            if (!_xtmfRuntime.ProjectController.GetProject(user, projectName, out var xtmfProject, ref error)) {
                 return new NotFoundObjectResult(error);
             }
 
-            if (!_xtmfRuntime.ProjectController.DeleteProject(user, xtmfProject, ref error))
-            {
+            if (!_xtmfRuntime.ProjectController.DeleteProject(user, xtmfProject, ref error)) {
                 _logger.LogError($"Unable to delete project: {projectName}\n" +
                                  $"Error: {error}");
                 return new UnprocessableEntityObjectResult(error);

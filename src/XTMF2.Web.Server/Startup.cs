@@ -35,6 +35,7 @@ using NSwag;
 using NSwag.Generation.Processors.Security;
 using XTMF2.Web.Server.Services;
 using XTMF2.Web.Server.Services.Interfaces;
+using XTMF2.Web.Server.State;
 
 namespace XTMF2.Web.Server
 {
@@ -65,7 +66,7 @@ namespace XTMF2.Web.Server
             services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-                    new[] {"application/octet-stream"});
+                    new[] { "application/octet-stream" });
             });
             services.AddMvcCore()
                 .AddApiExplorer();
@@ -81,6 +82,7 @@ namespace XTMF2.Web.Server
                 .AddRoleStore<XtmfRoleStore<string>>().AddSignInManager<XtmfSignInManager<User>>();
 
             services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
+            services.AddScoped<SessionState>();
 
             services.AddScoped(providers =>
             {
@@ -89,7 +91,7 @@ namespace XTMF2.Web.Server
                 var context = (IHttpContextAccessor) providers.GetService(typeof(IHttpContextAccessor));
                 var userManager = (UserManager<User>) providers.GetService(typeof(UserManager<User>));
                 var user = userManager.FindByNameAsync(context.HttpContext.User.Claims.FirstOrDefault()?.Value); */
-                return ((XTMFRuntime) providers.GetService(typeof(XTMFRuntime))).UserController.Users.FirstOrDefault();
+                return ((XTMFRuntime)providers.GetService(typeof(XTMFRuntime))).UserController.Users.FirstOrDefault();
             });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -143,12 +145,10 @@ namespace XTMF2.Web.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
+            else {
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
