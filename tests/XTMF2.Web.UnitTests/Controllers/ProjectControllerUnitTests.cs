@@ -67,6 +67,30 @@ namespace XTMF2.Web.UnitTests.Controllers {
             //assert
             Assert.IsAssignableFrom<OkResult>(result);
         }
+        
+        /// <summary>
+        /// Tests deletion of a non-existing project
+        /// </summary>
+        [Fact]
+        public void DeletePost_ReturnsNotFound_WhenProjectDeleted() {
+
+            var result = _controller.Delete("projectName", _userSession);
+            //assert
+            Assert.IsAssignableFrom<NotFoundObjectResult>(result);
+        }
+
+        /// <summary>
+        /// Tests retrieving of a single project
+        /// </summary>
+        [Fact]
+        public void Get_ReturnsValid_WhenProjectRetrieved() {
+            _controller.Create("projectName", _userSession);
+            var result = _controller.Get("projectName", _userSession);
+            Assert.IsAssignableFrom<OkObjectResult>(result);
+            Assert.Equal("projectName",((ProjectModel) ((OkObjectResult) result).Value).Name);
+        }
+
+
 
     }
 }

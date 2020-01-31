@@ -80,7 +80,7 @@ namespace XTMF2.Web.Server.Controllers {
         [HttpGet("{projectName}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProjectModel), StatusCodes.Status201Created)]
-        public ActionResult<ProjectModel> Get(string projectName, [FromServices] UserSession state) {
+        public IActionResult Get(string projectName, [FromServices] UserSession state) {
             string error = default;
             var project = state.Projects.FirstOrDefault(p => p.Name == projectName);
             if (project != null) {
