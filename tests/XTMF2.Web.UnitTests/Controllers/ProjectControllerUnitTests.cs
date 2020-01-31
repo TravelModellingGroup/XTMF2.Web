@@ -47,7 +47,6 @@ namespace XTMF2.Web.UnitTests.Controllers {
         public void CreatePost_ReturnsCreatedResult_WhenProjectCreated() {
             var result = _controller.Create("projectName", _userSession);
             var projects = _controller.List(_userSession);
-
             //assert
             Assert.IsAssignableFrom<CreatedResult>(result);
             Assert.IsAssignableFrom<OkObjectResult>(projects.Result);
@@ -60,10 +59,8 @@ namespace XTMF2.Web.UnitTests.Controllers {
         /// </summary>
         [Fact]
         public void DeletePost_ReturnsValid_WhenProjectDeleted() {
-
             _controller.Create("projectName", _userSession);
             var result = _controller.Delete("projectName", _userSession);
-
             //assert
             Assert.IsAssignableFrom<OkResult>(result);
         }
@@ -73,9 +70,7 @@ namespace XTMF2.Web.UnitTests.Controllers {
         /// </summary>
         [Fact]
         public void DeletePost_ReturnsNotFound_WhenProjectDeleted() {
-
             var result = _controller.Delete("projectName", _userSession);
-            //assert
             Assert.IsAssignableFrom<NotFoundObjectResult>(result);
         }
 
@@ -90,7 +85,15 @@ namespace XTMF2.Web.UnitTests.Controllers {
             Assert.Equal("projectName",((ProjectModel) ((OkObjectResult) result).Value).Name);
         }
 
-
+        /// <summary>
+        /// Tests single get project, should return not found.
+        /// </summary>
+        [Fact]
+        public void Get_ReturnsNotFound_WhenProjectRetrieved() {
+            _controller.Create("projectName", _userSession);
+            var result = _controller.Get("projectNameNoTvalid", _userSession);
+            Assert.IsAssignableFrom<NotFoundResult>(result);
+        }
 
     }
 }

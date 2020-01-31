@@ -79,7 +79,7 @@ namespace XTMF2.Web.Server.Controllers {
         /// <returns></returns>
         [HttpGet("{projectName}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProjectModel), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ProjectModel), StatusCodes.Status200OK)]
         public IActionResult Get(string projectName, [FromServices] UserSession state) {
             string error = default;
             var project = state.Projects.FirstOrDefault(p => p.Name == projectName);
@@ -121,7 +121,6 @@ namespace XTMF2.Web.Server.Controllers {
             if (project == null) {
                 return new NotFoundObjectResult(error);
             }
-
             if (!_xtmfRuntime.ProjectController.DeleteProject(state.User, project, ref error)) {
                 _logger.LogError($"Unable to delete project: {projectName}\n" +
                     $"Error: {error}");
