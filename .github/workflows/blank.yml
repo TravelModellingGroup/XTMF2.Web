@@ -16,7 +16,7 @@ jobs:
           git submodule update --recursive --remote
       - name: Pull XTMF2
         working-directory: .src/XTMF2
-          run: |
+        run: |
           git pull
       - name: Build with dotnet
         run: |
