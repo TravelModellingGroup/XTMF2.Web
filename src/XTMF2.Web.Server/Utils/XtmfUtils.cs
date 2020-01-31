@@ -16,7 +16,7 @@ namespace XTMF2.Web.Server.Utils
         /// <returns></returns>
         public static bool GetProjectSession(XTMFRuntime runtime, User user, string projectName, out ProjectSession projectSession, ref string error)
         {
-            if (!runtime.ProjectController.GetProject(user.UserName, projectName, out var project, ref error)) {
+            if (!runtime.ProjectController.GetProject(user, projectName, out var project, ref error)) {
                 projectSession = null;
                 return false;
             }
