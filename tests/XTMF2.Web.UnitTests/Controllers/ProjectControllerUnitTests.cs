@@ -55,6 +55,20 @@ namespace XTMF2.Web.UnitTests.Controllers {
         }
 
         /// <summary>
+        /// Test that project creation wont accept invalid name / model.
+        /// </summary>
+        [Fact]
+        public void CreatePost_ReturnsInvalid_WhenProjectCreated() {
+            var result = _controller.Create("", _userSession);
+            var projects = _controller.List(_userSession);
+            //assert
+            Assert.IsAssignableFrom<UnprocessableEntityObjectResult>(result);
+            Assert.IsAssignableFrom<OkObjectResult>(projects.Result);
+            Assert.Equal(0,((List<ProjectModel>) ((OkObjectResult) projects.Result).Value).Count);
+
+        }
+
+        /// <summary>
         /// Tests deleting a single project
         /// </summary>
         [Fact]

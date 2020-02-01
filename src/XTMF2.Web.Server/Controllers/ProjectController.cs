@@ -63,7 +63,7 @@ namespace XTMF2.Web.Server.Controllers {
             var error = default(string);
             if (!_xtmfRuntime.ProjectController.CreateNewProject(state.User, projectName,
                     out var session, ref error)) {
-                _logger.LogError($"Unable to create project: {session.Project.Name}\n" +
+                _logger.LogError($"Unable to create project: {projectName}\n" +
                     $"Error: {error}");
                 return new UnprocessableEntityObjectResult(error);
             }
