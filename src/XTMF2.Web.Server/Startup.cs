@@ -77,7 +77,7 @@ namespace XTMF2.Web.Server {
 
             services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
             services.AddScoped<UserSession>();
-
+            services.AddSingleton<ModelSystemSessions>();
             services.AddScoped(providers => {
                 /* This section of code is commented out temporarily until some further changes are mae on the client */
                 /*
