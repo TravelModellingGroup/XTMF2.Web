@@ -1,10 +1,9 @@
 using XTMF2.Editing;
+using XTMF2.Web.Server.Session;
 
-namespace XTMF2.Web.Server.Utils
-{
+namespace XTMF2.Web.Server.Utils {
 
-    public class XtmfUtils
-    {
+    public class XtmfUtils {
 
         /// <summary>
         /// Utility method to simplify/compact retrieval of a project session.
@@ -14,8 +13,8 @@ namespace XTMF2.Web.Server.Utils
         /// <param name="projectName"></param>
         /// <param name="error"></param>
         /// <returns></returns>
-        public static bool GetProjectSession(XTMFRuntime runtime, User user, string projectName, out ProjectSession projectSession, ref string error)
-        {
+        public static bool GetProjectSession(XTMFRuntime runtime, User user, string projectName, out ProjectSession projectSession, ref string error) {
+            var project = GetProject(projectName, null);
             if (!runtime.ProjectController.GetProject(user, projectName, out var project, ref error)) {
                 projectSession = null;
                 return false;
@@ -36,8 +35,7 @@ namespace XTMF2.Web.Server.Utils
         /// <param name="modelSystem"></param>
         /// <param name="error"></param>
         /// <returns></returns>
-        public static bool GetModelSystemHeader(XTMFRuntime runtime, User user, string projectName, string modelSystemName, out ModelSystemHeader modelSystem, ref string error)
-        {
+        public static bool GetModelSystemHeader(XTMFRuntime runtime, User user, string projectName, string modelSystemName, out ModelSystemHeader modelSystem, ref string error) {
             if (!GetProjectSession(runtime, user, projectName, out var projectSession, ref error)) {
                 modelSystem = null;
                 return false;
@@ -46,6 +44,10 @@ namespace XTMF2.Web.Server.Utils
                 return false;
             }
             return true;
+        }
+
+        public static Project GetProject(string projectName, UserSession session) {
+            return null;
         }
     }
 }
