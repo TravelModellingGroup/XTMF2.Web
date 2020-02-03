@@ -3,7 +3,7 @@
 
 # XTMF2.Web
 
-Server-side Blazor based GUI for XTMF2.
+Blazor WASM based GUI for XTMF2.
 
 # Building XTMF2.Web
 
