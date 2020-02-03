@@ -35,37 +35,32 @@ using NSwag;
 using NSwag.Generation.Processors.Security;
 using XTMF2.Web.Server.Services;
 using XTMF2.Web.Server.Services.Interfaces;
+using XTMF2.Web.Server.Session;
 
-namespace XTMF2.Web.Server
-{
-    public class Startup
-    {
+namespace XTMF2.Web.Server {
+    public class Startup {
         public IConfiguration Configuration { get; }
 
         /// <summary>
         /// </summary>
         /// <param name="configuration"></param>
-        public Startup(IConfiguration configuration)
-        {
+        public Startup(IConfiguration configuration) {
             Configuration = configuration;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
-        {
+        public void ConfigureServices(IServiceCollection services) {
             services.AddSingleton(XTMFRuntime.CreateRuntime());
             services.AddSingleton(Configuration);
-            services.AddScoped(provider =>
-            {
+            services.AddScoped(provider => {
                 var runtime = provider.GetService<XTMFRuntime>();
-                return runtime.UserController.GetUserByName("local");
+                return new UserSession(runtime.UserController.GetUserByName("local"));
             });
 
-            services.AddResponseCompression(opts =>
-            {
+            services.AddResponseCompression(opts => {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-                    new[] {"application/octet-stream"});
+                    new [] { "application/octet-stream" });
             });
             services.AddMvcCore()
                 .AddApiExplorer();
@@ -81,9 +76,9 @@ namespace XTMF2.Web.Server
                 .AddRoleStore<XtmfRoleStore<string>>().AddSignInManager<XtmfSignInManager<User>>();
 
             services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
+            services.AddScoped<UserSession>();
 
-            services.AddScoped(providers =>
-            {
+            services.AddScoped(providers => {
                 /* This section of code is commented out temporarily until some further changes are mae on the client */
                 /*
                 var context = (IHttpContextAccessor) providers.GetService(typeof(IHttpContextAccessor));
@@ -94,34 +89,29 @@ namespace XTMF2.Web.Server
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddAuthentication(x =>
-                {
+            services.AddAuthentication(x => {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                .AddJwtBearer(x =>
-                {
+                .AddJwtBearer(x => {
                     x.RequireHttpsMetadata = false;
                     x.SaveToken = true;
 
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
+                    x.TokenValidationParameters = new TokenValidationParameters {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["JwtSecurityKey"])),
+                        new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["JwtSecurityKey"])),
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
                 });
 
-            services.AddOpenApiDocument(document =>
-            {
-                document.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
-                {
+            services.AddOpenApiDocument(document => {
+                document.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme {
                     Type = OpenApiSecuritySchemeType.ApiKey,
-                    Name = "Authorization",
-                    In = OpenApiSecurityApiKeyLocation.Header,
-                    Description = "Type into the textbox: Bearer {your JWT token}."
+                        Name = "Authorization",
+                        In = OpenApiSecurityApiKeyLocation.Header,
+                        Description = "Type into the textbox: Bearer {your JWT token}."
                 });
 
                 document.OperationProcessors.Add(
@@ -135,29 +125,22 @@ namespace XTMF2.Web.Server
         ///     Creates the automapping configuration between various entities.
         /// </summary>
         /// <param name="services"></param>
-        private void ConfigureAutoMapping(IServiceCollection services)
-        {
+        private void ConfigureAutoMapping(IServiceCollection services) {
             services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
+            if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
-            }
-            else
-            {
+            } else {
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseClientSideBlazorFiles<Client.Startup>();
+            app.UseClientSideBlazorFiles<Client.Program>();
             app.UseRouting();
             app.UseAuthorization();
             //enable authentication and authorization
@@ -165,13 +148,11 @@ namespace XTMF2.Web.Server
             app.UseBlazorDebugging();
             app.UseOpenApi();
             app.UseSwaggerUi3();
-
-            app.UseEndpoints(endpoints =>
-            {
+            app.UseEndpoints(endpoints => {
                 // endpoints.MapBlazorHub ();
                 // endpoints.MapFallbackToPage ("/_Host");
                 endpoints.MapDefaultControllerRoute();
-                endpoints.MapFallbackToClientSideBlazor<Client.Startup>("index.html");
+                endpoints.MapFallbackToClientSideBlazor<Client.Program>("index.html");
             });
         }
     }

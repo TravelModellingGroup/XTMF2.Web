@@ -1,6 +1,9 @@
+
+![CI](https://github.com/TravelModellingGroup/XTMF2.Web/workflows/CI/badge.svg?branch=dev)
+
 # XTMF2.Web
 
-Server-side Blazor based GUI for XTMF2.
+Blazor WASM based GUI for XTMF2.
 
 # Building XTMF2.Web
 

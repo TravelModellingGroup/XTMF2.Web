@@ -1,0 +1,23 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup .NetCore
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
+      - name: XTMF2 Submodule
+        working-directory: src/XTMF2
+        run: |
+          git submodule update --init --recursive
+      - name: Build with dotnet
+        run: |
+          dotnet build --configuration Release
+      - name: Unit Tests
+        run: |
+          dotnet test

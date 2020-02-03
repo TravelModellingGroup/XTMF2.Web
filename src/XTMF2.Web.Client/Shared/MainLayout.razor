@@ -2,6 +2,8 @@
 @namespace XTMF2.Web.Client.Shared
 @using Blazored.SessionStorage
 @using Microsoft.AspNetCore.Components.Authorization
+@using XTMF2.Web.Client.Services.Api
+@using XTMF2.Web.Client.Services
 @inherits LayoutComponentBase
 <div class="wrapper">
     <nav id="main-sidebar">
@@ -64,13 +66,12 @@
 </div>
 
 @code {
-    [Inject]
-    private ISessionStorageService Storage { get; set;}
+
+        [Inject] protected AuthenticationService AuthenticationService {get;set;}
         protected override async Task OnInitializedAsync() {
-        
-        await Storage.SetItemAsync("name", "John Smith");
-        await Storage.SetItemAsync("name2", "Brendan Reilly");
-        var name = await Storage.GetItemAsync<string>("name");
-        Console.WriteLine("Read from storage: " + name);
+
+            await AuthenticationService.LoginAsync("admin");
+        }
+
     }
 }

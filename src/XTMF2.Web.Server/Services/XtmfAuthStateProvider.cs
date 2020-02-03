@@ -18,35 +18,31 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
+using XTMF2.Web.Server.Session;
 
-namespace XTMF2.Web.Server.Services
-{
+namespace XTMF2.Web.Server.Services {
     /// <summary>
     /// </summary>
-    public class XtmfAuthStateProvider : AuthenticationStateProvider
-    {
+    public class XtmfAuthStateProvider : AuthenticationStateProvider {
         public const string RoleAdmin = "Admin";
         public const string RoleUser = "User";
+
+        private UserSession UserSession { get; }
 
         /// <summary>
         /// </summary>
         /// <param name="xtmfUser"></param>
-        public XtmfAuthStateProvider(User xtmfUser)
-        {
-            XtmfUser = xtmfUser;
+        public XtmfAuthStateProvider(UserSession userSession) {
+            UserSession = userSession;
         }
-
-        private User XtmfUser { get; }
 
         /// <summary>
         /// </summary>
         /// <returns></returns>
-        public override Task<AuthenticationState> GetAuthenticationStateAsync()
-        {
-            var identity = new ClaimsIdentity(new[]
-            {
-                new Claim(ClaimTypes.Role, XtmfUser.IsAdmin ? RoleAdmin : RoleUser),
-                new Claim(ClaimTypes.Name, XtmfUser.UserName)
+        public override Task<AuthenticationState> GetAuthenticationStateAsync() {
+            var identity = new ClaimsIdentity(new [] {
+                new Claim(ClaimTypes.Role, UserSession.User.IsAdmin ? RoleAdmin : RoleUser),
+                    new Claim(ClaimTypes.Name, UserSession.User.UserName)
             }, "xtmf2");
             var user = new ClaimsPrincipal(identity);
 
