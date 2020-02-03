@@ -36,7 +36,6 @@ namespace XTMF2.Web.Server.Controllers {
         /// 
         /// </summary>
         /// <param name="runtime"></param>
-        /// <param name="userSession"></param>
         /// <param name="sessions"></param>
         public ModelSystemEditorController(XTMFRuntime runtime, ModelSystemSessions sessions) {
             _xtmfRuntime = runtime;
@@ -44,9 +43,11 @@ namespace XTMF2.Web.Server.Controllers {
         }
 
         /// <summary>
+        /// 
         /// </summary>
-        /// <param name="project"></param>
-        /// <param name="name"></param>
+        /// <param name="projectName"></param>
+        /// <param name="modelSystemName"></param>
+        /// <param name="userSession"></param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
