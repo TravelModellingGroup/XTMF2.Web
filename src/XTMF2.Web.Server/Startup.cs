@@ -71,7 +71,7 @@ namespace XTMF2.Web.Server {
             services.AddHttpContextAccessor();
             services.AddAuthorization();
             //configure the authentication and authorization services
-            services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider>();
+            services.AddScoped<AuthenticationStateProvider, XtmfAuthenticationStateProvider>();
             services.AddIdentity<User, string>().AddUserStore<XtmfUserStore<User>>()
                 .AddRoleStore<XtmfRoleStore<string>>().AddSignInManager<XtmfSignInManager<User>>();
 

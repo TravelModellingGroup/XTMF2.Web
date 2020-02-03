@@ -23,20 +23,22 @@ using XTMF2.Web.Server.Session;
 namespace XTMF2.Web.Server.Services {
     /// <summary>
     /// </summary>
-    public class XtmfAuthStateProvider : AuthenticationStateProvider {
+    public class XtmfAuthenticationStateProvider : AuthenticationStateProvider {
         public const string RoleAdmin = "Admin";
         public const string RoleUser = "User";
 
         private UserSession UserSession { get; }
 
         /// <summary>
+        /// 
         /// </summary>
-        /// <param name="xtmfUser"></param>
-        public XtmfAuthStateProvider(UserSession userSession) {
+        /// <param name="userSession"></param>
+        public XtmfAuthenticationStateProvider(UserSession userSession) {
             UserSession = userSession;
         }
 
         /// <summary>
+        /// Returns the authentication state of the current user of the http context
         /// </summary>
         /// <returns></returns>
         public override Task<AuthenticationState> GetAuthenticationStateAsync() {

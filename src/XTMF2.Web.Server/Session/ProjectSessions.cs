@@ -9,7 +9,7 @@ namespace XTMF2.Web.Server.Session {
     /// </summary>
     public class ProjectSessions {
 
-        public List<Editing.ProjectSession> Sessions { get; } = new List<Editing.ProjectSession>();
+        public Dictionary<string, Editing.ProjectSession> Sessions { get; } = new Dictionary<string, Editing.ProjectSession>();
         public ProjectSessions() {
 
         }
