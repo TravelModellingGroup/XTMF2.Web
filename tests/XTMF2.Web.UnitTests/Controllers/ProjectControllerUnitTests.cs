@@ -128,10 +128,14 @@ namespace XTMF2.Web.UnitTests.Controllers
             var result = _controller.Get("projectNameNoTvalid", _userSession);
             Assert.IsAssignableFrom<NotFoundResult>(result);
         }
-
+        
+        /// <summary>
+        /// Dispose of test data
+        /// </summary>
         public void Dispose()
         {
             TestHelper.CleanUpTestContext(_runtime, _userName);
+            _runtime.Shutdown();
         }
     }
 }

@@ -48,6 +48,7 @@ namespace XTMF2.Web.UnitTests.Controllers
         public void Dispose()
         {
             TestHelper.CleanUpTestContext(_runtime, _userName);
+            _runtime.Shutdown();
         }
     }
 }

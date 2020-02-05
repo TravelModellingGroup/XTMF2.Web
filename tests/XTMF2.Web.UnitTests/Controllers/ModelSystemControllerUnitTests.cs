@@ -123,6 +123,7 @@ namespace XTMF2.Web.UnitTests.Controllers
             _controller.Get("projectName", "MSName", _userSession);
             _controller.Get("projectName", "MSName", _userSession);
             Assert.Single(_projectSessions.Sessions[_userSession.User]);
+            _projectSessions.Sessions[_userSession.User][0].Dispose();
         }
 
         /// <summary>
@@ -163,6 +164,7 @@ namespace XTMF2.Web.UnitTests.Controllers
         public void Dispose()
         {
             TestHelper.CleanUpTestContext(_runtime, _userName);
+            _runtime.Shutdown();
         }
     }
 }
