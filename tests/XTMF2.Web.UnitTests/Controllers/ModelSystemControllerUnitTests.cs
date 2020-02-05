@@ -12,6 +12,9 @@ using Xunit;
 
 namespace XTMF2.Web.UnitTests.Controllers
 {
+    /// <summary>
+    /// Unit tests related to the ModelSystemController
+    /// </summary>
     public class ModelSystemControllerUnitTests : IDisposable
     {
 
@@ -125,8 +128,7 @@ namespace XTMF2.Web.UnitTests.Controllers
         /// <summary>
         /// Tests that an appropriate accessed model system is deleted.
         /// </summary>
-        [Fact]
-        public void ModelSystemDelete_ReturnsOkResult_WhenModelSystemDeleted()
+        public void ModelSystemDelete_ReturnsOkResult_WhenValidModelSystemDeleted()
         {
             _projectController.Create("projectName", _userSession);
             _controller.Create("projectName", new ModelSystemModel()
@@ -134,8 +136,28 @@ namespace XTMF2.Web.UnitTests.Controllers
                 Description = "Description",
                 Name = "MSName"
             }, _userSession);
-            var result = _controller.Delete("projectName","MSName",_userSession);
+            var result = _controller.Delete("projectName", "MSName", _userSession);
+
+            // end project sessions 
             Assert.IsAssignableFrom<OkResult>(result);
+        }
+
+        /// <summary>
+        /// Tests for not found result when deleting a model system that does not exist.
+        /// </summary>
+        [Fact]
+        public void ModelSystemDelete_ReturnsNotFoundObjectResult_WhenInvalidModelSystemDeleted()
+        {
+            _projectController.Create("projectName2", _userSession);
+            _controller.Create("projectName2", new ModelSystemModel()
+            {
+                Description = "Description",
+                Name = "MSName2"
+            }, _userSession);
+            var result = _controller.Delete("projectName2", "MSName2", _userSession);
+            Assert.IsAssignableFrom<OkResult>(result);
+            _projectSessions.Sessions[_userSession.User][0].Dispose();
+            _projectSessions.Sessions[_userSession.User].Clear();
         }
 
         public void Dispose()

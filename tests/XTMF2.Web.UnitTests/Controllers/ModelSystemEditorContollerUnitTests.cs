@@ -12,6 +12,9 @@ using Xunit;
 
 namespace XTMF2.Web.UnitTests.Controllers
 {
+    /// <summary>
+    /// Unit tests related to the ModelSystemEditorController
+    /// </summary>
     public class ModelSystemEditorControllerUnitTests : IDisposable
     {
 

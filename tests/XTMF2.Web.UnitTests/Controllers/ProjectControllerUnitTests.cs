@@ -12,6 +12,9 @@ using Xunit;
 
 namespace XTMF2.Web.UnitTests.Controllers
 {
+    /// <summary>
+    /// Unit tests related to the ProjectController
+    /// </summary>
     public class ProjectControllerUnitTests : IDisposable
     {
 

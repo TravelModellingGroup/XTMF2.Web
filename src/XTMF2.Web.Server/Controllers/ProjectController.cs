@@ -141,5 +141,20 @@ namespace XTMF2.Web.Server.Controllers
             _logger.LogInformation($"Project deleted: {projectName}");
             return new OkResult();
         }
+
+        /// <summary>
+        /// Ends a project session for the associated project.
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        [HttpPost("{projectName}/end-session")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        public IActionResult EndSession(string projectName, [FromServices] UserSession state)
+        {
+            return new OkResult();
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace XTMF2.Web.UnitTests
             var projectController = runtime.ProjectController;
             string error = null;
             // clear out the user if possible
-            userController.Delete(userName);
+            // userController.Delete(userName);
             userController.CreateNew(userName, true, out var user, ref error);
             return runtime;
         }

@@ -47,7 +47,7 @@ namespace XTMF2.Web.Components.Util
 
         protected InputModel InputModel = new InputModel();
 
-        private BSModal _inputModal;
+        private BSModal _inputModal = null;
 
         /// <summary>
         ///     Attempts to create a new project on submission of the new project form.
