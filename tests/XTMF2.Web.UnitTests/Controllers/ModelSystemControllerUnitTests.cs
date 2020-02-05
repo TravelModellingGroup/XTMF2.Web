@@ -122,6 +122,22 @@ namespace XTMF2.Web.UnitTests.Controllers
             Assert.Single(_projectSessions.Sessions[_userSession.User]);
         }
 
+        /// <summary>
+        /// Tests that an appropriate accessed model system is deleted.
+        /// </summary>
+        [Fact]
+        public void ModelSystemDelete_ReturnsOkResult_WhenModelSystemDeleted()
+        {
+            _projectController.Create("projectName", _userSession);
+            _controller.Create("projectName", new ModelSystemModel()
+            {
+                Description = "Description",
+                Name = "MSName"
+            }, _userSession);
+            var result = _controller.Delete("projectName","MSName",_userSession);
+            Assert.IsAssignableFrom<OkResult>(result);
+        }
+
         public void Dispose()
         {
             TestHelper.CleanUpTestContext(_runtime, _userName);

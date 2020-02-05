@@ -88,7 +88,7 @@ namespace XTMF2.Web.Server.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Deletes the specified model system.
         /// </summary>
         /// <param name="projectName"></param>
         /// <param name="modelSystemName"></param>
@@ -114,7 +114,7 @@ namespace XTMF2.Web.Server.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Returns information / model system header about the specified model system.
         /// </summary>
         /// <param name="projectName"></param>
         /// <param name="modelSystemName"></param>
