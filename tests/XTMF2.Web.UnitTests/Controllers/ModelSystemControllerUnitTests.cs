@@ -15,6 +15,7 @@ namespace XTMF2.Web.UnitTests.Controllers
     /// <summary>
     /// Unit tests related to the ModelSystemController
     /// </summary>
+    [Collection("Sequential")]
     public class ModelSystemControllerUnitTests : IDisposable
     {
 

@@ -15,6 +15,7 @@ namespace XTMF2.Web.UnitTests.Controllers
     /// <summary>
     /// Unit tests related to the ProjectController
     /// </summary>
+    [Collection("Sequential")]
     public class ProjectControllerUnitTests : IDisposable
     {
 
@@ -128,7 +129,7 @@ namespace XTMF2.Web.UnitTests.Controllers
             var result = _controller.Get("projectNameNoTvalid", _userSession);
             Assert.IsAssignableFrom<NotFoundResult>(result);
         }
-        
+
         /// <summary>
         /// Dispose of test data
         /// </summary>
