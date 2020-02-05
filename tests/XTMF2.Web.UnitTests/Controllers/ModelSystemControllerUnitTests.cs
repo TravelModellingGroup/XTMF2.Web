@@ -130,6 +130,7 @@ namespace XTMF2.Web.UnitTests.Controllers
         /// <summary>
         /// Tests that an appropriate accessed model system is deleted.
         /// </summary>
+        [Fact]
         public void ModelSystemDelete_ReturnsOkResult_WhenValidModelSystemDeleted()
         {
             _projectController.Create("projectName", _userSession);
@@ -154,16 +155,22 @@ namespace XTMF2.Web.UnitTests.Controllers
             _controller.Create("projectName2", new ModelSystemModel()
             {
                 Description = "Description",
-                Name = "MSName2"
+                Name = "MSName"
             }, _userSession);
-            var result = _controller.Delete("projectName2", "MSName2", _userSession);
-            Assert.IsAssignableFrom<OkResult>(result);
-            _projectSessions.Sessions[_userSession.User][0].Dispose();
-            _projectSessions.Sessions[_userSession.User].Clear();
+            var result = _controller.Delete("projectName2", "MSNameWrong", _userSession);
+            Assert.IsAssignableFrom<NotFoundObjectResult>(result);
+
         }
 
         public void Dispose()
         {
+            if (_projectSessions.Sessions.ContainsKey(_userSession.User)) {
+                _projectSessions.Sessions[_userSession.User].ForEach((i) =>
+                            {
+                                i.Dispose();
+                            });
+            }
+
             TestHelper.CleanUpTestContext(_runtime, _userName);
             _runtime.Shutdown();
         }
