@@ -23,30 +23,40 @@ using Microsoft.Extensions.Logging;
 using XTMF2.Web.Data.Interfaces;
 using XTMF2.Web.Data.Models;
 using XTMF2.Web.Server.Session;
+using XTMF2.Web.Server.Utils;
 
-namespace XTMF2.Web.Server.Controllers {
+namespace XTMF2.Web.Server.Controllers
+{
     /// <summary>
     ///     API controller for the editing of model systems.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class ModelSystemController : ControllerBase {
+    public class ModelSystemController : ControllerBase
+    {
 
         private readonly ILogger<ModelSystemController> _logger;
         private readonly IMapper _mapper;
         private readonly XTMFRuntime _xtmfRuntime;
 
+        private readonly ProjectSessions _projectSessions;
+
         /// <summary>
+        /// 
         /// </summary>
         /// <param name="runtime"></param>
         /// <param name="logger"></param>
         /// <param name="mapper"></param>
+        /// <param name="projectSessions"></param>
         public ModelSystemController(XTMFRuntime runtime,
              ILogger<ModelSystemController> logger,
-            IMapper mapper) {
+            IMapper mapper,
+            ProjectSessions projectSessions)
+        {
             _xtmfRuntime = runtime;
             _logger = logger;
             _mapper = mapper;
+            _projectSessions = projectSessions;
 
         }
 
@@ -59,61 +69,67 @@ namespace XTMF2.Web.Server.Controllers {
         /// <returns></returns>
         [HttpPost("project/{projectName}")]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ModelSystemModel), StatusCodes.Status201Created)]
-        public ActionResult Create(string projectName, [FromBody] ModelSystemModel modelSystemModel, [FromServices] User user) {
+        public ActionResult Create(string projectName, [FromBody] ModelSystemModel modelSystemModel, [FromServices] UserSession userSession)
+        {
             if (!ModelState.IsValid) {
                 return new UnprocessableEntityObjectResult(ModelState.Values.ToArray());
             }
-
             var error = default(string);
-            if (!_xtmfRuntime.ProjectController.GetProject(user.UserName, projectName, out var project, ref error)) {
+            if (!XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession, _projectSessions, ref error)) {
                 return new NotFoundObjectResult(error);
             }
 
-            if (!_xtmfRuntime.ProjectController.GetProjectSession(user, project, out var projectSession, ref error)) {
-                return new NotFoundObjectResult(error);
+            if (projectSession.CreateNewModelSystem(userSession.User, modelSystemModel.Name, out var modelSystem, ref error)) {
+                return new CreatedResult(nameof(ModelSystemController), _mapper.Map<ModelSystemModel>(modelSystem));
+            }
+            else {
+                return new UnprocessableEntityObjectResult(error);
             }
 
-            projectSession.CreateNewModelSystem(user, modelSystemModel.Name, out var modelSystem, ref error);
-            return new CreatedResult(nameof(ModelSystemController), _mapper.Map<ModelSystemModel>(modelSystem));
         }
 
         /// <summary>
-        /// Deletes the specified model system.
+        /// 
         /// </summary>
         /// <param name="projectName"></param>
         /// <param name="modelSystemName"></param>
-        /// <param name="user"></param>
+        /// <param name="userSession"></param>
         /// <returns></returns>
         [HttpDelete("projects/{projectName}/model-systems/{modelSystemName}")]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult Delete(string projectName, string modelSystemName, [FromServices] User user) {
+        public ActionResult Delete(string projectName, string modelSystemName, [FromServices] UserSession userSession)
+        {
             string error = default;
-            if (!Utils.XtmfUtils.GetProjectSession(_xtmfRuntime, user, projectName, out var projectSession, ref error)) {
+            if (!XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession, _projectSessions, ref error)) {
                 return new NotFoundObjectResult(error);
             }
-            if (!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime, user, projectName, modelSystemName, out var modelSystemHeader, ref error)) {
+            if (!XtmfUtils.GetModelSystemHeader(_xtmfRuntime, userSession, _projectSessions, projectName, modelSystemName, out var modelSystemHeader, ref error)) {
                 return new NotFoundObjectResult(error);
             }
-            if (!projectSession.RemoveModelSystem(user, modelSystemHeader, ref error)) {
+            if (!projectSession.RemoveModelSystem(userSession.User, modelSystemHeader, ref error)) {
                 return new UnprocessableEntityObjectResult(error);
             }
             return new OkResult();
         }
 
         /// <summary>
+        /// 
         /// </summary>
-        /// <param name="project"></param>
-        /// <param name="name"></param>
+        /// <param name="projectName"></param>
+        /// <param name="modelSystemName"></param>
+        /// <param name="userSession"></param>
         /// <returns></returns>
         [HttpGet("projects/{projectName}/model-systems/{modelSystemName}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ModelSystemModel), StatusCodes.Status200OK)]
-        public ActionResult<ModelSystemModel> Get(string projectName, string modelSystemName, [FromServices] User user) {
+        public ActionResult<ModelSystemModel> Get(string projectName, string modelSystemName, [FromServices] UserSession userSession)
+        {
             string error = default;
-            if (!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime, user, projectName, modelSystemName, out var modelSystemHeader, ref error)) {
+            if (!XtmfUtils.GetModelSystemHeader(_xtmfRuntime, userSession, _projectSessions, projectName, modelSystemName, out var modelSystemHeader, ref error)) {
                 return new NotFoundObjectResult(error);
             }
             return new OkObjectResult(_mapper.Map<ModelSystemModel>(modelSystemHeader));

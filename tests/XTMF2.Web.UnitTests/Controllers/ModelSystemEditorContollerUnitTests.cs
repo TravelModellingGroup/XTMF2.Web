@@ -17,6 +17,7 @@ namespace XTMF2.Web.UnitTests.Controllers {
         private ILogger<ModelSystemController> _logger;
         private ModelSystemController _controller;
         private UserSession _userSession;
+        private ProjectSessions _projectSessions;
 
         public ModelSystemEditorControllerUnitTests() {
             var config = new MapperConfiguration(cfg => {
@@ -24,8 +25,9 @@ namespace XTMF2.Web.UnitTests.Controllers {
             });
             _mapper = config.CreateMapper();
             _runtime = TestHelper.CreateTestContext();
-            _logger = Mock.Of<ILogger<ModelSystemController>>();
-            _controller = new ModelSystemController(_runtime, _logger, _mapper);
+            _logger = Mock.Of<ILogger<ModelSystemController>>(); 
+            _projectSessions = new ProjectSessions();
+            _controller = new ModelSystemController(_runtime, _logger, _mapper, _projectSessions);
             _userSession = new UserSession(_runtime.UserController.GetUserByName("TempUser"));
         }
 
