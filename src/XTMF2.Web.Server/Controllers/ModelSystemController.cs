@@ -71,7 +71,7 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ModelSystemModel), StatusCodes.Status201Created)]
-        public ActionResult Create(string projectName, [FromBody] ModelSystemModel modelSystemModel, [FromServices] UserSession userSession)
+        public IActionResult Create(string projectName, [FromBody] ModelSystemModel modelSystemModel, [FromServices] UserSession userSession)
         {
             var error = default(string);
             if (!XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession, _projectSessions, ref error)) {

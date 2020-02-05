@@ -55,9 +55,12 @@ namespace XTMF2.Web.UnitTests.Controllers
             var result = _controller.Create("projectName", new ModelSystemModel()
             {
                 Description = "Description",
-                Name = "Name"
+                Name = "NameTest"
             }, _userSession);
+            var queryResult = _controller.Get("projectName", "NameTest", _userSession);
             Assert.IsAssignableFrom<CreatedResult>(result);
+            Assert.Equal("NameTest", (((ModelSystemModel)((OkObjectResult)queryResult).Value).Name));
+
         }
 
         /// <summary>
