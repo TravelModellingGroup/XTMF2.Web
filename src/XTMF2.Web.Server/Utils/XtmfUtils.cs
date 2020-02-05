@@ -23,8 +23,14 @@ namespace XTMF2.Web.Server.Utils
             ref string error)
         {
             var project = GetProject(projectName, userSession);
+            if(project == null)
+            {
+                error = "Invalid project";
+                projectSession = null;
+                return false;
+            }
             // determine if the project session already exists
-            if (projectSessions.Sessions[userSession.User] != null) {
+            if (projectSessions.Sessions.ContainsKey(userSession.User)) {
                 projectSession = projectSessions.Sessions[userSession.User].FirstOrDefault(p => p.Project == project);
                 if (projectSession != null) {
                     return true;
@@ -35,7 +41,7 @@ namespace XTMF2.Web.Server.Utils
                 return false;
             }
             //store the project session
-            if (projectSessions.Sessions[userSession.User] == null) {
+            if (!projectSessions.Sessions.ContainsKey(userSession.User)) {
                 projectSessions.Sessions[userSession.User] = new System.Collections.Generic.List<ProjectSession>();
                 projectSessions.Sessions[userSession.User].Add(projectSession);
             }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -9,8 +10,10 @@ using XTMF2.Web.Server.Profiles;
 using XTMF2.Web.Server.Session;
 using Xunit;
 
-namespace XTMF2.Web.UnitTests.Controllers {
-    public class ModelSystemEditorControllerUnitTests {
+namespace XTMF2.Web.UnitTests.Controllers
+{
+    public class ModelSystemEditorControllerUnitTests : IDisposable
+    {
 
         private IMapper _mapper;
         private XTMFRuntime _runtime;
@@ -19,17 +22,29 @@ namespace XTMF2.Web.UnitTests.Controllers {
         private UserSession _userSession;
         private ProjectSessions _projectSessions;
 
-        public ModelSystemEditorControllerUnitTests() {
-            var config = new MapperConfiguration(cfg => {
+        private string _userName;
+
+        public ModelSystemEditorControllerUnitTests()
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
                 cfg.AddProfile<ModelSystemProfile>();
             });
             _mapper = config.CreateMapper();
-            _runtime = TestHelper.CreateTestContext();
-            _logger = Mock.Of<ILogger<ModelSystemController>>(); 
+            _userName = Guid.NewGuid().ToString();
+            _runtime = TestHelper.CreateTestContext(_userName);
+            _logger = Mock.Of<ILogger<ModelSystemController>>();
             _projectSessions = new ProjectSessions();
             _controller = new ModelSystemController(_runtime, _logger, _mapper, _projectSessions);
-            _userSession = new UserSession(_runtime.UserController.GetUserByName("TempUser"));
+            _userSession = new UserSession(_runtime.UserController.GetUserByName(_userName));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Dispose()
+        {
+            TestHelper.CleanUpTestContext(_runtime, _userName);
+        }
     }
 }

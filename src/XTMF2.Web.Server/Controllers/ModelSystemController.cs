@@ -73,9 +73,6 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(typeof(ModelSystemModel), StatusCodes.Status201Created)]
         public ActionResult Create(string projectName, [FromBody] ModelSystemModel modelSystemModel, [FromServices] UserSession userSession)
         {
-            if (!ModelState.IsValid) {
-                return new UnprocessableEntityObjectResult(ModelState.Values.ToArray());
-            }
             var error = default(string);
             if (!XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession, _projectSessions, ref error)) {
                 return new NotFoundObjectResult(error);
@@ -126,7 +123,7 @@ namespace XTMF2.Web.Server.Controllers
         [HttpGet("projects/{projectName}/model-systems/{modelSystemName}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ModelSystemModel), StatusCodes.Status200OK)]
-        public ActionResult<ModelSystemModel> Get(string projectName, string modelSystemName, [FromServices] UserSession userSession)
+        public IActionResult Get(string projectName, string modelSystemName, [FromServices] UserSession userSession)
         {
             string error = default;
             if (!XtmfUtils.GetModelSystemHeader(_xtmfRuntime, userSession, _projectSessions, projectName, modelSystemName, out var modelSystemHeader, ref error)) {

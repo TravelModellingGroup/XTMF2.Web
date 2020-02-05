@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ using Xunit;
 
 namespace XTMF2.Web.UnitTests.Controllers
 {
-    public class ProjectControllerUnitTests
+    public class ProjectControllerUnitTests : IDisposable
     {
 
         private IMapper _mapper;
@@ -20,6 +21,7 @@ namespace XTMF2.Web.UnitTests.Controllers
         private ProjectController _controller;
         private UserSession _userSession;
         private ProjectSessions _projectSessions;
+        private string _userName;
 
         public ProjectControllerUnitTests()
         {
@@ -27,11 +29,12 @@ namespace XTMF2.Web.UnitTests.Controllers
             {
                 cfg.AddProfile<ProjectProfile>();
             });
+            _userName = Guid.NewGuid().ToString();
             _mapper = config.CreateMapper();
-            _runtime = TestHelper.CreateTestContext();
+            _runtime = TestHelper.CreateTestContext(_userName);
             _logger = Mock.Of<ILogger<ProjectController>>();
             _controller = new ProjectController(_runtime, _logger, _mapper);
-            _userSession = new UserSession(_runtime.UserController.GetUserByName("TempUser"));
+            _userSession = new UserSession(_runtime.UserController.GetUserByName(_userName));
             _projectSessions = new ProjectSessions();
 
 
@@ -123,5 +126,9 @@ namespace XTMF2.Web.UnitTests.Controllers
             Assert.IsAssignableFrom<NotFoundResult>(result);
         }
 
+        public void Dispose()
+        {
+            TestHelper.CleanUpTestContext(_runtime, _userName);
+        }
     }
 }
