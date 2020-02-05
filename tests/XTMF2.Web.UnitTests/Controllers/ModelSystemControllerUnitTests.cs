@@ -103,6 +103,25 @@ namespace XTMF2.Web.UnitTests.Controllers
             var result = _controller.Get("projectName", "MSNameWrong", _userSession);
             Assert.IsAssignableFrom<NotFoundObjectResult>(result);
         }
+
+        /// <summary>
+        /// Tests that multiple calls to get model system keeps a single reference to project session
+        /// </summary>
+        [Fact]
+        public void ModelSystemGet_MaintainsCorrectProjectSessionReference()
+        {
+            _projectController.Create("projectName", _userSession);
+            _controller.Create("projectName", new ModelSystemModel()
+            {
+                Description = "Description",
+                Name = "MSName"
+            }, _userSession);
+            _controller.Get("projectName", "MSName", _userSession);
+            _controller.Get("projectName", "MSName", _userSession);
+            _controller.Get("projectName", "MSName", _userSession);
+            Assert.Single(_projectSessions.Sessions[_userSession.User]);
+        }
+
         public void Dispose()
         {
             TestHelper.CleanUpTestContext(_runtime, _userName);
