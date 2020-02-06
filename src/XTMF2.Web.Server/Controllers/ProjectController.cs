@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using XTMF2.Web.Data.Models;
 using XTMF2.Web.Server.Session;
+using XTMF2.Web.Server.Utils;
 
 namespace XTMF2.Web.Server.Controllers
 {
@@ -37,6 +38,7 @@ namespace XTMF2.Web.Server.Controllers
         private readonly ILogger<ProjectController> _logger;
         private readonly IMapper _mapper;
         private readonly XTMFRuntime _xtmfRuntime;
+        private readonly ProjectSessions _projectSessions;
 
         /// <summary>
         /// </summary>
@@ -45,11 +47,13 @@ namespace XTMF2.Web.Server.Controllers
         /// <param name="mapper"></param>
         public ProjectController(XTMFRuntime runtime,
             ILogger<ProjectController> logger,
-            IMapper mapper)
+            IMapper mapper,
+            ProjectSessions projectSessions)
         {
             _xtmfRuntime = runtime;
             _logger = logger;
             _mapper = mapper;
+            _projectSessions = projectSessions;
         }
 
         /// <summary>
@@ -79,7 +83,7 @@ namespace XTMF2.Web.Server.Controllers
         /// <summary>
         ///     Gets the specified project.
         /// </summary>
-        /// <param name="projectName"></param>
+        /// /// <param name="projectName"></param>
         /// <param  name="user"></param>
         /// <returns></returns>
         [HttpGet("{projectName}")]
@@ -151,9 +155,14 @@ namespace XTMF2.Web.Server.Controllers
         [HttpPost("{projectName}/end-session")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         public IActionResult EndSession(string projectName, [FromServices] UserSession state)
         {
+            string error = default;
+            if(!XtmfUtils.GetProjectSession(_xtmfRuntime, state, projectName, out var projectSession, _projectSessions, ref error)) {
+                return new NotFoundObjectResult(error);
+            }
+            //clean up the session
+            projectSession.Dispose();
             return new OkResult();
         }
     }
