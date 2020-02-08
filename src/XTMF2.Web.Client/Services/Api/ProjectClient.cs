@@ -32,7 +32,7 @@ namespace XTMF2.Web.Client.Services.Api
         /// <param name="httpClient"></param>
         /// <param name="authorization"></param>
         /// <returns></returns>
-        public ProjectClient (System.Net.Http.HttpClient httpClient, XtmfAuthStateProvider authStateProvider) : this (httpClient) {
+        public ProjectClient (System.Net.Http.HttpClient httpClient, XtmfAuthenticationStateProvider authStateProvider) : this (httpClient) {
             AuthStateProvider = authStateProvider;
         }
 

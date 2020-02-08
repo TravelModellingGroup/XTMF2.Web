@@ -55,11 +55,11 @@ namespace XTMF2.Web.Client
         private static void AddServices(IServiceCollection services)
         {
             services.AddScoped<AuthenticationClient>();
-            services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider>();
+            services.AddScoped<AuthenticationStateProvider, XtmfAuthenticationStateProvider>();
             services.AddScoped<ProjectClient>(provider =>
             {
                 return new ProjectClient(provider.GetService<System.Net.Http.HttpClient>(),
-                    (XtmfAuthStateProvider)provider.GetService<AuthenticationStateProvider>());
+                    (XtmfAuthenticationStateProvider)provider.GetService<AuthenticationStateProvider>());
             });
             services.AddAuthorizationCore();
             services.AddScoped<ModelSystemClient>();

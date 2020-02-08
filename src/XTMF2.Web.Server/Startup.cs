@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -72,6 +73,7 @@ namespace XTMF2.Web.Server
             services.AddMvcCore()
                 .AddApiExplorer();
             services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, XtmfUserIdProvider>();
             services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Trace); });
             //configure the automapping services
             ConfigureAutoMapping(services);
@@ -157,22 +159,26 @@ namespace XTMF2.Web.Server
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseClientSideBlazorFiles<Client.Program>();
             app.UseRouting();
-            app.UseAuthorization();
+
+
             //enable authentication and authorization
-            app.UseAuthentication();
             app.UseBlazorDebugging();
             app.UseOpenApi();
             app.UseSwaggerUi3();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 // endpoints.MapBlazorHub ();
                 // endpoints.MapFallbackToPage ("/_Host");
                 endpoints.MapDefaultControllerRoute();
-                endpoints.MapHub<ProjectSessionContextHub>("/project-session-context");
+                endpoints.MapHub<SessionContextHub>("/project-session-context");
                 endpoints.MapFallbackToClientSideBlazor<Client.Program>("index.html");
             });
         }

@@ -16,6 +16,8 @@ namespace XTMF2.Web.Client.Services
         private ILogger<AuthenticationService> _logger;
         private AuthenticationStateProvider _authProvider;
 
+        public event EventHandler OnAuthenticated;
+
         /// <summary>
         /// 
         /// </summary>
@@ -48,16 +50,21 @@ namespace XTMF2.Web.Client.Services
         /// <returns></returns>
         public async Task<bool> LoginAsync(string userName)
         {
-            try {
-                var result = await _client.LoginAsync("local");
+            string result = default;
+            try
+            {
+                result = await _client.LoginAsync("local");
                 await _storage.SetItemAsync("token", result);
                 await _storage.SetItemAsync("userName", userName);
 
             }
-            catch (ApiException exception) {
+            catch (ApiException exception)
+            {
                 _logger.LogError("Invalid login.", exception);
                 return false;
             }
+            _logger.LogInformation("Logged in.");
+            OnAuthenticated?.Invoke(this, new EventArgs());
             return true;
         }
 

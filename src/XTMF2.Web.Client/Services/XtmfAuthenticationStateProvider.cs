@@ -7,8 +7,8 @@ namespace XTMF2.Web.Client.Services {
     /// <summary>
     /// Client authentication state provider.
     /// </summary>
-    public class XtmfAuthStateProvider : AuthenticationStateProvider {
-        public XtmfAuthStateProvider () {
+    public class XtmfAuthenticationStateProvider : AuthenticationStateProvider {
+        public XtmfAuthenticationStateProvider () {
 
         }
 

@@ -18,6 +18,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -32,6 +33,7 @@ namespace XTMF2.Web.Server.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     // [Authorize] ! Authorization pending change to client
     public class ProjectController : ControllerBase
     {
@@ -158,7 +160,8 @@ namespace XTMF2.Web.Server.Controllers
         public IActionResult EndSession(string projectName, [FromServices] UserSession state)
         {
             string error = default;
-            if(!XtmfUtils.GetProjectSession(_xtmfRuntime, state, projectName, out var projectSession, _projectSessions, ref error)) {
+            if (!XtmfUtils.GetProjectSession(_xtmfRuntime, state, projectName, out var projectSession, _projectSessions, ref error))
+            {
                 return new NotFoundObjectResult(error);
             }
             //clean up the session
