@@ -18,6 +18,7 @@
 using System.Linq;
 using System.Text;
 using AutoMapper;
+using BlazorSignalRApp.Server.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -37,34 +38,40 @@ using XTMF2.Web.Server.Services;
 using XTMF2.Web.Server.Services.Interfaces;
 using XTMF2.Web.Server.Session;
 
-namespace XTMF2.Web.Server {
-    public class Startup {
+namespace XTMF2.Web.Server
+{
+    public class Startup
+    {
         public IConfiguration Configuration { get; }
 
         /// <summary>
         /// </summary>
         /// <param name="configuration"></param>
-        public Startup(IConfiguration configuration) {
+        public Startup(IConfiguration configuration)
+        {
             Configuration = configuration;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services) {
+        public void ConfigureServices(IServiceCollection services)
+        {
             services.AddSingleton(XTMFRuntime.CreateRuntime());
             services.AddSingleton(Configuration);
-            services.AddScoped(provider => {
+            services.AddScoped(provider =>
+            {
                 var runtime = provider.GetService<XTMFRuntime>();
                 return new UserSession(runtime.UserController.GetUserByName("local"));
             });
 
-            services.AddResponseCompression(opts => {
+            services.AddResponseCompression(opts =>
+            {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-                    new [] { "application/octet-stream" });
+                    new[] { "application/octet-stream" });
             });
             services.AddMvcCore()
                 .AddApiExplorer();
-
+            services.AddSignalR();
             services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Trace); });
             //configure the automapping services
             ConfigureAutoMapping(services);
@@ -79,26 +86,30 @@ namespace XTMF2.Web.Server {
             services.AddScoped<UserSession>();
             services.AddSingleton<ModelSystemSessions>();
             services.AddSingleton<ProjectSessions>();
-            services.AddScoped(providers => {
+            services.AddScoped(providers =>
+            {
                 /* This section of code is commented out temporarily until some further changes are mae on the client */
                 /*
                 var context = (IHttpContextAccessor) providers.GetService(typeof(IHttpContextAccessor));
                 var userManager = (UserManager<User>) providers.GetService(typeof(UserManager<User>));
                 var user = userManager.FindByNameAsync(context.HttpContext.User.Claims.FirstOrDefault()?.Value); */
-                return ((XTMFRuntime) providers.GetService(typeof(XTMFRuntime))).UserController.Users.FirstOrDefault();
+                return ((XTMFRuntime)providers.GetService(typeof(XTMFRuntime))).UserController.Users.FirstOrDefault();
             });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddAuthentication(x => {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x => {
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(x =>
+                {
                     x.RequireHttpsMetadata = false;
                     x.SaveToken = true;
 
-                    x.TokenValidationParameters = new TokenValidationParameters {
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey =
                         new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["JwtSecurityKey"])),
@@ -107,12 +118,14 @@ namespace XTMF2.Web.Server {
                     };
                 });
 
-            services.AddOpenApiDocument(document => {
-                document.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme {
+            services.AddOpenApiDocument(document =>
+            {
+                document.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+                {
                     Type = OpenApiSecuritySchemeType.ApiKey,
-                        Name = "Authorization",
-                        In = OpenApiSecurityApiKeyLocation.Header,
-                        Description = "Type into the textbox: Bearer {your JWT token}."
+                    Name = "Authorization",
+                    In = OpenApiSecurityApiKeyLocation.Header,
+                    Description = "Type into the textbox: Bearer {your JWT token}."
                 });
 
                 document.OperationProcessors.Add(
@@ -126,15 +139,20 @@ namespace XTMF2.Web.Server {
         ///     Creates the automapping configuration between various entities.
         /// </summary>
         /// <param name="services"></param>
-        private void ConfigureAutoMapping(IServiceCollection services) {
+        private void ConfigureAutoMapping(IServiceCollection services)
+        {
             services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
-            if (env.IsDevelopment()) {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
                 app.UseDeveloperExceptionPage();
-            } else {
+            }
+            else
+            {
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
@@ -149,10 +167,12 @@ namespace XTMF2.Web.Server {
             app.UseBlazorDebugging();
             app.UseOpenApi();
             app.UseSwaggerUi3();
-            app.UseEndpoints(endpoints => {
+            app.UseEndpoints(endpoints =>
+            {
                 // endpoints.MapBlazorHub ();
                 // endpoints.MapFallbackToPage ("/_Host");
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapHub<ProjectSessionContextHub>("/project-session-context");
                 endpoints.MapFallbackToClientSideBlazor<Client.Program>("index.html");
             });
         }

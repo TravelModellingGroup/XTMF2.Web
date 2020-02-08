@@ -27,6 +27,8 @@ using Serilog.Debugging;
 using XTMF2.Web.Client.Services;
 using XTMF2.Web.Client.Services.Api;
 using Blazored.SessionStorage;
+using Microsoft.AspNetCore.Http.Connections.Client;
+
 namespace XTMF2.Web.Client
 {
     /// <summary>
