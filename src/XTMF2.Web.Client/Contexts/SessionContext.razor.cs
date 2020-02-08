@@ -9,7 +9,11 @@ using Microsoft.AspNetCore.SignalR.Client;
 namespace XTMF2.Web.Client.Contexts
 {
 
-    public partial class ProjectSessionContext : ComponentBase
+    /// <summary>
+    /// Session context. Tracks user session and context, and helps notify
+    /// server on client disconnect.
+    /// </summary>
+    public partial class SessionContext : ComponentBase
     {
 
         private HubConnection _hubConnection;
