@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 
+
 namespace XTMF2.Web.Client.Contexts
 {
 
@@ -13,12 +14,14 @@ namespace XTMF2.Web.Client.Contexts
 
         private HubConnection _hubConnection;
 
-        [Inject]
-        public NavigationManager NavigationManager { get; set; }
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected override async Task OnInitializedAsync()
         {
             Console.WriteLine("on init");
