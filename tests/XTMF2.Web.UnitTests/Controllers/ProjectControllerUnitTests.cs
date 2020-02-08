@@ -37,9 +37,9 @@ namespace XTMF2.Web.UnitTests.Controllers
             _mapper = config.CreateMapper();
             _runtime = TestHelper.CreateTestContext(_userName);
             _logger = Mock.Of<ILogger<ProjectController>>();
-            _controller = new ProjectController(_runtime, _logger, _mapper);
             _userSession = new UserSession(_runtime.UserController.GetUserByName(_userName));
             _projectSessions = new ProjectSessions();
+            _controller = new ProjectController(_runtime, _logger, _mapper, _projectSessions);
 
 
         }

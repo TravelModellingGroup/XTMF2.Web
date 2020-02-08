@@ -41,8 +41,8 @@ namespace XTMF2.Web.UnitTests.Controllers
             _logger = Mock.Of<ILogger<ModelSystemController>>();
             _projectSessions = new ProjectSessions();
             _controller = new ModelSystemController(_runtime, _logger, _mapper, _projectSessions);
-            _projectController = new ProjectController(_runtime, Mock.Of<ILogger<ProjectController>>(), _mapper);
             _userSession = new UserSession(_runtime.UserController.GetUserByName(_userName));
+            _projectController = new ProjectController(_runtime, Mock.Of<ILogger<ProjectController>>(), _mapper, _projectSessions);
         }
 
         /// <summary>
@@ -167,7 +167,8 @@ namespace XTMF2.Web.UnitTests.Controllers
 
         public void Dispose()
         {
-            if (_projectSessions.Sessions.ContainsKey(_userSession.User)) {
+            if (_projectSessions.Sessions.ContainsKey(_userSession.User))
+            {
                 _projectSessions.Sessions[_userSession.User].ForEach((i) =>
                             {
                                 i.Dispose();
