@@ -142,7 +142,7 @@ namespace XTMF2.Web.Server.Controllers
             return new CreatedResult("AddBoundary", newBoundary);
         }
 
-                /// <summary>
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="projectName"></param>
@@ -168,6 +168,29 @@ namespace XTMF2.Web.Server.Controllers
             }
 
             return new CreatedResult("AddStart", start);
+        }
+
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/add-comment-block")]
+        public IActionResult AddCommentBlock(string projectName, string modelSystemName, string parentBoundaryPath, [FromBody] CommentBlock commentBlock,
+        [FromServices] UserSession userSession)
+        {
+            if (!Utils.XtmfUtils.GetModelSystemSession(_xtmfRuntime, userSession, projectName,
+                modelSystemName, _projectSessions, _modelSystemSessions, out var modelSystemSession))
+            {
+                return new NotFoundObjectResult(null);
+            }
+            string error = default;
+            Boundary parentBoundary = (Boundary)ModelSystemUtils.GetModelSystemObjectByPath(_xtmfRuntime, modelSystemSession, parentBoundaryPath);
+            if (!modelSystemSession.AddCommentBlock(userSession.User, parentBoundary,
+             commentBlock.Text, new Point(commentBlock.Location.Item1, commentBlock.Location.Item2), out var commentBlockRef, ref error))
+            {
+                return new UnprocessableEntityObjectResult(error);
+            }
+
+            return new CreatedResult("AddCommentBlock", commentBlockRef);
         }
 
 
