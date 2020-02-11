@@ -19,8 +19,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using XTMF2.Web.Server.Session;
 
-namespace XTMF2.Web.Server.Controllers
-{
+namespace XTMF2.Web.Server.Controllers {
     /// <summary>
     ///     API controller for the management of model systems (meta). This controller does not contain endpoints for the
     ///     editing
@@ -28,8 +27,7 @@ namespace XTMF2.Web.Server.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class ModelSystemEditorController : ControllerBase
-    {
+    public class ModelSystemEditorController : ControllerBase {
         private XTMFRuntime _xtmfRuntime;
         private ModelSystemSessions _sessions;
         private ProjectSessions _projectSessions;

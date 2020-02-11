@@ -113,7 +113,6 @@ namespace XTMF2.Web.UnitTests.Controllers
             //assert
             Assert.IsAssignableFrom<OkResult>(result);
         }
-
         /// <summary>
         /// Tests deletion of a non-existing project
         /// </summary>

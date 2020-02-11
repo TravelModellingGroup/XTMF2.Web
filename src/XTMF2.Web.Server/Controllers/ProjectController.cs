@@ -26,8 +26,7 @@ using XTMF2.Web.Data.Models;
 using XTMF2.Web.Server.Session;
 using XTMF2.Web.Server.Utils;
 
-namespace XTMF2.Web.Server.Controllers
-{
+namespace XTMF2.Web.Server.Controllers {
     /// <summary>
     ///     API Controller for project related actions.
     /// </summary>
@@ -35,8 +34,7 @@ namespace XTMF2.Web.Server.Controllers
     [ApiController]
     [Authorize]
     // [Authorize] ! Authorization pending change to client
-    public class ProjectController : ControllerBase
-    {
+    public class ProjectController : ControllerBase {
         private readonly ILogger<ProjectController> _logger;
         private readonly IMapper _mapper;
         private readonly XTMFRuntime _xtmfRuntime;
