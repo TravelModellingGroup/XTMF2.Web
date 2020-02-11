@@ -55,7 +55,7 @@ namespace XTMF2.Web.Server.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Opens a new model system editing session.
         /// </summary>
         /// <param name="projectName"></param>
         /// <param name="modelSystemName"></param>
@@ -84,7 +84,7 @@ namespace XTMF2.Web.Server.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Ends a model system editing session
         /// </summary>
         /// <param name="projectName"></param>
         /// <param name="modelSystemName"></param>
@@ -115,7 +115,7 @@ namespace XTMF2.Web.Server.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Adds a new boundary to the specified model system
         /// </summary>
         /// <param name="projectName"></param>
         /// <param name="modelSystemName"></param>
@@ -222,28 +222,55 @@ namespace XTMF2.Web.Server.Controllers
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="modelSystemName"></param>
+        /// <param name="parentBoundaryPath"></param>
+        /// <param name="commentBlock"></param>
+        /// <param name="userSession"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/node-generate-parameters")]
         public IActionResult AddNodeGenerateParameteres(string projectName, string modelSystemName, string parentBoundaryPath, [FromBody] CommentBlock commentBlock,
-[FromServices] UserSession userSession)
+                                                        [FromServices] UserSession userSession)
         {
             //TODO
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="modelSystemName"></param>
+        /// <param name="parentBoundaryPath"></param>
+        /// <param name="commentBlock"></param>
+        /// <param name="userSession"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/node")]
         public IActionResult AddNode(string projectName, string modelSystemName, string parentBoundaryPath, [FromBody] CommentBlock commentBlock,
-[FromServices] UserSession userSession)
+                                    [FromServices] UserSession userSession)
         {
             //TODO
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="modelSystemName"></param>
+        /// <param name="parentBoundaryPath"></param>
+        /// <param name="commentBlock"></param>
+        /// <param name="userSession"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
@@ -255,6 +282,15 @@ namespace XTMF2.Web.Server.Controllers
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="modelSystemName"></param>
+        /// <param name="parentBoundaryPath"></param>
+        /// <param name="commentBlock"></param>
+        /// <param name="userSession"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
