@@ -27,6 +27,8 @@ using Serilog.Debugging;
 using XTMF2.Web.Client.Services;
 using XTMF2.Web.Client.Services.Api;
 using Blazored.SessionStorage;
+using Microsoft.AspNetCore.Http.Connections.Client;
+
 namespace XTMF2.Web.Client
 {
     /// <summary>
@@ -53,11 +55,12 @@ namespace XTMF2.Web.Client
         private static void AddServices(IServiceCollection services)
         {
             services.AddScoped<AuthenticationClient>();
-            services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider>();
+            services.AddScoped<AuthenticationStateProvider, XtmfAuthenticationStateProvider>();
             services.AddScoped<ProjectClient>(provider =>
             {
                 return new ProjectClient(provider.GetService<System.Net.Http.HttpClient>(),
-                    (XtmfAuthStateProvider)provider.GetService<AuthenticationStateProvider>());
+                    (XtmfAuthenticationStateProvider)provider.GetService<AuthenticationStateProvider>(),
+                    (ISessionStorageService)provider.GetService<ISessionStorageService>());
             });
             services.AddAuthorizationCore();
             services.AddScoped<ModelSystemClient>();

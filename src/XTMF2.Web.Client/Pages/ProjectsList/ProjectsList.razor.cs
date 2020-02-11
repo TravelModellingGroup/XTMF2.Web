@@ -35,7 +35,7 @@ namespace XTMF2.Web.Client.Pages {
         /// <summary>
         ///     New project form validation model.
         /// </summary>
-        private InputRequestDialog _inputRequestDialog;
+        private InputRequestDialog _inputRequestDialog = null;
 
         /// <summary>
         ///     Modal ref for the new project dialog.

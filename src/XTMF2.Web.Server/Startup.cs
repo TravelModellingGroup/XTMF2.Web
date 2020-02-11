@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,6 +34,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
+using XTMF2.Web.Server.Hubs;
 using XTMF2.Web.Server.Services;
 using XTMF2.Web.Server.Services.Interfaces;
 using XTMF2.Web.Server.Session;
@@ -60,40 +62,45 @@ namespace XTMF2.Web.Server {
 
             services.AddResponseCompression(opts => {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-                    new [] { "application/octet-stream" });
+                    new[] { "application/octet-stream" });
             });
             services.AddMvcCore()
                 .AddApiExplorer();
-
+            services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, XtmfUserIdProvider>();
             services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Trace); });
             //configure the automapping services
             ConfigureAutoMapping(services);
             services.AddHttpContextAccessor();
             services.AddAuthorization();
             //configure the authentication and authorization services
-            services.AddScoped<AuthenticationStateProvider, XtmfAuthStateProvider>();
+            services.AddScoped<AuthenticationStateProvider, XtmfAuthenticationStateProvider>();
             services.AddIdentity<User, string>().AddUserStore<XtmfUserStore<User>>()
                 .AddRoleStore<XtmfRoleStore<string>>().AddSignInManager<XtmfSignInManager<User>>();
 
             services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
             services.AddScoped<UserSession>();
-
-            services.AddScoped(providers => {
+            services.AddSingleton<ModelSystemSessions>();
+            services.AddSingleton<ProjectSessions>();
+            services.AddScoped(providers =>
+            {
                 /* This section of code is commented out temporarily until some further changes are mae on the client */
                 /*
                 var context = (IHttpContextAccessor) providers.GetService(typeof(IHttpContextAccessor));
                 var userManager = (UserManager<User>) providers.GetService(typeof(UserManager<User>));
                 var user = userManager.FindByNameAsync(context.HttpContext.User.Claims.FirstOrDefault()?.Value); */
-                return ((XTMFRuntime) providers.GetService(typeof(XTMFRuntime))).UserController.Users.FirstOrDefault();
+                return ((XTMFRuntime)providers.GetService(typeof(XTMFRuntime))).UserController.Users.FirstOrDefault();
             });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddAuthentication(x => {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x => {
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(x =>
+                {
                     x.RequireHttpsMetadata = false;
                     x.SaveToken = true;
 
@@ -142,16 +149,20 @@ namespace XTMF2.Web.Server {
             app.UseStaticFiles();
             app.UseClientSideBlazorFiles<Client.Program>();
             app.UseRouting();
-            app.UseAuthorization();
+
             //enable authentication and authorization
-            app.UseAuthentication();
             app.UseBlazorDebugging();
             app.UseOpenApi();
             app.UseSwaggerUi3();
-            app.UseEndpoints(endpoints => {
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
                 // endpoints.MapBlazorHub ();
                 // endpoints.MapFallbackToPage ("/_Host");
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapHub<SessionContextHub>("/session-context-hub");
                 endpoints.MapFallbackToClientSideBlazor<Client.Program>("index.html");
             });
         }

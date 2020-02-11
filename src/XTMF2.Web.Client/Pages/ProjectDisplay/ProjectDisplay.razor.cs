@@ -22,17 +22,14 @@ using Microsoft.Extensions.Logging;
 using XTMF2.Web.Components.Util;
 using XTMF2.Web.Data.Models;
 
-namespace XTMF2.Web.Client.Pages {
+namespace XTMF2.Web.Client.Pages
+{
     /// <summary>
     ///     Single project view (page).
     /// </summary>
-    public partial class ProjectDisplay : ComponentBase {
-
-        private InputRequestDialog _inputDialog;
-
-        [Inject]
-        protected UserModel XtmfUser { get; set; }
-
+    public partial class ProjectDisplay : ComponentBase
+    {
+        private InputRequestDialog _inputDialog = null;
         /// <summary>
         ///     Path parameter that specifies the ProjectName
         /// </summary>
@@ -45,14 +42,15 @@ namespace XTMF2.Web.Client.Pages {
         /// <summary>
         ///     Model systems belonging to the project
         /// </summary>
-        public IReadOnlyCollection<ModelSystemModel> ModelSystems { get; set; } = new List<ModelSystemModel> ();
+        public IReadOnlyCollection<ModelSystemModel> ModelSystems { get; set; } = new List<ModelSystemModel>();
 
         /// <summary>
         ///     The loaded project.
         /// </summary>
         protected ProjectModel Project { get; set; }
 
-        protected void NewModelSystemSubmit (string input) {
+        protected void NewModelSystemSubmit(string input)
+        {
             /*
             string error = null;
             if (!_projectSession.CreateNewModelSystem(XtmfUser, input, out var modelSystem, ref error))
@@ -69,7 +67,8 @@ namespace XTMF2.Web.Client.Pages {
         ///     Callback for deleting the passed model system.
         /// </summary>
         /// <param name="modelSystem"></param>
-        protected void DeleteModelSystem (ModelSystemModel modelSystem) {
+        protected void DeleteModelSystem(ModelSystemModel modelSystem)
+        {
             /*
             string error = null;
             if (!_projectSession.RemoveModelSystem(XtmfUser, modelSystem, ref error))
@@ -85,7 +84,8 @@ namespace XTMF2.Web.Client.Pages {
         /// <summary>
         ///     Initialization function, will attempt to load the referenced project.
         /// </summary>
-        protected override Task OnInitializedAsync () {
+        protected override Task OnInitializedAsync()
+        {
             /*
             string error = null;
             if (XtmfRuntime.ProjectController.GetProject(XtmfUser, ProjectName, out var project, ref error))
@@ -100,7 +100,7 @@ namespace XTMF2.Web.Client.Pages {
                 Logger.LogError("Unable to load project, or project not found: " + ProjectName);
             }
  */
-            return base.OnInitializedAsync ();
+            return base.OnInitializedAsync();
         }
     }
 }

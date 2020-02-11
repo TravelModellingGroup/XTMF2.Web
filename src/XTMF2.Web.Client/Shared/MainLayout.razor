@@ -68,9 +68,9 @@
 @code {
 
         [Inject] protected AuthenticationService AuthenticationService {get;set;}
-        protected override async Task OnInitializedAsync() {
 
-            await AuthenticationService.LoginAsync("admin");
+        protected override async Task OnInitializedAsync() {
+            var result = await AuthenticationService.LoginAsync("local");
         }
 
     }
