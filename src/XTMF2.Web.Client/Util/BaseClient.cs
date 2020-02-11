@@ -15,9 +15,12 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Blazored.SessionStorage;
+using Microsoft.AspNetCore.Components;
 using XTMF2.Web.Client.Services;
 
 namespace XTMF2.Web.Client.Util
@@ -27,8 +30,8 @@ namespace XTMF2.Web.Client.Util
     /// </summary>
     public class BaseClient
     {
-
         protected XtmfAuthenticationStateProvider AuthStateProvider { get; set; }
+        protected ISessionStorageService SessionStorageService { get; set; }
 
         /// <summary>
         /// Required base method from client generation, this provides a custom mechanism to create the HttpRequest
@@ -36,11 +39,15 @@ namespace XTMF2.Web.Client.Util
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        public Task<HttpRequestMessage> CreateHttpRequestMessageAsync(CancellationToken token)
+        public async Task<HttpRequestMessage> CreateHttpRequestMessageAsync(CancellationToken token)
         {
             var req = new HttpRequestMessage();
-            req.Headers.Add("TestHeader", "XTMF2");
-            return Task.FromResult(req);
+            if (SessionStorageService != null)
+            {
+                var auth = await SessionStorageService.GetItemAsync<string>("token");
+                req.Headers.Add("Authorization", "Bearer " + auth);
+            }
+            return req;
         }
     }
 }

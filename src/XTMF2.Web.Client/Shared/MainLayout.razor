@@ -69,11 +69,11 @@
 
         [Inject] protected AuthenticationService AuthenticationService {get;set;}
 
-        protected override void OnInitialized() {
+        protected override async Task OnInitializedAsync() {
             Console.WriteLine("here");
-            var task =  AuthenticationService.LoginAsync("local");
+            var result = await AuthenticationService.LoginAsync("local");
             // task.Wait();
-            // Console.WriteLine("logged in " + task.Result);
+            Console.WriteLine("logged in " + result);
         }
 
     }

@@ -59,7 +59,8 @@ namespace XTMF2.Web.Client
             services.AddScoped<ProjectClient>(provider =>
             {
                 return new ProjectClient(provider.GetService<System.Net.Http.HttpClient>(),
-                    (XtmfAuthenticationStateProvider)provider.GetService<AuthenticationStateProvider>());
+                    (XtmfAuthenticationStateProvider)provider.GetService<AuthenticationStateProvider>(),
+                    (ISessionStorageService)provider.GetService<ISessionStorageService>());
             });
             services.AddAuthorizationCore();
             services.AddScoped<ModelSystemClient>();
