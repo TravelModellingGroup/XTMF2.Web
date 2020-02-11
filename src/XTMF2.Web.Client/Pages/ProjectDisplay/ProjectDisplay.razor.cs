@@ -30,9 +30,7 @@ namespace XTMF2.Web.Client.Pages
     public partial class ProjectDisplay : ComponentBase
     {
 
-        private InputRequestDialog _inputDialog = null;
-
-
+        //private InputRequestDialog _inputDialog = null;
         /// <summary>
         ///     Path parameter that specifies the ProjectName
         /// </summary>
