@@ -17,7 +17,9 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using XTMF2.Web.Data.Interfaces.Editing;
 using XTMF2.Web.Server.Session;
+using XTMF2.Web.Server.Utils;
 
 namespace XTMF2.Web.Server.Controllers
 {
@@ -120,14 +122,21 @@ namespace XTMF2.Web.Server.Controllers
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public IActionResult AddBoundary(string projectName, string modelSystemName, [FromServices] UserSession userSession)
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        public IActionResult AddBoundary(string projectName, string modelSystemName, string parentBoundaryPath, [FromBody] BoundaryModel boundary, [FromServices] UserSession userSession)
         {
-            // TODO
-            if(!Utils.XtmfUtils.GetModelSystemSession(_xtmfRuntime, userSession, projectName, _projectSessions, _modelSystemSessions)) {
+            if (!Utils.XtmfUtils.GetModelSystemSession(_xtmfRuntime, userSession, projectName,
+                modelSystemName, _projectSessions, _modelSystemSessions, out var modelSystemSession))
+            {
                 return new NotFoundObjectResult(null);
             }
-
-            return new OkResult();
+            string error = default;
+            Boundary parentBoundary = (Boundary)ModelSystemUtils.GetModelSystemObjectByPath(_xtmfRuntime, modelSystemSession, parentBoundaryPath);
+            if (!modelSystemSession.AddBoundary(userSession.User, parentBoundary, boundary.Name, out var newBoundary, ref error))
+            {
+                return new UnprocessableEntityObjectResult(error);
+            }
+            return new CreatedResult("AddBoundary", newBoundary);
         }
 
 
