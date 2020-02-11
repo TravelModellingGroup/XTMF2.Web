@@ -124,7 +124,7 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/add-boundary")]
+        [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/boundary")]
         public IActionResult AddBoundary(string projectName, string modelSystemName, string parentBoundaryPath, [FromBody] BoundaryModel boundary, [FromServices] UserSession userSession)
         {
             if (!Utils.XtmfUtils.GetModelSystemSession(_xtmfRuntime, userSession, projectName,
@@ -143,7 +143,7 @@ namespace XTMF2.Web.Server.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Adds a model start node to the model system.
         /// </summary>
         /// <param name="projectName"></param>
         /// <param name="modelSystemName"></param>
@@ -152,7 +152,7 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/add-start")]
+        [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/start")]
         public IActionResult AddModelSystemStart(string projectName, string modelSystemName, string parentBoundaryPath, [FromBody] BoundaryModel boundary, [FromServices] UserSession userSession)
         {
             if (!Utils.XtmfUtils.GetModelSystemSession(_xtmfRuntime, userSession, projectName,
@@ -170,10 +170,19 @@ namespace XTMF2.Web.Server.Controllers
             return new CreatedResult("AddStart", start);
         }
 
+        /// <summary>
+        /// Adds a comment block to the specified model system
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="modelSystemName"></param>
+        /// <param name="parentBoundaryPath"></param>
+        /// <param name="commentBlock"></param>
+        /// <param name="userSession"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/add-comment-block")]
+        [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/comment-block")]
         public IActionResult AddCommentBlock(string projectName, string modelSystemName, string parentBoundaryPath, [FromBody] CommentBlock commentBlock,
         [FromServices] UserSession userSession)
         {
@@ -189,8 +198,72 @@ namespace XTMF2.Web.Server.Controllers
             {
                 return new UnprocessableEntityObjectResult(error);
             }
-
             return new CreatedResult("AddCommentBlock", commentBlockRef);
+        }
+
+
+        /// <summary>
+        /// Adds a comment block to the specified model system
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="modelSystemName"></param>
+        /// <param name="parentBoundaryPath"></param>
+        /// <param name="commentBlock"></param>
+        /// <param name="userSession"></param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/link")]
+        public IActionResult AddLink(string projectName, string modelSystemName, string parentBoundaryPath, [FromBody] CommentBlock commentBlock,
+        [FromServices] UserSession userSession)
+        {
+            //TODO
+            throw new System.NotImplementedException();
+        }
+
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/node-generate-parameters")]
+        public IActionResult AddNodeGenerateParameteres(string projectName, string modelSystemName, string parentBoundaryPath, [FromBody] CommentBlock commentBlock,
+[FromServices] UserSession userSession)
+        {
+            //TODO
+            throw new System.NotImplementedException();
+        }
+
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/node")]
+        public IActionResult AddNode(string projectName, string modelSystemName, string parentBoundaryPath, [FromBody] CommentBlock commentBlock,
+[FromServices] UserSession userSession)
+        {
+            //TODO
+            throw new System.NotImplementedException();
+        }
+
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [HttpDelete("projects/{projectName}/model-systems/{modelSystemName}/comment-block")]
+        public IActionResult RemoveCommentBlock(string projectName, string modelSystemName, string parentBoundaryPath, [FromBody] CommentBlock commentBlock,
+                                                [FromServices] UserSession userSession)
+        {
+            //TODO
+            throw new System.NotImplementedException();
+        }
+
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [HttpDelete("projects/{projectName}/model-systems/{modelSystemName}/boundary")]
+        public IActionResult RemoveBoundary(string projectName, string modelSystemName, string parentBoundaryPath, [FromBody] CommentBlock commentBlock,
+                                                [FromServices] UserSession userSession)
+        {
+            //TODO
+            throw new System.NotImplementedException();
         }
 
 
