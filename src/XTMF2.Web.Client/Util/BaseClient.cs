@@ -45,7 +45,7 @@ namespace XTMF2.Web.Client.Util
             if (SessionStorageService != null)
             {
                 var auth = await SessionStorageService.GetItemAsync<string>("token");
-                req.Headers.Add("Authorization", "Bearer " + auth);
+                req.Headers.Add("Authorization", $"Bearer {auth}");
             }
             return req;
         }

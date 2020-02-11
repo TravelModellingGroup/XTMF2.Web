@@ -17,40 +17,41 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using XTMF2.Web.Server.Session;
 
-namespace BlazorSignalRApp.Server.Hubs
+namespace XTMF2.Web.Server.Hubs
 {
     /// <summary>
-    /// 
+    /// Tracks user connnects and disconnects via a SignalR hub.
     /// </summary>
     [Authorize]
     public class SessionContextHub : Hub
     {
-        private ILogger<SessionContextHub> _logger;
+        public readonly Dictionary<User, int> UserSessionCounts = new Dictionary<User, int>();
+        private readonly ILogger<SessionContextHub> _logger;
+        private readonly ModelSystemSessions _modelSystemSessions;
+        private readonly ProjectSessions _projectSessions;
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="logger"></param>
-        public SessionContextHub(ILogger<SessionContextHub> logger)
+        /// <param name="projectSessions"></param>
+        /// <param name="modelSystemSessions"></param>
+        public SessionContextHub(ILogger<SessionContextHub> logger, ProjectSessions projectSessions,
+            ModelSystemSessions modelSystemSessions)
         {
             _logger = logger;
-        }
-
-        public async Task SendMessage(string user, string message)
-        {
-
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            _projectSessions = projectSessions;
+            _modelSystemSessions = modelSystemSessions;
         }
 
         /// <summary>
-        /// Called when a client disconnects or timeout is reached.
-        /// This should be used to free sessions opened by the user.
+        ///     Called when a client disconnects or timeout is reached.
+        ///     This should be used to free sessions opened by the user.
         /// </summary>
         /// <param name="exception"></param>
         /// <returns></returns>
@@ -61,16 +62,39 @@ namespace BlazorSignalRApp.Server.Hubs
         }
 
         /// <summary>
-        /// Client connected callback
+        ///     Tracks a user connected
+        /// </summary>
+        /// <param name="userSession"></param>
+        public void TrackUserConnected(UserSession userSession)
+        {
+            if (!UserSessionCounts.ContainsKey(userSession.User)) UserSessionCounts[userSession.User] = 0;
+            UserSessionCounts[userSession.User]++;
+        }
+
+        /// <summary>
+        ///     Tracks a disconnected user.
+        /// </summary>
+        /// <param name="userSession"></param>
+        public void TrackUserDisconnected(UserSession userSession)
+        {
+            UserSessionCounts[userSession.User]--;
+            if (UserSessionCounts[userSession.User] == 0)
+            {
+                // no session counts left, clear project sessions
+                _projectSessions.ClearSessionsForUser(userSession.User);
+                _modelSystemSessions.ClearSessionsForUser(userSession.User);
+            }
+        }
+
+        /// <summary>
+        ///     Client connected callback
         /// </summary>
         /// <returns></returns>
         public override async Task OnConnectedAsync()
         {
-
-           var user = Context.User;
+            var user = Context.User;
             _logger.LogInformation("Client connected");
             await base.OnConnectedAsync();
-
         }
     }
 }

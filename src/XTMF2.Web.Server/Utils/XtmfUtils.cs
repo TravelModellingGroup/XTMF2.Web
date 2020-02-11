@@ -40,11 +40,8 @@ namespace XTMF2.Web.Server.Utils
             if (!runtime.ProjectController.GetProjectSession(userSession.User, project, out projectSession, ref error)) {
                 return false;
             }
-            //store the project session
-            if (!projectSessions.Sessions.ContainsKey(userSession.User)) {
-                projectSessions.Sessions[userSession.User] = new System.Collections.Generic.List<ProjectSession>();
-                projectSessions.Sessions[userSession.User].Add(projectSession);
-            }
+            // store the project session
+            projectSessions.TrackSessionForUser(userSession.User,projectSession);
             return true;
         }
 

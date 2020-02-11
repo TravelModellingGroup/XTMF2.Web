@@ -1,15 +1,16 @@
 using AutoMapper;
 using XTMF2.Web.Data.Models;
 
-namespace XTMF2.Web.Server.Profiles {
-
+namespace XTMF2.Web.Server.Profiles
+{
     /// <summary>
-    /// AutoMapper profile
+    ///     AutoMapper profile
     /// </summary>
-    public class ModelSystemProfile : Profile {
-
-        public ModelSystemProfile () {
-            CreateMap<ModelSystemHeader, ModelSystemModel> ();
+    public class ModelSystemProfile : Profile
+    {
+        public ModelSystemProfile()
+        {
+            CreateMap<ModelSystemHeader, ModelSystemModel>();
         }
     }
 }

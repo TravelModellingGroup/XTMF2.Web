@@ -18,7 +18,6 @@
 using System.Linq;
 using System.Text;
 using AutoMapper;
-using BlazorSignalRApp.Server.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -35,6 +34,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
+using XTMF2.Web.Server.Hubs;
 using XTMF2.Web.Server.Services;
 using XTMF2.Web.Server.Services.Interfaces;
 using XTMF2.Web.Server.Session;
@@ -159,12 +159,10 @@ namespace XTMF2.Web.Server
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseClientSideBlazorFiles<Client.Program>();
             app.UseRouting();
-
 
             //enable authentication and authorization
             app.UseBlazorDebugging();

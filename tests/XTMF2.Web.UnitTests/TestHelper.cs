@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace XTMF2.Web.UnitTests
+﻿namespace XTMF2.Web.UnitTests
 {
     public class TestHelper
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
@@ -24,13 +19,13 @@ namespace XTMF2.Web.UnitTests
         }
 
         /// <summary>
-        /// Cleanup the test context
+        ///     Cleanup the test context
         /// </summary>
         /// <param name="runtime"></param>
         /// <param name="userName"></param>
-        public static void CleanUpTestContext(XTMFRuntime runtime, string userName) {
+        public static void CleanUpTestContext(XTMFRuntime runtime, string userName)
+        {
             runtime.UserController.Delete(userName);
-
         }
     }
 }
