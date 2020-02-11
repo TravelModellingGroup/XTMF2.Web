@@ -15,6 +15,8 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
+
 namespace XTMF2.Web.Data.Interfaces.Editing
 {
     public interface INode
@@ -22,5 +24,9 @@ namespace XTMF2.Web.Data.Interfaces.Editing
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public IBoundary ContainedWithin { get; set; }
+
+        public Tuple<float,float> Location {get;set;}
     }
 }

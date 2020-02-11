@@ -15,21 +15,12 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
-using AutoMapper;
-using XTMF2.Web.Data.Models;
-using XTMF2.Web.Data.Models.Editing;
+using System;
+using XTMF2.Web.Data.Interfaces.Editing;
 
-namespace XTMF2.Web.Server.Profiles
+namespace XTMF2.Web.Data.Models.Editing
 {
-    /// <summary>
-    ///     AutoMapper profile
-    /// </summary>
-    public class NodeProfile : Profile
+    public class LinkModel : ILink
     {
-        public NodeProfile()
-        {
-            CreateMap<Node, NodeModel>()
-                .ForMember(m => m.Location, opt => opt.MapFrom(s => new { s.Location.X, s.Location.Y }));
-        }
     }
 }

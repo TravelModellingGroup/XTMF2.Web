@@ -18,6 +18,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using XTMF2.Web.Data.Interfaces.Editing;
+using XTMF2.Web.Data.Models.Editing;
 using XTMF2.Web.Server.Session;
 using XTMF2.Web.Server.Utils;
 
