@@ -1,5 +1,14 @@
 {
   "version": "1.0",
   "defaultProvider": "cdnjs",
-  "libraries": []
+  "libraries": [
+    {
+      "provider": "jsdelivr",
+      "library": "notyf@3.1.0",
+      "destination": "Lib/",
+      "files": [
+        "notyf.min.js"
+      ]
+    }
+  ]
 }
