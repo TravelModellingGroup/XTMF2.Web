@@ -176,7 +176,7 @@ namespace XTMF2.Web.Server
                 // endpoints.MapBlazorHub ();
                 // endpoints.MapFallbackToPage ("/_Host");
                 endpoints.MapDefaultControllerRoute();
-                endpoints.MapHub<SessionContextHub>("/project-session-context");
+                endpoints.MapHub<SessionContextHub>("/session-context-hub");
                 endpoints.MapFallbackToClientSideBlazor<Client.Program>("index.html");
             });
         }

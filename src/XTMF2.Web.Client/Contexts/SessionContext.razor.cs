@@ -49,14 +49,20 @@ namespace XTMF2.Web.Client.Contexts
         protected override void OnInitialized()
         {
             AuthenticationService.OnAuthenticated += OnAuthenticated;
-
         }
 
+        /// <summary>
+        /// Connects to the blazor session hub on connected
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        /// <returns></returns>
         private async void OnAuthenticated(object sender, EventArgs eventArgs)
         {
             _hubConnection = new HubConnectionBuilder()
-                        .WithUrl(NavigationManager.ToAbsoluteUri("/project-session-context"), options =>
+                        .WithUrl(NavigationManager.ToAbsoluteUri("/session-context-hub"), options =>
                         {
+                            //token is the JWT access token
                             options.AccessTokenProvider = () => StorageService.GetItemAsync<string>("token");
                         })
                         .Build();
