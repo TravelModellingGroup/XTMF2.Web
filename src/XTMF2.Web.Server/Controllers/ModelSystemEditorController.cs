@@ -19,7 +19,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using XTMF2.Web.Server.Session;
 
-namespace XTMF2.Web.Server.Controllers {
+namespace XTMF2.Web.Server.Controllers
+{
     /// <summary>
     ///     API controller for the management of model systems (meta). This controller does not contain endpoints for the
     ///     editing
@@ -27,10 +28,12 @@ namespace XTMF2.Web.Server.Controllers {
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class ModelSystemEditorController : ControllerBase {
+    public class ModelSystemEditorController : ControllerBase
+    {
         private XTMFRuntime _xtmfRuntime;
         private ModelSystemSessions _sessions;
         private ProjectSessions _projectSessions;
+        private ModelSystemSessions _modelSystemSessions;
 
         /// <summary>
         /// 
@@ -38,11 +41,14 @@ namespace XTMF2.Web.Server.Controllers {
         /// <param name="runtime"></param>
         /// <param name="sessions"></param>
         /// <param name="projectSessions"></param>
-        public ModelSystemEditorController(XTMFRuntime runtime, ModelSystemSessions sessions, ProjectSessions projectSessions)
+        /// <param name="modelSystemSessions"></param>
+        public ModelSystemEditorController(XTMFRuntime runtime, ModelSystemSessions sessions, ProjectSessions projectSessions,
+            ModelSystemSessions modelSystemSessions)
         {
             _xtmfRuntime = runtime;
             _sessions = sessions;
             _projectSessions = projectSessions;
+            _modelSystemSessions = modelSystemSessions;
         }
 
         /// <summary>
@@ -56,16 +62,19 @@ namespace XTMF2.Web.Server.Controllers {
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/open-session")]
-        public ActionResult OpenSession(string projectName, string modelSystemName, [FromServices] UserSession userSession)
+        public IActionResult OpenSession(string projectName, string modelSystemName, [FromServices] UserSession userSession)
         {
             string error = default;
-            if (!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime, userSession, _projectSessions, projectName, modelSystemName, out var modelSystemHeader, ref error)) {
+            if (!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime, userSession, _projectSessions, projectName, modelSystemName, out var modelSystemHeader, ref error))
+            {
                 return new NotFoundObjectResult(error);
             }
-            if (!Utils.XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession, _projectSessions, ref error)) {
+            if (!Utils.XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession, _projectSessions, ref error))
+            {
                 return new NotFoundObjectResult(error);
             }
-            if (!projectSession.EditModelSystem(userSession.User, modelSystemHeader, out var session, ref error)) {
+            if (!projectSession.EditModelSystem(userSession.User, modelSystemHeader, out var session, ref error))
+            {
                 return new UnprocessableEntityObjectResult(error);
             }
             return new OkResult();
@@ -82,21 +91,45 @@ namespace XTMF2.Web.Server.Controllers {
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/end-session")]
-        public ActionResult EndSession(string projectName, string modelSystemName, [FromServices] UserSession userSession)
+        public IActionResult EndSession(string projectName, string modelSystemName, [FromServices] UserSession userSession)
         {
             string error = default;
-            if (!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime, userSession, _projectSessions, projectName, modelSystemName, out var modelSystemHeader, ref error)) {
+            if (!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime, userSession, _projectSessions, projectName, modelSystemName, out var modelSystemHeader, ref error))
+            {
                 return new NotFoundObjectResult(error);
             }
-            if (!Utils.XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession, _projectSessions, ref error)) {
+            if (!Utils.XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession, _projectSessions, ref error))
+            {
                 return new NotFoundObjectResult(error);
             }
-            if (!projectSession.EditModelSystem(userSession.User, modelSystemHeader, out var session, ref error)) {
+            if (!projectSession.EditModelSystem(userSession.User, modelSystemHeader, out var session, ref error))
+            {
                 return new UnprocessableEntityObjectResult(error);
             }
             //dispose of the session
             session.Dispose();
             return new OkResult();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="modelSystemName"></param>
+        /// <param name="userSession"></param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public IActionResult AddBoundary(string projectName, string modelSystemName, [FromServices] UserSession userSession)
+        {
+            // TODO
+            if(!Utils.XtmfUtils.GetModelSystemSession(_xtmfRuntime, userSession, projectName, _projectSessions, _modelSystemSessions)) {
+                return new NotFoundObjectResult(null);
+            }
+
+            return new OkResult();
+        }
+
+
     }
 }

@@ -23,25 +23,34 @@ namespace XTMF2.Web.Server.Utils
             ref string error)
         {
             var project = GetProject(projectName, userSession);
-            if(project == null)
+            if (project == null)
             {
                 error = "Invalid project";
                 projectSession = null;
                 return false;
             }
             // determine if the project session already exists
-            if (projectSessions.Sessions.ContainsKey(userSession.User)) {
+            if (projectSessions.Sessions.ContainsKey(userSession.User))
+            {
                 projectSession = projectSessions.Sessions[userSession.User].FirstOrDefault(p => p.Project == project);
-                if (projectSession != null) {
+                if (projectSession != null)
+                {
                     return true;
                 }
             }
             // otherwise get the project session from the xtmf project controller
-            if (!runtime.ProjectController.GetProjectSession(userSession.User, project, out projectSession, ref error)) {
+            if (!runtime.ProjectController.GetProjectSession(userSession.User, project, out projectSession, ref error))
+            {
                 return false;
             }
             // store the project session
-            projectSessions.TrackSessionForUser(userSession.User,projectSession);
+            projectSessions.TrackSessionForUser(userSession.User, projectSession);
+            return true;
+        }
+
+        public static bool GetModelSystemSession(XTMFRuntime runtime, UserSession userSession, string projectName,
+            ProjectSessions projectSessions, ModelSystemSessions modelSystemSessions)
+        {
             return true;
         }
 
@@ -58,11 +67,13 @@ namespace XTMF2.Web.Server.Utils
         public static bool GetModelSystemHeader(XTMFRuntime runtime, UserSession userSession, ProjectSessions projectSessions,
             string projectName, string modelSystemName, out ModelSystemHeader modelSystem, ref string error)
         {
-            if (!GetProjectSession(runtime, userSession, projectName, out var projectSession, projectSessions, ref error)) {
+            if (!GetProjectSession(runtime, userSession, projectName, out var projectSession, projectSessions, ref error))
+            {
                 modelSystem = null;
                 return false;
             }
-            if (!projectSession.GetModelSystemHeader(userSession.User, modelSystemName, out modelSystem, ref error)) {
+            if (!projectSession.GetModelSystemHeader(userSession.User, modelSystemName, out modelSystem, ref error))
+            {
                 return false;
             }
             return true;

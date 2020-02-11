@@ -106,7 +106,7 @@ namespace XTMF2.Web.UnitTests.Hubs
                 ref error);
             projectSession.CreateNewModelSystem(_userSession.User, "MSNAME", out var modelSystem, ref error);
             projectSession.EditModelSystem(_userSession.User, modelSystem, out var modelSystemSession, ref error);
-            _modelSystemSessions.TrackSessionForUser(_userSession.User, modelSystemSession);
+            _modelSystemSessions.TrackSessionForUser(_userSession.User, projectSession.Project, modelSystemSession);
             Assert.Single(_modelSystemSessions.Sessions[_userSession.User]);
             _sessionContextHub.TrackUserDisconnected(_userSession);
             _sessionContextHub.TrackUserDisconnected(_userSession);
