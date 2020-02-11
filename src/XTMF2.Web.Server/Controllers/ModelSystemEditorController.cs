@@ -123,6 +123,7 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/add-boundary")]
         public IActionResult AddBoundary(string projectName, string modelSystemName, string parentBoundaryPath, [FromBody] BoundaryModel boundary, [FromServices] UserSession userSession)
         {
             if (!Utils.XtmfUtils.GetModelSystemSession(_xtmfRuntime, userSession, projectName,
@@ -136,7 +137,36 @@ namespace XTMF2.Web.Server.Controllers
             {
                 return new UnprocessableEntityObjectResult(error);
             }
+
             return new CreatedResult("AddBoundary", newBoundary);
+        }
+
+                /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="modelSystemName"></param>
+        /// <param name="userSession"></param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/add-start")]
+        public IActionResult AddModelSystemStart(string projectName, string modelSystemName, string parentBoundaryPath, [FromBody] BoundaryModel boundary, [FromServices] UserSession userSession)
+        {
+            if (!Utils.XtmfUtils.GetModelSystemSession(_xtmfRuntime, userSession, projectName,
+                modelSystemName, _projectSessions, _modelSystemSessions, out var modelSystemSession))
+            {
+                return new NotFoundObjectResult(null);
+            }
+            string error = default;
+            Boundary parentBoundary = (Boundary)ModelSystemUtils.GetModelSystemObjectByPath(_xtmfRuntime, modelSystemSession, parentBoundaryPath);
+            if (!modelSystemSession.AddModelSystemStart(userSession.User, parentBoundary, boundary.Name, out var start, ref error))
+            {
+                return new UnprocessableEntityObjectResult(error);
+            }
+
+            return new CreatedResult("AddStart", start);
         }
 
 
