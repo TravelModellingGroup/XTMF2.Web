@@ -22,5 +22,9 @@ namespace XTMF2.Web.Data.Interfaces.Editing
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public IBoundary Boundaries { get; set; }
+
+        public INode Nodes { get; set; }
     }
 }

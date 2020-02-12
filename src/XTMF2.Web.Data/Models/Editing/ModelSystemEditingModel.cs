@@ -20,10 +20,12 @@ using XTMF2.Web.Data.Interfaces.Editing;
 
 namespace XTMF2.Web.Data.Models.Editing
 {
-    public class CommentBlockModel : ICommentBlock, IViewObject
+    /// <summary>
+    /// Editing model for the model system.
+    /// Stores the structure and graph of the model system for view / editing.
+    /// </summary>
+    public class ModelSystemEditingModel
     {
-        public string Text { get; set; }
-        public Tuple<float, float> Location { get; set; }
-        public Guid Id { get; set; }
+        public IBoundary GlobalBoundary { get; set; }
     }
 }

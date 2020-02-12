@@ -16,14 +16,11 @@
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using XTMF2.Web.Data.Interfaces.Editing;
 
-namespace XTMF2.Web.Data.Models.Editing
+namespace XTMF2.Web.Data.Interfaces.Editing
 {
-    public class CommentBlockModel : ICommentBlock, IViewObject
+    public interface IViewObject
     {
-        public string Text { get; set; }
-        public Tuple<float, float> Location { get; set; }
         public Guid Id { get; set; }
     }
 }

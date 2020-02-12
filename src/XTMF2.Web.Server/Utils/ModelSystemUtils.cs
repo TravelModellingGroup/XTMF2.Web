@@ -28,8 +28,8 @@ namespace XTMF2.Web.Server.Utils
         /// <summary>
         /// Returns the model system object addressed by the passed path.
         /// </summary>
-        /// <param name="runtime"></param>
-        /// <param name="modelSystemSession"></param>
+        /// <param name="runtime">The XTMF Runtime</param>
+        /// <param name="modelSystemSession">The model system session to query.</param>
         /// <param name="path">The path to the object in the form of eg: Parent.Child.Child.ObjectName</param>
         /// <returns></returns>
         public static T GetModelSystemObjectByPath<T>(XTMFRuntime runtime, ModelSystemSession modelSystemSession, Path path) where T : class

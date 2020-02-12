@@ -33,19 +33,18 @@ namespace XTMF2.Web.Server.Session
         public Dictionary<User, Dictionary<Project, List<ModelSystemSession>>> Sessions { get; } =
             new Dictionary<User, Dictionary<Project, List<ModelSystemSession>>>();
 
+        public Dictionary<string, object> ModelSystemObjectRefs = new Dictionary<string, object>();
+
         /// <summary>
         ///     Clears all model system sessions for the associated user
         /// </summary>
         /// <param name="user"></param>
         public void ClearSessionsForUser(User user)
         {
-            if (Sessions.ContainsKey(user))
-            {
+            if (Sessions.ContainsKey(user)) {
                 //dispose each session
-                foreach (var project in Sessions[user].Values)
-                {
-                    foreach (var modelSystem in project)
-                    {
+                foreach (var project in Sessions[user].Values) {
+                    foreach (var modelSystem in project) {
                         modelSystem.Dispose();
                     }
                 }
@@ -60,12 +59,10 @@ namespace XTMF2.Web.Server.Session
         /// <param name="session"></param>
         public void TrackSessionForUser(User user, Project project, ModelSystemSession session)
         {
-            if (!Sessions.ContainsKey(user))
-            {
+            if (!Sessions.ContainsKey(user)) {
                 Sessions[user] = new Dictionary<Project, List<ModelSystemSession>>();
             }
-            if (!Sessions[user].ContainsKey(project))
-            {
+            if (!Sessions[user].ContainsKey(project)) {
                 Sessions[user][project] = new List<ModelSystemSession>();
             }
             Sessions[user][project].Add(session);
@@ -80,8 +77,7 @@ namespace XTMF2.Web.Server.Session
         /// <returns></returns>
         public ModelSystemSession GetModelSystemSession(User user, Project project, ModelSystemHeader modelSystemHeader)
         {
-            if (!Sessions.ContainsKey(user) && !Sessions[user].ContainsKey(project))
-            {
+            if (!Sessions.ContainsKey(user) && !Sessions[user].ContainsKey(project)) {
                 return null;
             }
             return Sessions[user][project].Find(ms =>

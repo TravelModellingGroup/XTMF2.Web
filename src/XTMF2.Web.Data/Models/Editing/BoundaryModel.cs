@@ -23,5 +23,7 @@ namespace XTMF2.Web.Data.Models.Editing
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public IBoundary Boundaries { get; set; }
+        public INode Nodes { get; set; }
     }
 }
