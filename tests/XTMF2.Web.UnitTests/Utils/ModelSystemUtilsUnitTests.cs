@@ -81,5 +81,20 @@ namespace XTMF2.Web.UnitTests.Utils
             Assert.IsType<Boundary>(result);
             Assert.Equal("TestBoundary1", result.Name);
         }
+
+        /// <summary>
+        /// Tests single element query for Node type object
+        /// </summary>
+        [Fact]
+        public void SingleElementPath_QueryNodeObject_ReturnsCorrectObject()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
+            var result = ModelSystemUtils.GetModelSystemObjectByPath<Node>(_runtime, modelSystemSession, new Data.Types.Path()
+            {
+                Parts = new[] { "TestNode1" }
+            });
+            Assert.IsType<Node>(result);
+            Assert.Equal("TestNode1", result.Name);
+        }
     }
 }

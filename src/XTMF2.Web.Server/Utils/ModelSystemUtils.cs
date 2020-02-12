@@ -65,6 +65,18 @@ namespace XTMF2.Web.Server.Utils
                         return (T)(object)start;
                     }
                 }
+                else if (type == typeof(ModelSystemConstruct.CommentBlock)) {
+                    var commentBlock = current.CommentBlocks.FirstOrDefault(cb => cb.Comment == path.Parts[index]);
+                    if (commentBlock != null) {
+                        return (T)(object)commentBlock;
+                    }
+                }
+                else if (type == typeof(Node)) {
+                    var node = current.Modules.FirstOrDefault(n => n.Name == path.Parts[index]);
+                    if (node != null) {
+                        return (T)(object)node;
+                    }
+                }
                 // no matching element 
                 return null;
             }
