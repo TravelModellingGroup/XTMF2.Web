@@ -21,10 +21,8 @@ namespace XTMF2.Web.Data.Interfaces.Editing
 {
     public interface ISingleLink : ILink
     {
-        [JsonIgnore]
         public INode Origin { get; set; }
 
-        [JsonIgnore]
         public INode Destination { get; set; }
     }
 }
