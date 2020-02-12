@@ -21,7 +21,7 @@ using XTMF2.Web.UnitTests;
 using Xunit;
 
 
-namespace XTMF2.Web.Tests.Utils
+namespace XTMF2.Web.UnitTests.Utils
 {
     /// <summary>
     /// Unit tests for ModelSystemUtils
