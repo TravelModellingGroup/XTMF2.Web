@@ -15,6 +15,7 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Collections.Generic;
 using XTMF2.Web.Data.Interfaces.Editing;
 
 namespace XTMF2.Web.Data.Models.Editing
@@ -23,7 +24,9 @@ namespace XTMF2.Web.Data.Models.Editing
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public IBoundary Boundaries { get; set; }
-        public INode Nodes { get; set; }
+        public List<IBoundary> Boundaries { get; set; }
+        public List<INode> Nodes { get; set; }
+        public List<ICommentBlock> CommentBlocks { get; set; }
+        public List<ILink> Links { get; set; }
     }
 }
