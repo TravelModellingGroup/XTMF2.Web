@@ -16,13 +16,17 @@
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Text.Json.Serialization;
 
 namespace XTMF2.Web.Data.Interfaces.Editing
 {
-    public interface IViewObject
+    public abstract class ViewObject
     {
         public Guid Id { get; set; }
 
         public Tuple<float, float> Location { get; set; }
+
+        [JsonIgnore]
+        public object ObjectReference { get; set; }
     }
 }

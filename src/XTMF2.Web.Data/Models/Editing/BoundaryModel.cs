@@ -21,7 +21,7 @@ using XTMF2.Web.Data.Interfaces.Editing;
 
 namespace XTMF2.Web.Data.Models.Editing
 {
-    public class BoundaryModel : IBoundary, IViewObject
+    public class BoundaryModel : ViewObject, IBoundary
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -29,7 +29,5 @@ namespace XTMF2.Web.Data.Models.Editing
         public List<INode> Nodes { get; set; }
         public List<ICommentBlock> CommentBlocks { get; set; }
         public List<ILink> Links { get; set; }
-        public Guid Id { get; set; }
-        public Tuple<float, float> Location { get; set; }
     }
 }
