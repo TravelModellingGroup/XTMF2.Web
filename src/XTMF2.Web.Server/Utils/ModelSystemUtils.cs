@@ -65,12 +65,14 @@ namespace XTMF2.Web.Server.Utils
                         return (T)(object)start;
                     }
                 }
+                // no matching element 
                 return null;
             }
             else {
                 // find the boundary with this current name
                 var boundary = current.Boundaries.FirstOrDefault(b => b.Name == path.Parts[index]);
                 if (boundary == null) {
+                    // not a valid path
                     return null;
                 }
                 else {
