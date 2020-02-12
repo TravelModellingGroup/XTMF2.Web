@@ -16,6 +16,7 @@
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Text.Json.Serialization;
 
 namespace XTMF2.Web.Data.Interfaces.Editing
 {
@@ -25,6 +26,7 @@ namespace XTMF2.Web.Data.Interfaces.Editing
 
         public string Description { get; set; }
 
+        [JsonIgnore]
         public IBoundary ContainedWithin { get; set; }
 
         public Tuple<float,float> Location {get;set;}
