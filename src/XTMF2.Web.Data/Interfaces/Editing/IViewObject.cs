@@ -22,5 +22,7 @@ namespace XTMF2.Web.Data.Interfaces.Editing
     public interface IViewObject
     {
         public Guid Id { get; set; }
+
+        public Tuple<float, float> Location { get; set; }
     }
 }
