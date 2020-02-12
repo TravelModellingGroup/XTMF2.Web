@@ -128,7 +128,7 @@ namespace XTMF2.Web.Server.Controllers
                 return new NotFoundObjectResult(null);
             }
             string error = default;
-            Boundary parentBoundary = (Boundary)ModelSystemUtils.GetModelSystemObjectByPath(_xtmfRuntime, modelSystemSession, parentBoundaryPath);
+            Boundary parentBoundary = ModelSystemUtils.GetModelSystemObjectByPath<Boundary>(_xtmfRuntime, modelSystemSession, parentBoundaryPath);
             if (!modelSystemSession.AddBoundary(userSession.User, parentBoundary, boundary.Name, out var newBoundary, ref error)) {
                 return new UnprocessableEntityObjectResult(error);
             }
@@ -155,7 +155,7 @@ namespace XTMF2.Web.Server.Controllers
                 return new NotFoundObjectResult(null);
             }
             string error = default;
-            Boundary parentBoundary = (Boundary)ModelSystemUtils.GetModelSystemObjectByPath(_xtmfRuntime, modelSystemSession, parentBoundaryPath);
+            Boundary parentBoundary = ModelSystemUtils.GetModelSystemObjectByPath<Boundary>(_xtmfRuntime, modelSystemSession, parentBoundaryPath);
             if (!modelSystemSession.AddModelSystemStart(userSession.User, parentBoundary, boundary.Name, out var start, ref error)) {
                 return new UnprocessableEntityObjectResult(error);
             }
@@ -184,7 +184,7 @@ namespace XTMF2.Web.Server.Controllers
                 return new NotFoundObjectResult(null);
             }
             string error = default;
-            Boundary parentBoundary = (Boundary)ModelSystemUtils.GetModelSystemObjectByPath(_xtmfRuntime, modelSystemSession, parentBoundaryPath);
+            Boundary parentBoundary = ModelSystemUtils.GetModelSystemObjectByPath<Boundary>(_xtmfRuntime, modelSystemSession, parentBoundaryPath);
             if (!modelSystemSession.AddCommentBlock(userSession.User, parentBoundary,
              commentBlock.Text, new Point(commentBlock.Location.Item1, commentBlock.Location.Item2), out var commentBlockRef, ref error)) {
                 return new UnprocessableEntityObjectResult(error);

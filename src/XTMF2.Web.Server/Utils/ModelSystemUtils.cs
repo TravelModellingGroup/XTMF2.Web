@@ -15,6 +15,7 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Linq;
 using XTMF2.Editing;
 using XTMF2.Web.Data.Types;
@@ -31,9 +32,14 @@ namespace XTMF2.Web.Server.Utils
         /// <param name="modelSystemSession"></param>
         /// <param name="path">The path to the object in the form of eg: Parent.Child.Child.ObjectName</param>
         /// <returns></returns>
-        public static object GetModelSystemObjectByPath(XTMFRuntime runtime, ModelSystemSession modelSystemSession, Path path)
+        public static T GetModelSystemObjectByPath<T>(XTMFRuntime runtime, ModelSystemSession modelSystemSession, Path path) where T : class
         {
-            return Traverse(modelSystemSession.ModelSystem.GlobalBoundary,path, 0);
+            if (path.Parts.Length == 0) {
+                return (T)(object)modelSystemSession.ModelSystem.GlobalBoundary;
+            }
+            else {
+                return Traverse<T>(modelSystemSession.ModelSystem.GlobalBoundary, path, 0);
+            }
         }
 
         /// <summary>
@@ -43,12 +49,33 @@ namespace XTMF2.Web.Server.Utils
         /// <param name="path"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        private static object Traverse(Boundary current, Path path, int index) {
-            if(index >= path.Parts.Length) {
-                return current;
+        private static T Traverse<T>(Boundary current, Path path, int index) where T : class
+        {
+            if (index >= path.Parts.Length - 1) {
+                Type type = typeof(T);
+                if (type == typeof(Boundary)) {
+                    var boundary = current.Boundaries.FirstOrDefault(b => b.Name == path.Parts[index]);
+                    if (boundary != null) {
+                        return (T)(object)boundary;
+                    }
+                }
+                else if (type == typeof(ModelSystemConstruct.Start)) {
+                    var start = current.Starts.FirstOrDefault(s => s.Name == path.Parts[index]);
+                    if (start != null) {
+                        return (T)(object)start;
+                    }
+                }
+                return null;
             }
             else {
-                return null;
+                // find the boundary with this current name
+                var boundary = current.Boundaries.FirstOrDefault(b => b.Name == path.Parts[index]);
+                if (boundary == null) {
+                    return null;
+                }
+                else {
+                    return Traverse<T>(boundary, path, index + 1);
+                }
             }
         }
     }

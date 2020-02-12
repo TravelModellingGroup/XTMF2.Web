@@ -16,6 +16,7 @@
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using XTMF2.RuntimeModules;
 using XTMF2.Web.Server.Utils;
 using XTMF2.Web.UnitTests;
 using Xunit;
@@ -43,12 +44,27 @@ namespace XTMF2.Web.UnitTests.Utils
         public void EmptyPath_ReturnsGlobalBoundary()
         {
             TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
-            var result = ModelSystemUtils.GetModelSystemObjectByPath(_runtime, modelSystemSession, new Data.Types.Path()
+            var result = ModelSystemUtils.GetModelSystemObjectByPath<Boundary>(_runtime, modelSystemSession, new Data.Types.Path()
             {
                 Parts = new string[0]
             });
             Assert.IsType<Boundary>(result);
-            Assert.Equal(modelSystemSession.ModelSystem.GlobalBoundary,result);
+            Assert.Equal(modelSystemSession.ModelSystem.GlobalBoundary, result);
+        }
+
+        /// <summary>
+        /// Tests that the first element of a path is returned correctly
+        /// </summary>
+        [Fact]
+        public void SingleElementPath_ReturnsCorrectObject()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
+            var result = ModelSystemUtils.GetModelSystemObjectByPath<ModelSystemConstruct.Start>(_runtime, modelSystemSession, new Data.Types.Path()
+            {
+                Parts =  new []{ "TestStart" }
+            });
+            Assert.IsType<ModelSystemConstruct.Start>(result);
+            Assert.Equal("TestStart", result.Name);
         }
     }
 }
