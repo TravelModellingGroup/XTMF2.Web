@@ -52,7 +52,8 @@ namespace XTMF2.Web.UnitTests.Controllers
             });
             _mapper = config.CreateMapper();
             _userName = Guid.NewGuid().ToString();
-            _runtime = TestHelper.CreateTestContext(_userName);
+            TestHelper.CreateTestUser(_userName);
+            _runtime = TestHelper.Runtime;
             _logger = Mock.Of<ILogger<ModelSystemController>>();
             _projectSessions = new ProjectSessions();
             _controller = new ModelSystemController(_runtime, _logger, _mapper, _projectSessions);

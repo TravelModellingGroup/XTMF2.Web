@@ -13,12 +13,10 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-    <!--<PackageReference Include="BlazorQuery" Version="0.0.1" /> -->
-       
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />       
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Server" Version="3.2.0-preview1.20073.1" />
-    <PackageReference Include="NSwag.AspNetCore" Version="13.2.2" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.2.3" />
     <PackageReference Include="NSwag.MSBuild" Version="13.2.2" />
   </ItemGroup>
 
@@ -32,7 +30,7 @@
     <ProjectReference Include="..\XTMF2.Web.Data\XTMF2.Web.Data.csproj" />
     <ProjectReference Include="..\XTMF2\src\XTMF2\XTMF2.csproj" />
     <ProjectReference Include="..\XTMF2\src\XTMF2.Interfaces\XTMF2.Interfaces.csproj" />
-    <ProjectReference Include="..\XTMF2\src\XTMF2.Run\XTMF2.Run.csproj" />
+    <ProjectReference Include="..\XTMF2\src\XTMF2.Client\XTMF2.Client.csproj" />
   </ItemGroup>
 
 </Project>

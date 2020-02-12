@@ -32,7 +32,6 @@ namespace XTMF2.Web.UnitTests.Controllers
     /// <summary>
     /// Unit tests related to the ProjectController
     /// </summary>
-    [Collection("Sequential")]
     public class ProjectControllerUnitTests : IDisposable
     {
 
@@ -52,7 +51,8 @@ namespace XTMF2.Web.UnitTests.Controllers
             });
             _userName = Guid.NewGuid().ToString();
             _mapper = config.CreateMapper();
-            _runtime = TestHelper.CreateTestContext(_userName);
+            TestHelper.CreateTestUser(_userName);
+            _runtime = TestHelper.Runtime;
             _logger = Mock.Of<ILogger<ProjectController>>();
             _userSession = new UserSession(_runtime.UserController.GetUserByName(_userName));
             _projectSessions = new ProjectSessions();

@@ -32,7 +32,6 @@ namespace XTMF2.Web.UnitTests.Controllers
     /// <summary>
     /// Unit tests related to the ModelSystemController
     /// </summary>
-    [Collection("Sequential")]
     public class ModelSystemControllerUnitTests : IDisposable
     {
 
@@ -54,7 +53,8 @@ namespace XTMF2.Web.UnitTests.Controllers
             });
             _userName = Guid.NewGuid().ToString();
             _mapper = config.CreateMapper();
-            _runtime = TestHelper.CreateTestContext(_userName);
+            TestHelper.CreateTestUser(_userName);
+            _runtime = TestHelper.Runtime;
             _logger = Mock.Of<ILogger<ModelSystemController>>();
             _projectSessions = new ProjectSessions();
             _controller = new ModelSystemController(_runtime, _logger, _mapper, _projectSessions);

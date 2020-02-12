@@ -33,7 +33,8 @@ namespace XTMF2.Web.UnitTests.Hubs
         public SessionContextHubUnitTests()
         {
             _userName = Guid.NewGuid().ToString();
-            _runtime = TestHelper.CreateTestContext(_userName);
+            TestHelper.CreateTestUser(_userName);
+            _runtime = TestHelper.Runtime;
             _projectSessions = new ProjectSessions();
             _modelSystemSessions = new ModelSystemSessions();
             _userSession = new UserSession(_runtime.UserController.GetUserByName(_userName));

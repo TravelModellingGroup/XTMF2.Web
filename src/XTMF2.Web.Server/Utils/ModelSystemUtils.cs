@@ -17,6 +17,7 @@
 
 using System.Linq;
 using XTMF2.Editing;
+using XTMF2.Web.Data.Types;
 using XTMF2.Web.Server.Session;
 
 namespace XTMF2.Web.Server.Utils
@@ -30,8 +31,25 @@ namespace XTMF2.Web.Server.Utils
         /// <param name="modelSystemSession"></param>
         /// <param name="path">The path to the object in the form of eg: Parent.Child.Child.ObjectName</param>
         /// <returns></returns>
-        public static object GetModelSystemObjectByPath(XTMFRuntime runtime, ModelSystemSession modelSystemSession, string path) {
-            return null;
+        public static object GetModelSystemObjectByPath(XTMFRuntime runtime, ModelSystemSession modelSystemSession, Path path)
+        {
+            return Traverse(modelSystemSession.ModelSystem.GlobalBoundary,path, 0);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="current"></param>
+        /// <param name="path"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        private static object Traverse(Boundary current, Path path, int index) {
+            if(index >= path.Parts.Length) {
+                return current;
+            }
+            else {
+                return null;
+            }
         }
     }
 }
