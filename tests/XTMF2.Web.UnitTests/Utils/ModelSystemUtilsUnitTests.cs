@@ -56,15 +56,30 @@ namespace XTMF2.Web.UnitTests.Utils
         /// Tests that the first element of a path is returned correctly
         /// </summary>
         [Fact]
-        public void SingleElementPath_ReturnsCorrectObject()
+        public void SingleElementPath_QueryStartObject_ReturnsCorrectObject()
         {
             TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
             var result = ModelSystemUtils.GetModelSystemObjectByPath<ModelSystemConstruct.Start>(_runtime, modelSystemSession, new Data.Types.Path()
             {
-                Parts =  new []{ "TestStart" }
+                Parts = new[] { "TestStart" }
             });
             Assert.IsType<ModelSystemConstruct.Start>(result);
             Assert.Equal("TestStart", result.Name);
+        }
+
+        /// <summary>
+        /// Tests single element for Boundary type query
+        /// </summary>
+        [Fact]
+        public void SingleElementPath_QueryBoundaryObject_ReturnsCorrectObject()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
+            var result = ModelSystemUtils.GetModelSystemObjectByPath<Boundary>(_runtime, modelSystemSession, new Data.Types.Path()
+            {
+                Parts = new[] { "TestBoundary1" }
+            });
+            Assert.IsType<Boundary>(result);
+            Assert.Equal("TestBoundary1", result.Name);
         }
     }
 }
