@@ -15,8 +15,10 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
 using XTMF2.Editing;
+using XTMF2.Web.Data.Models.Editing;
 
 namespace XTMF2.Web.Server.Session
 {
@@ -33,12 +35,17 @@ namespace XTMF2.Web.Server.Session
         public Dictionary<User, Dictionary<Project, List<ModelSystemSession>>> Sessions { get; } =
             new Dictionary<User, Dictionary<Project, List<ModelSystemSession>>>();
 
-        public Dictionary<string, object> ModelSystemObjectRefs = new Dictionary<string, object>();
+        /// <summary>
+        /// Model system object reference tracker
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<ModelSystemSession, ModelSystemEditingModel> ModelSystemEditingModels { get; set; } =
+        new Dictionary<ModelSystemSession, ModelSystemEditingModel>();
 
         /// <summary>
         ///     Clears all model system sessions for the associated user
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="user">The user to clear sessions for.</param>
         public void ClearSessionsForUser(User user)
         {
             if (Sessions.ContainsKey(user)) {
@@ -46,6 +53,9 @@ namespace XTMF2.Web.Server.Session
                 foreach (var project in Sessions[user].Values) {
                     foreach (var modelSystem in project) {
                         modelSystem.Dispose();
+                        if (modelSystem.References <= 0) {
+                            ModelSystemEditingModels.Remove(modelSystem);
+                        }
                     }
                 }
                 Sessions[user].Clear();
@@ -55,8 +65,8 @@ namespace XTMF2.Web.Server.Session
         /// <summary>
         ///     Adds / tracks a session for the associated user.
         /// </summary>
-        /// /// <param name="user"></param>
-        /// <param name="session"></param>
+        /// <param name="user">The user to track the session with.</param>
+        /// <param name="session">The session to track.</param>
         public void TrackSessionForUser(User user, Project project, ModelSystemSession session)
         {
             if (!Sessions.ContainsKey(user)) {
@@ -73,7 +83,7 @@ namespace XTMF2.Web.Server.Session
         /// </summary>
         /// <param name="user"></param>
         /// <param name="project"></param>
-        /// <param name="modelSystemName"></param>
+        /// <param name="modelSystemHeader"></param>
         /// <returns></returns>
         public ModelSystemSession GetModelSystemSession(User user, Project project, ModelSystemHeader modelSystemHeader)
         {
