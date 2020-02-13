@@ -29,5 +29,10 @@ namespace XTMF2.Web.Server.Profiles
         {
             CreateMap<ModelSystemHeader, ModelSystemModel>();
         }
+
+
+        private void MapEditorProfile() {
+            CreateMap<ModelSystem,ModelSystemEditingModel>();
+        }
     }
 }
