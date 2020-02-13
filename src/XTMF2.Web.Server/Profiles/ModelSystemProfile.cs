@@ -45,6 +45,7 @@ namespace XTMF2.Web.Server.Profiles
             CreateMap<Node, INode>();
             CreateMap<Start, IStart>();
             CreateMap<XTMF2.Point, XTMF2.Web.Data.Types.Point>();
+            
         }
     }
 }

@@ -27,7 +27,7 @@ namespace XTMF2.Web.UnitTests.Utils
     /// <summary>
     /// Unit tests for ModelSystemUtils
     /// </summary>
-    public class TestModelSystemUtils
+    public class TestModelSystemUtils : IDisposable
     {
         private User _user;
         private XTMFRuntime _runtime;
@@ -95,6 +95,11 @@ namespace XTMF2.Web.UnitTests.Utils
             });
             Assert.IsType<Node>(result);
             Assert.Equal("TestNode1", result.Name);
+        }
+
+        public void Dispose()
+        {
+            TestHelper.CleanUpTestContext(_runtime,_user.UserName);
         }
     }
 }
