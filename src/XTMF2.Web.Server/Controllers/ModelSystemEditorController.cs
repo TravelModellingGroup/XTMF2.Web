@@ -37,7 +37,6 @@ namespace XTMF2.Web.Server.Controllers
     public class ModelSystemEditorController : ControllerBase
     {
         private XTMFRuntime _xtmfRuntime;
-        private ModelSystemSessions _sessions;
         private ProjectSessions _projectSessions;
         private ModelSystemSessions _modelSystemSessions;
         private IMapper _mapper;
@@ -48,15 +47,13 @@ namespace XTMF2.Web.Server.Controllers
         /// </summary>
         /// <param name="runtime"></param>
         /// <param name="logger"></param>
-        /// <param name="sessions"></param>
         /// <param name="projectSessions"></param>
         /// <param name="modelSystemSessions"></param>
         /// <param name="mapper"></param>
-        public ModelSystemEditorController(XTMFRuntime runtime, ILogger<ModelSystemEditorController> logger, ModelSystemSessions sessions, ProjectSessions projectSessions,
+        public ModelSystemEditorController(XTMFRuntime runtime, ILogger<ModelSystemEditorController> logger, ProjectSessions projectSessions,
             ModelSystemSessions modelSystemSessions, IMapper mapper)
         {
             _xtmfRuntime = runtime;
-            _sessions = sessions;
             _projectSessions = projectSessions;
             _modelSystemSessions = modelSystemSessions;
             _mapper = mapper;

@@ -16,6 +16,7 @@
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using AutoMapper;
+using XTMF2.Web.Data.Interfaces.Editing;
 using XTMF2.Web.Data.Models;
 using XTMF2.Web.Data.Models.Editing;
 
@@ -29,12 +30,14 @@ namespace XTMF2.Web.Server.Profiles
         public ModelSystemProfile()
         {
             CreateMap<ModelSystemHeader, ModelSystemModel>();
+            MapEditorProfile();
         }
-
 
         private void MapEditorProfile()
         {
             CreateMap<ModelSystem, ModelSystemEditingModel>();
+            CreateMap<Boundary,IBoundary>();
+            CreateMap<Link,ILink>();
         }
     }
 }

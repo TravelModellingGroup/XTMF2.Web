@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using XTMF2.Web.Data.Models;
+using XTMF2.Web.Data.Models.Editing;
 using XTMF2.Web.Server.Controllers;
 using XTMF2.Web.Server.Profiles;
 using XTMF2.Web.Server.Session;
@@ -37,13 +38,14 @@ namespace XTMF2.Web.UnitTests.Controllers
 
         private IMapper _mapper;
         private XTMFRuntime _runtime;
-        private ILogger<ModelSystemController> _logger;
+        private ILogger<ModelSystemEditorController> _logger;
         private ModelSystemEditorController _controller;
         private UserSession _userSession;
         private ProjectSessions _projectSessions;
         private ModelSystemSessions _modelSystemSessions;
 
         private string _userName;
+        private User _user;
 
         public ModelSystemEditorControllerUnitTests()
         {
@@ -53,13 +55,35 @@ namespace XTMF2.Web.UnitTests.Controllers
             });
             _mapper = config.CreateMapper();
             _userName = Guid.NewGuid().ToString();
-            TestHelper.CreateTestUser(_userName);
+            _user = TestHelper.CreateTestUser(_userName);
             _runtime = TestHelper.Runtime;
-            _logger = Mock.Of<ILogger<ModelSystemController>>();
+            _logger = Mock.Of<ILogger<ModelSystemEditorController>>();
             _projectSessions = new ProjectSessions();
             _modelSystemSessions = new ModelSystemSessions();
-            _controller = new ModelSystemEditorController(_runtime, _logger, _modelSystemSessions, _projectSessions, _mapper);
+            _controller = new ModelSystemEditorController(_runtime, _logger, _projectSessions,_modelSystemSessions, _mapper);
             _userSession = new UserSession(_runtime.UserController.GetUserByName(_userName));
+        }
+
+        /// <summary>
+        /// Tests that 200 OK is returned for valid model system
+        /// </summary>
+        [Fact]
+        public void GetModelSystem_Returns200Ok_WhenQueryValidModelSystem() {
+            TestHelper.InitializeTestModelSystem(_user,"TestProject","TestModelSystem", out var modelSystemSession);
+            var result = _controller.GetModelSystem("TestProject","TestModelSystem",_userSession);
+            Assert.IsAssignableFrom<OkObjectResult>(result);
+
+        }
+
+        /// <summary>
+        /// Tests that retrieving a model system, returns the correct model system (and constructed properly)
+        /// </summary>
+        [Fact]
+        public void GetModelSystem_ReturnsCorrectModelSystem_WhenQueryModelsystem() {
+            TestHelper.InitializeTestModelSystem(_user,"TestProject","TestModelSystem", out var modelSystemSession);
+            var result = (OkObjectResult)_controller.GetModelSystem("TestProject","TestModelSystem",_userSession);
+            Assert.IsType<ModelSystemEditingModel>(result.Value);
+
         }
 
         /// <summary>
