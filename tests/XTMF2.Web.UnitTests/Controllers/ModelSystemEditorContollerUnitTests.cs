@@ -38,9 +38,10 @@ namespace XTMF2.Web.UnitTests.Controllers
         private IMapper _mapper;
         private XTMFRuntime _runtime;
         private ILogger<ModelSystemController> _logger;
-        private ModelSystemController _controller;
+        private ModelSystemEditorController _controller;
         private UserSession _userSession;
         private ProjectSessions _projectSessions;
+        private ModelSystemSessions _modelSystemSessions;
 
         private string _userName;
 
@@ -56,7 +57,8 @@ namespace XTMF2.Web.UnitTests.Controllers
             _runtime = TestHelper.Runtime;
             _logger = Mock.Of<ILogger<ModelSystemController>>();
             _projectSessions = new ProjectSessions();
-            _controller = new ModelSystemController(_runtime, _logger, _mapper, _projectSessions);
+            _modelSystemSessions = new ModelSystemSessions();
+            _controller = new ModelSystemEditorController(_runtime, _logger, _modelSystemSessions, _projectSessions, _mapper);
             _userSession = new UserSession(_runtime.UserController.GetUserByName(_userName));
         }
 

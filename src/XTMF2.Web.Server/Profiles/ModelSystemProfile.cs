@@ -17,6 +17,7 @@
 
 using AutoMapper;
 using XTMF2.Web.Data.Models;
+using XTMF2.Web.Data.Models.Editing;
 
 namespace XTMF2.Web.Server.Profiles
 {
@@ -31,8 +32,9 @@ namespace XTMF2.Web.Server.Profiles
         }
 
 
-        private void MapEditorProfile() {
-            CreateMap<ModelSystem,ModelSystemEditingModel>();
+        private void MapEditorProfile()
+        {
+            CreateMap<ModelSystem, ModelSystemEditingModel>();
         }
     }
 }
