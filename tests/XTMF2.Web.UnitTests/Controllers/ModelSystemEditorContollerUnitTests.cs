@@ -17,11 +17,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Newtonsoft.Json;
 using XTMF2.UnitTests.Modules;
+using XTMF2.Web.Data.Converters;
 using XTMF2.Web.Data.Interfaces.Editing;
 using XTMF2.Web.Data.Models;
 using XTMF2.Web.Data.Models.Editing;
@@ -29,6 +32,7 @@ using XTMF2.Web.Server.Controllers;
 using XTMF2.Web.Server.Profiles;
 using XTMF2.Web.Server.Session;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace XTMF2.Web.UnitTests.Controllers
 {
@@ -45,11 +49,11 @@ namespace XTMF2.Web.UnitTests.Controllers
         private UserSession _userSession;
         private ProjectSessions _projectSessions;
         private ModelSystemSessions _modelSystemSessions;
-
+        private readonly ITestOutputHelper output;
         private string _userName;
         private User _user;
 
-        public ModelSystemEditorControllerUnitTests()
+        public ModelSystemEditorControllerUnitTests(ITestOutputHelper output)
         {
             var config = new MapperConfiguration(cfg =>
             {
@@ -64,6 +68,7 @@ namespace XTMF2.Web.UnitTests.Controllers
             _modelSystemSessions = new ModelSystemSessions();
             _controller = new ModelSystemEditorController(_runtime, _logger, _projectSessions, _modelSystemSessions, _mapper);
             _userSession = new UserSession(_runtime.UserController.GetUserByName(_userName));
+            this.output = output;
         }
 
         /// <summary>
@@ -98,6 +103,17 @@ namespace XTMF2.Web.UnitTests.Controllers
                     // Assert.Equal(typeof(SimpleTestModule),item.Type);
                     Assert.Equal("TestNode1", item.Name);
                 });
+
+            var options = new JsonSerializerOptions()
+            {
+                WriteIndented = true,
+                IgnoreNullValues = true,
+                MaxDepth = 64
+            };
+            options.Converters.Add(new TypeConverter());
+            output.WriteLine(System.Text.Json.JsonSerializer.Serialize<ModelSystemEditingModel>((ModelSystemEditingModel)modelSystem, options
+            ));
+            Assert.NotNull(modelSystem.GlobalBoundary.Modules[0].Id);
         }
 
         /// <summary>

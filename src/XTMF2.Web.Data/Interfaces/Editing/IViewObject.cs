@@ -15,14 +15,16 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Text.Json.Serialization;
+using XTMF2.Web.Data.Types;
 
 namespace XTMF2.Web.Data.Interfaces.Editing
 {
-    public interface ISingleLink : ILink, IViewObject
+    public interface IViewObject
     {
-        public INode Origin { get; set; }
-
-        public INode Destination { get; set; }
+        public Guid Id { get; set; }
+        public Point Location { get; set; }
+        public object ObjectReference { get; set; }
     }
 }

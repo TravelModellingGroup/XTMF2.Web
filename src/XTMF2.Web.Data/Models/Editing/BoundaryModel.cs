@@ -17,7 +17,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using XTMF2.Web.Data.Interfaces.Editing;
+using XTMF2.Web.Data.Types;
 
 namespace XTMF2.Web.Data.Models.Editing
 {
@@ -25,10 +27,15 @@ namespace XTMF2.Web.Data.Models.Editing
     {
         public string Name { get; set; }
         public string Description { get; set; }
+
         public List<IBoundary> Boundaries { get; set; }
+
         public List<INode> Modules { get; set; }
+
         public List<ICommentBlock> CommentBlocks { get; set; }
+
         public List<ILink> Links { get; set; }
+
         public List<IStart> Starts { get; set; }
     }
 }

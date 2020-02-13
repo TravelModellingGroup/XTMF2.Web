@@ -17,17 +17,16 @@
 
 using System;
 using System.Text.Json.Serialization;
-using XTMF2.Web.Data.Models;
+using XTMF2.Web.Data.Interfaces.Editing;
 using XTMF2.Web.Data.Types;
 
-namespace XTMF2.Web.Data.Interfaces.Editing
+namespace XTMF2.Web.Data.Models.Editing
 {
-    public abstract class ViewObject
+    public class ViewObject : IViewObject
     {
         public Guid Id { get; set; }
-
         public Point Location { get; set; }
-
+        
         [JsonIgnore]
         public object ObjectReference { get; set; }
     }

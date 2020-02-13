@@ -20,7 +20,7 @@ using System.Text.Json.Serialization;
 
 namespace XTMF2.Web.Data.Interfaces.Editing
 {
-    public interface IStart
+    public interface IStart  : IViewObject
     {
         public string Name { get; set; }
 

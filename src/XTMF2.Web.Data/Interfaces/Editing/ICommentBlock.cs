@@ -19,7 +19,7 @@ using System;
 
 namespace XTMF2.Web.Data.Interfaces.Editing
 {
-    public interface ICommentBlock
+    public interface ICommentBlock : IViewObject
     {
         public string Text { get; set; }
 

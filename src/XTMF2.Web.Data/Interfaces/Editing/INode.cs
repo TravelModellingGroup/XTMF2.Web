@@ -20,15 +20,12 @@ using System.Text.Json.Serialization;
 
 namespace XTMF2.Web.Data.Interfaces.Editing
 {
-    public interface INode
+    public interface INode  : IViewObject
     {
         public string Name { get; set; }
 
         public string Description { get; set; }
-
-        [JsonIgnore]
-        public IBoundary ContainedWithin { get; set; }
-
+        // public IBoundary ContainedWithin { get; set; }
         public Type Type { get; set; }
     }
 }

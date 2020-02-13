@@ -17,7 +17,7 @@
 
 namespace XTMF2.Web.Data.Interfaces.Editing
 {
-    public interface ILink
+    public interface ILink : IViewObject
     {
     }
 }

@@ -16,6 +16,7 @@
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Text.Json.Serialization;
 using XTMF2.Web.Data.Interfaces.Editing;
 
 namespace XTMF2.Web.Data.Models.Editing
@@ -26,6 +27,6 @@ namespace XTMF2.Web.Data.Models.Editing
     /// </summary>
     public class ModelSystemEditingModel
     {
-        public IBoundary GlobalBoundary { get; set; }
+        public BoundaryModel GlobalBoundary { get; set; }
     }
 }

@@ -40,10 +40,11 @@ namespace XTMF2.Web.Server.Profiles
         private void MapEditorProfile()
         {
             CreateMap<ModelSystem, ModelSystemEditingModel>();
-            CreateMap<Boundary, IBoundary>();
+            CreateMap<Boundary, IBoundary>().As<BoundaryModel>();
             CreateMap<Link, ILink>();
-            CreateMap<Node, INode>();
-            CreateMap<Start, IStart>();
+            CreateMap<Node, INode>().As<NodeModel>();
+            CreateMap<Start, IStart>().As<StartModel>();
+            CreateMap<CommentBlock, ICommentBlock>().As<CommentBlockModel>();
             CreateMap<XTMF2.Point, XTMF2.Web.Data.Types.Point>();
             
         }

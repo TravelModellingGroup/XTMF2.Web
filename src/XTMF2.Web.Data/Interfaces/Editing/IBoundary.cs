@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 namespace XTMF2.Web.Data.Interfaces.Editing
 {
-    public interface IBoundary
+    public interface IBoundary : IViewObject
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -27,7 +27,6 @@ namespace XTMF2.Web.Data.Interfaces.Editing
         public List<INode> Modules { get; set; }
         public List<ICommentBlock> CommentBlocks { get; set; }
         public List<ILink> Links { get; set; }
-
         public List<IStart> Starts { get; set; }
     }
 }
