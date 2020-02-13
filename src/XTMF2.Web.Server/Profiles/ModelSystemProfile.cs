@@ -15,7 +15,9 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using AutoMapper;
+using XTMF2.ModelSystemConstruct;
 using XTMF2.Web.Data.Interfaces.Editing;
 using XTMF2.Web.Data.Models;
 using XTMF2.Web.Data.Models.Editing;
@@ -32,12 +34,17 @@ namespace XTMF2.Web.Server.Profiles
             CreateMap<ModelSystemHeader, ModelSystemModel>();
             MapEditorProfile();
         }
-
+        /// <summary>
+        /// Create mapping profiles for model system editor objects
+        /// </summary>
         private void MapEditorProfile()
         {
             CreateMap<ModelSystem, ModelSystemEditingModel>();
-            CreateMap<Boundary,IBoundary>();
-            CreateMap<Link,ILink>();
+            CreateMap<Boundary, IBoundary>();
+            CreateMap<Link, ILink>();
+            CreateMap<Node, INode>();
+            CreateMap<Start, IStart>();
+            CreateMap<XTMF2.Point, XTMF2.Web.Data.Types.Point>();
         }
     }
 }

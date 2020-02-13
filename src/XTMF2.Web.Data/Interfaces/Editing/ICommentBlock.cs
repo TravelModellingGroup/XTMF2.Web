@@ -23,6 +23,5 @@ namespace XTMF2.Web.Data.Interfaces.Editing
     {
         public string Text { get; set; }
 
-        public Tuple<float, float> Location { get; set; }
     }
 }

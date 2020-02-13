@@ -21,6 +21,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using XTMF2.UnitTests.Modules;
+using XTMF2.Web.Data.Interfaces.Editing;
 using XTMF2.Web.Data.Models;
 using XTMF2.Web.Data.Models.Editing;
 using XTMF2.Web.Server.Controllers;
@@ -60,7 +62,7 @@ namespace XTMF2.Web.UnitTests.Controllers
             _logger = Mock.Of<ILogger<ModelSystemEditorController>>();
             _projectSessions = new ProjectSessions();
             _modelSystemSessions = new ModelSystemSessions();
-            _controller = new ModelSystemEditorController(_runtime, _logger, _projectSessions,_modelSystemSessions, _mapper);
+            _controller = new ModelSystemEditorController(_runtime, _logger, _projectSessions, _modelSystemSessions, _mapper);
             _userSession = new UserSession(_runtime.UserController.GetUserByName(_userName));
         }
 
@@ -68,9 +70,10 @@ namespace XTMF2.Web.UnitTests.Controllers
         /// Tests that 200 OK is returned for valid model system
         /// </summary>
         [Fact]
-        public void GetModelSystem_Returns200Ok_WhenQueryValidModelSystem() {
-            TestHelper.InitializeTestModelSystem(_user,"TestProject","TestModelSystem", out var modelSystemSession);
-            var result = _controller.GetModelSystem("TestProject","TestModelSystem",_userSession);
+        public void GetModelSystem_Returns200Ok_WhenQueryValidModelSystem()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
+            var result = _controller.GetModelSystem("TestProject", "TestModelSystem", _userSession);
             Assert.IsAssignableFrom<OkObjectResult>(result);
 
         }
@@ -79,11 +82,33 @@ namespace XTMF2.Web.UnitTests.Controllers
         /// Tests that retrieving a model system, returns the correct model system (and constructed properly)
         /// </summary>
         [Fact]
-        public void GetModelSystem_ReturnsCorrectModelSystem_WhenQueryModelsystem() {
-            TestHelper.InitializeTestModelSystem(_user,"TestProject","TestModelSystem", out var modelSystemSession);
-            var result = (OkObjectResult)_controller.GetModelSystem("TestProject","TestModelSystem",_userSession);
+        public void GetModelSystem_ReturnsCorrectModelSystem_WhenQueryModelsystem()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
+            var result = (OkObjectResult)_controller.GetModelSystem("TestProject", "TestModelSystem", _userSession);
             Assert.IsType<ModelSystemEditingModel>(result.Value);
+            var modelSystem = (ModelSystemEditingModel)result.Value;
 
+            // assert 
+            Assert.Single(modelSystem.GlobalBoundary.Starts);
+            Assert.Equal("TestStart", modelSystem.GlobalBoundary.Starts[0].Name);
+            Assert.Collection<INode>(modelSystem.GlobalBoundary.Modules,
+                item =>
+                {
+                    // Assert.Equal(typeof(SimpleTestModule),item.Type);
+                    Assert.Equal("TestNode1", item.Name);
+                });
+        }
+
+        /// <summary>
+        /// Tests that a 404 is returned for non existing model system
+        /// </summary>
+        [Fact]
+        public void GetModelSystem_Returns404_WhenQueryNonExistingModelsystem()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
+            var result = _controller.GetModelSystem("TestProject", "TestModelSystemFake", _userSession);
+            Assert.IsAssignableFrom<NotFoundObjectResult>(result);
         }
 
         /// <summary>

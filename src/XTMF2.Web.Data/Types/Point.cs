@@ -1,3 +1,4 @@
+
 //     Copyright 2017-2020 University of Toronto
 // 
 //     This file is part of XTMF2.
@@ -15,20 +16,14 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Text.Json.Serialization;
-using XTMF2.Web.Data.Models;
-using XTMF2.Web.Data.Types;
+using System.ComponentModel.DataAnnotations;
+using XTMF2.Web.Data.Interfaces;
 
-namespace XTMF2.Web.Data.Interfaces.Editing
+namespace XTMF2.Web.Data.Types
 {
-    public abstract class ViewObject
+    public class Point
     {
-        public Guid Id { get; set; }
-
-        public Point Location { get; set; }
-
-        [JsonIgnore]
-        public object ObjectReference { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
     }
 }

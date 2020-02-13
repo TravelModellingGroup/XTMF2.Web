@@ -59,7 +59,6 @@ namespace XTMF2.Web.UnitTests
             modelSystemSession.AddModelSystemStart(user, modelSystemSession.ModelSystem.GlobalBoundary, "TestStart", out var start, ref error);
             modelSystemSession.AddNode(user, modelSystemSession.ModelSystem.GlobalBoundary, "TestNode1", typeof(SimpleTestModule), out var node, ref error);
             modelSystemSession.AddLink(user,start,start.Hooks[0], node, out var link, ref error);
-
             modelSystemSession.AddBoundary(user,modelSystemSession.ModelSystem.GlobalBoundary, "TestBoundary1",out var boundary, ref error);
 
         }

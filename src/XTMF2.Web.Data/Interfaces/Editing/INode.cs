@@ -29,6 +29,6 @@ namespace XTMF2.Web.Data.Interfaces.Editing
         [JsonIgnore]
         public IBoundary ContainedWithin { get; set; }
 
-        public Tuple<float,float> Location {get;set;}
+        public Type Type { get; set; }
     }
 }

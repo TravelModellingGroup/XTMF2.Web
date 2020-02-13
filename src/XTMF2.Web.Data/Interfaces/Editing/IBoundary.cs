@@ -22,14 +22,12 @@ namespace XTMF2.Web.Data.Interfaces.Editing
     public interface IBoundary
     {
         public string Name { get; set; }
-
         public string Description { get; set; }
-
         public List<IBoundary> Boundaries { get; set; }
-
-        public List<INode> Nodes { get; set; }
-
+        public List<INode> Modules { get; set; }
         public List<ICommentBlock> CommentBlocks { get; set; }
         public List<ILink> Links { get; set; }
+
+        public List<IStart> Starts { get; set; }
     }
 }
