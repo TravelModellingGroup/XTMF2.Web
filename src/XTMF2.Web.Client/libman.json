@@ -1,5 +1,31 @@
 {
   "version": "1.0",
   "defaultProvider": "cdnjs",
-  "libraries": []
+  "defaultDestination": "wwwroot/js",
+  "libraries": [
+    {
+      "provider": "jsdelivr",
+      "library": "interact-js@2.1.0",
+      "destination": "wwwroot/js",
+      "files": [
+        "interact.js",
+        "interact.min.js"
+      ]
+    },
+    {
+      "library": "jquery@3.4.1",
+      "destination": "Lib/",
+      "files": [
+        "jquery.min.js"
+      ]
+    },
+    {
+      "library": "twitter-bootstrap@4.4.1",
+      "destination": "wwwroot/",
+      "files": [
+        "js/bootstrap.bundle.min.js",
+        "css/bootstrap.min.css"
+      ]
+    }
+  ]
 }

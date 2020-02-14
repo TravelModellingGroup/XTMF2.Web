@@ -1,6 +1,7 @@
 {
   "version": "1.0",
   "defaultProvider": "cdnjs",
+  "defaultDestination": "Lib/",
   "libraries": [
     {
       "provider": "jsdelivr",
@@ -8,6 +9,15 @@
       "destination": "Lib/",
       "files": [
         "notyf.min.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "interact-js@2.1.0",
+      "destination": "Lib/",
+      "files": [
+        "interact.js",
+        "interact.min.js"
       ]
     }
   ]
