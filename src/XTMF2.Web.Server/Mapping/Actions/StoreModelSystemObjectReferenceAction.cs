@@ -33,6 +33,10 @@ namespace XTMF2.Web.Server.Mapping.Actions
         private readonly ModelSystemSessions _modelSystemSessions;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
+        public StoreModelSystemObjectReferenceAction() {
+            
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -58,8 +62,6 @@ namespace XTMF2.Web.Server.Mapping.Actions
         public void Process(TSrc source, TDest destination, ResolutionContext context)
         {
             _modelSystemSessions.ModelSystemObjectReferenceMap[null].Add(destination.Id,destination);
-
-
         }
     }
 }

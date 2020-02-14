@@ -60,7 +60,7 @@ namespace XTMF2.Web.UnitTests.Controllers
             _runtime = TestHelper.Runtime;
             _logger = Mock.Of<ILogger<ModelSystemEditorController>>();
             _projectSessions = new ProjectSessions();
-            var modelSystemSessions = new ModelSystemSessions();
+            var modelSystemSessions = new ModelSystemSessions(_mapper);
             _controller =
                 new ModelSystemEditorController(_runtime, _logger, _projectSessions, modelSystemSessions, _mapper,
                     Mock.Of<IHubContext<ModelSystemEditingHub>>());

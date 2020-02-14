@@ -16,9 +16,11 @@
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Moq;
 using XTMF2.Web.Server.Hubs;
+using XTMF2.Web.Server.Mapping.Profiles;
 using XTMF2.Web.Server.Session;
 using Xunit;
 
@@ -32,11 +34,12 @@ namespace XTMF2.Web.UnitTests.Hubs
     {
         public SessionContextHubUnitTests()
         {
+            var config = new MapperConfiguration(cfg => { cfg.AddProfile<ModelSystemProfile>(); });
             _userName = Guid.NewGuid().ToString();
             TestHelper.CreateTestUser(_userName);
             _runtime = TestHelper.Runtime;
             _projectSessions = new ProjectSessions();
-            _modelSystemSessions = new ModelSystemSessions();
+            _modelSystemSessions = new ModelSystemSessions(config.CreateMapper());
             _userSession = new UserSession(_runtime.UserController.GetUserByName(_userName));
             var logger = Mock.Of<ILogger<SessionContextHub>>();
             _sessionContextHub = new SessionContextHub(logger, _projectSessions, _modelSystemSessions);
