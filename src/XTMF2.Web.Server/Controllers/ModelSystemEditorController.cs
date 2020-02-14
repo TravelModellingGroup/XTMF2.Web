@@ -105,11 +105,10 @@ namespace XTMF2.Web.Server.Controllers
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [Authorize(Policy = nameof(ModelSystemAccessRequirement))]
         [HttpGet("projects/{projectName}/model-systems/{modelSystemName}/")]
         public IActionResult GetModelSystem(string projectName, string modelSystemName, [FromServices] UserSession userSession)
         {
-            if (!HandleRequest(projectName, modelSystemName, userSession, out var session, out var requestResult )) {
+            if (!HandleRequest(projectName, modelSystemName, userSession, out var session, out var requestResult)) {
                 return requestResult;
             }
             return new OkObjectResult(_mapper.Map<ModelSystemEditingModel>(session.ModelSystem));
@@ -128,15 +127,8 @@ namespace XTMF2.Web.Server.Controllers
         [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/open-session")]
         public IActionResult OpenSession(string projectName, string modelSystemName, [FromServices] UserSession userSession)
         {
-            string error = default;
-            if (!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime, userSession, _projectSessions, projectName, modelSystemName, out var modelSystemHeader, ref error)) {
-                return new NotFoundObjectResult(error);
-            }
-            if (!Utils.XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession, _projectSessions, ref error)) {
-                return new NotFoundObjectResult(error);
-            }
-            if (!projectSession.EditModelSystem(userSession.User, modelSystemHeader, out var session, ref error)) {
-                return new UnprocessableEntityObjectResult(error);
+            if (!HandleRequest(projectName, modelSystemName, userSession, out var session, out var requestResult)) {
+                return requestResult;
             }
             return new OkResult();
         }
@@ -154,15 +146,8 @@ namespace XTMF2.Web.Server.Controllers
         [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/end-session")]
         public IActionResult EndSession(string projectName, string modelSystemName, [FromServices] UserSession userSession)
         {
-            string error = default;
-            if (!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime, userSession, _projectSessions, projectName, modelSystemName, out var modelSystemHeader, ref error)) {
-                return new NotFoundObjectResult(error);
-            }
-            if (!Utils.XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession, _projectSessions, ref error)) {
-                return new NotFoundObjectResult(error);
-            }
-            if (!projectSession.EditModelSystem(userSession.User, modelSystemHeader, out var session, ref error)) {
-                return new UnprocessableEntityObjectResult(error);
+            if (!HandleRequest(projectName, modelSystemName, userSession, out var session, out var requestResult)) {
+                return requestResult;
             }
             //dispose of the session
             session.Dispose();
@@ -185,13 +170,12 @@ namespace XTMF2.Web.Server.Controllers
         public IActionResult AddBoundary(string projectName, string modelSystemName, [FromHeader] Path parentBoundaryPath,
         [FromBody] BoundaryModel boundary, [FromServices] UserSession userSession)
         {
-            if (!Utils.XtmfUtils.GetModelSystemSession(_xtmfRuntime, userSession, projectName,
-                modelSystemName, _projectSessions, _modelSystemSessions, out var modelSystemSession)) {
-                return new NotFoundObjectResult(null);
+            if (!HandleRequest(projectName, modelSystemName, userSession, out var session, out var requestResult)) {
+                return requestResult;
             }
             string error = default;
-            Boundary parentBoundary = ModelSystemUtils.GetModelSystemObjectByPath<Boundary>(_xtmfRuntime, modelSystemSession, parentBoundaryPath);
-            if (!modelSystemSession.AddBoundary(userSession.User, parentBoundary, boundary.Name, out var newBoundary, ref error)) {
+            Boundary parentBoundary = ModelSystemUtils.GetModelSystemObjectByPath<Boundary>(_xtmfRuntime, session, parentBoundaryPath);
+            if (!session.AddBoundary(userSession.User, parentBoundary, boundary.Name, out var newBoundary, ref error)) {
                 return new UnprocessableEntityObjectResult(error);
             }
 
@@ -212,13 +196,12 @@ namespace XTMF2.Web.Server.Controllers
         public IActionResult AddModelSystemStart(string projectName, string modelSystemName, [FromHeader] Path parentBoundaryPath,
                         [FromBody] BoundaryModel boundary, [FromServices] UserSession userSession)
         {
-            if (!Utils.XtmfUtils.GetModelSystemSession(_xtmfRuntime, userSession, projectName,
-                modelSystemName, _projectSessions, _modelSystemSessions, out var modelSystemSession)) {
-                return new NotFoundObjectResult(null);
+            if (!HandleRequest(projectName, modelSystemName, userSession, out var session, out var requestResult)) {
+                return requestResult;
             }
             string error = default;
-            Boundary parentBoundary = ModelSystemUtils.GetModelSystemObjectByPath<Boundary>(_xtmfRuntime, modelSystemSession, parentBoundaryPath);
-            if (!modelSystemSession.AddModelSystemStart(userSession.User, parentBoundary, boundary.Name, out var start, ref error)) {
+            Boundary parentBoundary = ModelSystemUtils.GetModelSystemObjectByPath<Boundary>(_xtmfRuntime, session, parentBoundaryPath);
+            if (!session.AddModelSystemStart(userSession.User, parentBoundary, boundary.Name, out var start, ref error)) {
                 return new UnprocessableEntityObjectResult(error);
             }
 

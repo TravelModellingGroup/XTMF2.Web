@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using XTMF2.Web.Data.Models;
+using XTMF2.Web.Server.Authorization;
 using XTMF2.Web.Server.Session;
 using XTMF2.Web.Server.Utils;
 
@@ -113,6 +114,7 @@ namespace XTMF2.Web.Server.Controllers {
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(IEnumerable<ProjectModel>), StatusCodes.Status200OK)]
+        [Authorize(Policy = nameof(ModelSystemAccessRequirement))]
         public ActionResult<IEnumerable<ProjectModel>> List([FromServices] UserSession state)
         {
             return new OkObjectResult(_mapper.Map<List<ProjectModel>>(state.Projects));

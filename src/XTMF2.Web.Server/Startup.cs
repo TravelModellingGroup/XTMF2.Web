@@ -86,6 +86,10 @@ namespace XTMF2.Web.Server
                     nameof(ModelSystemAccessRequirement), policy =>
                     policy.Requirements.Add(
                           new ModelSystemAccessRequirement()));
+                options.AddPolicy(
+                    nameof(ProjectAccessRequirement), policy =>
+                    policy.Requirements.Add(
+                          new ProjectAccessRequirement()));
             });
             services.AddSingleton<IAuthorizationHandler,
                    ModelSystemAuthorizationHandler>();

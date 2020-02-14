@@ -15,11 +15,75 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 
 namespace XTMF2.Web.Server.Hubs
 {
+    [Authorize]
     public class ModelSystemEditingHub : Hub
     {
+        private readonly ILogger<ModelSystemEditingHub> _logger;
+
+        /// <summary>
+        /// Maps a model system to a list of users, that are currently active in editing the model system
+        /// </summary>
+        /// <returns></returns>
+        private readonly Dictionary<ModelSystem, HashSet<User>> _modelSystemUsers = new Dictionary<ModelSystem, HashSet<User>>();
+
+        /// <summary>
+        /// Maps a single user to a list of open model systems
+        /// </summary>
+        /// <typeparam name="User"></typeparam>
+        /// <typeparam name="ModelSystem"></typeparam>
+        /// <returns></returns>
+        private readonly Dictionary<User, ModelSystem> _userModelSystem = new Dictionary<User, ModelSystem>();
+
+        /// <summary>
+        /// Maps a user to a list of associated connection ids
+        /// </summary>
+        /// <returns></returns>
+        private readonly Dictionary<User, HashSet<string>> _userConnectionIds = new Dictionary<User, HashSet<string>>();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="logger"></param>
+        public ModelSystemEditingHub(ILogger<ModelSystemEditingHub> logger)
+        {
+            _logger = logger;
+        }
+
+        /// <summary>
+        /// Sends an update to all clients connected to the model system editing hub
+        /// </summary>
+        /// <param name="changeName"></param>
+        /// <param name="data"></param>
+        public void SendModelSystemChangesAsync(string changeName, object data)
+        {
+            Clients.Others.SendAsync(changeName, data);
+        }
+
+        public override async Task OnConnectedAsync()
+        {
+            var user = Context.User;
+            // find model system from request 
+            await base.OnConnectedAsync();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exception"></param>
+        /// <returns></returns>
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+            _logger.LogInformation("Client disconnected");
+            await base.OnDisconnectedAsync(exception);
+        }
     }
 }
