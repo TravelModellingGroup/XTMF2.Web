@@ -111,7 +111,12 @@ namespace XTMF2.Web.Server.Controllers
             if (!HandleRequest(projectName, modelSystemName, userSession, out var session, out var requestResult)) {
                 return requestResult;
             }
-            return new OkObjectResult(_mapper.Map<ModelSystemEditingModel>(session.ModelSystem));
+            // determine if the model system edting model exists, otherwise add it
+            if(!_modelSystemSessions.ModelSystemEditingModels.TryGetValue(session, out var editingModel) {
+                editingModel = _mapper.Map<ModelSystemEditingModel>(session.ModelSystem);
+                _modelSystemSessions.ModelSystemEditingModels[session] = editingModel;
+            }
+            return new OkObjectResult(editingModel);
         }
 
         /// <summary>

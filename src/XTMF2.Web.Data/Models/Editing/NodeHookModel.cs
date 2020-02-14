@@ -20,10 +20,9 @@ using XTMF2.Web.Data.Interfaces.Editing;
 
 namespace XTMF2.Web.Data.Models.Editing
 {
-    public class NodeHookModel
+    public class NodeHookModel : ViewObject
     {
         public Type Type { get; set; }
 
-        public Guid Id { get; set; }
     }
 }

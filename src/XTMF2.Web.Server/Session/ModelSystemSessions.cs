@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using AutoMapper;
 using XTMF2.Editing;
 using XTMF2.Web.Data.Models.Editing;
 
@@ -52,6 +53,13 @@ namespace XTMF2.Web.Server.Session
         public Dictionary<ModelSystemSession, Dictionary<Guid, object>> ModelSystemObjectReferenceMap { get; }
         = new Dictionary<ModelSystemSession, Dictionary<Guid, object>>();
 
+        private readonly IMapper _mapper;
+
+        public ModelSystemSessions(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         /// <summary>
         ///     Clears all model system sessions for the associated user
         /// </summary>
@@ -86,6 +94,20 @@ namespace XTMF2.Web.Server.Session
                 Sessions[user][project] = new List<ModelSystemSession>();
             }
             Sessions[user][project].Add(session);
+        }
+
+        /// <summary>
+        /// Retrieves the active editing model for the passed model system session
+        /// </summary>
+        /// <param name="session">The model system session</param>
+        /// <returns>The editing model for the passed model system / session</returns>
+        public ModelSystemEditingModel GetModelSystemEditingModel(ModelSystemSession session)
+        {
+            if (!ModelSystemEditingModels.TryGetValue(session, out var model)) {
+                model = _mapper.Map<ModelSystemEditingModel>(session.ModelSystem);
+                ModelSystemEditingModels[session] = model;
+            }
+            return model;
         }
 
         /// <summary>

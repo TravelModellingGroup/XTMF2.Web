@@ -20,6 +20,7 @@ using AutoMapper;
 using XTMF2.ModelSystemConstruct;
 using XTMF2.Web.Data.Models;
 using XTMF2.Web.Data.Models.Editing;
+using XTMF2.Web.Server.Mapping.Actions;
 using XTMF2.Web.Server.Mapping.Converters;
 
 namespace XTMF2.Web.Server.Mapping.Profiles
@@ -35,47 +36,33 @@ namespace XTMF2.Web.Server.Mapping.Profiles
         private void MapEditorProfile()
         {
             CreateMap<ModelSystem, ModelSystemEditingModel>();
-            CreateMap<Boundary, BoundaryModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); }).AfterMap(
-                (src, dest) =>
-                {
-                    // empty
-                });
-            CreateMap<Link, LinkModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); }).AfterMap((src, dest) =>
-                {
-                    // empty
-                }).ConvertUsing(typeof(LinkConverter))
+            CreateMap<Boundary, BoundaryModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); })
+                .AfterMap<StoreModelSystemObjectReferenceAction<Boundary, BoundaryModel>>();
+            CreateMap<Link, LinkModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); })
+                .ConvertUsing(typeof(LinkConverter))
                 ;
-            CreateMap<MultiLink, MultiLinkModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); }).AfterMap(
-                (src, dest) =>
-                {
-                    // empty
-                });
+            CreateMap<MultiLink, MultiLinkModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); })
+                .AfterMap<StoreModelSystemObjectReferenceAction<MultiLink, MultiLinkModel>>();
             CreateMap<SingleLink, SingleLinkModel>()
                 .BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); })
                 .AfterMap((src, dest) =>
                 {
                     dest.OriginHookId = dest.OriginHook.Id;
                     dest.OriginId = dest.Origin.Id;
-                });
-            CreateMap<Start, StartModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); }).AfterMap(
-                (src, dest) =>
-                {
-                    // empty
-                });
+                })
+                .AfterMap<StoreModelSystemObjectReferenceAction<SingleLink, SingleLinkModel>>();
+            CreateMap<Start, StartModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); })
+                .AfterMap<StoreModelSystemObjectReferenceAction<Start, StartModel>>();
             CreateMap<Node, NodeModel>()
                 .ForMember(m => m.ContainedWithin, opt => { opt.MapFrom(x => x.ContainedWithin); })
                 .BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); })
-                .AfterMap((src, dest) => { dest.ContainWithinId = dest.ContainedWithin.Id; });
-            CreateMap<NodeHook, NodeHookModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); }).AfterMap(
-                (src, dest) =>
-                {
-                    // empty
-                });
+                .AfterMap((src, dest) => { dest.ContainWithinId = dest.ContainedWithin.Id; })
+                .AfterMap<StoreModelSystemObjectReferenceAction<Node, NodeModel>>();
+
+            CreateMap<NodeHook, NodeHookModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); })
+                .AfterMap<StoreModelSystemObjectReferenceAction<NodeHook, NodeHookModel>>();
             CreateMap<CommentBlock, CommentBlockModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); })
-                .AfterMap((src, dest) =>
-                {
-                    // empty
-                });
+                .AfterMap<StoreModelSystemObjectReferenceAction<CommentBlock, CommentBlockModel>>();
             CreateMap<Rectangle, Data.Types.Rectangle>();
         }
 
