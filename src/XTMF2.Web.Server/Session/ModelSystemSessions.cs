@@ -40,7 +40,7 @@ namespace XTMF2.Web.Server.Session
         /// view model.
         /// </summary>
         /// <returns></returns>
-        public Dictionary<ModelSystemSession, ModelSystemEditingModel> ModelSystemEditingModels { get; set; } =
+        public Dictionary<ModelSystemSession, ModelSystemEditingModel> ModelSystemEditingModels { get; } =
         new Dictionary<ModelSystemSession, ModelSystemEditingModel>();
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace XTMF2.Web.Server.Session
         /// removed from the model system.
         /// </summary>
         /// <returns></returns>
-        public Dictionary<ModelSystemSession, Dictionary<Guid, object>> ModelSystemObjectReferenceMap
+        public Dictionary<ModelSystemSession, Dictionary<Guid, object>> ModelSystemObjectReferenceMap { get; }
         = new Dictionary<ModelSystemSession, Dictionary<Guid, object>>();
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace XTMF2.Web.Server.Session
             if (!Sessions.ContainsKey(user)) {
                 Sessions[user] = new Dictionary<Project, List<ModelSystemSession>>();
             }
-            if (!Sessions[user].TryGetValue(project, out var list)){
+            if (!Sessions[user].TryGetValue(project, out var list)) {
                 Sessions[user][project] = new List<ModelSystemSession>();
             }
             Sessions[user][project].Add(session);
