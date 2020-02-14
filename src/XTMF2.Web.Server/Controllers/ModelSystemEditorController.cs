@@ -231,7 +231,7 @@ namespace XTMF2.Web.Server.Controllers
             string error = default;
             Boundary parentBoundary = ModelSystemUtils.GetModelSystemObjectByPath<Boundary>(_xtmfRuntime, modelSystemSession, parentBoundaryPath);
             if (!modelSystemSession.AddCommentBlock(userSession.User, parentBoundary,
-             commentBlock.Text, new Rectangle(commentBlock.Location.X, commentBlock.Location.Y, 100, 100), out var commentBlockRef, ref error)) {
+             commentBlock.Text, new Rectangle(commentBlock.Location.X, commentBlock.Location.Y, commentBlock.Location.Width, commentBlock.Location.Height), out var commentBlockRef, ref error)) {
                 return new UnprocessableEntityObjectResult(error);
             }
             return new CreatedResult("AddCommentBlock", commentBlockRef);

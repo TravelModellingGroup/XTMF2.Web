@@ -36,11 +36,21 @@ namespace XTMF2.Web.Server.Session
             new Dictionary<User, Dictionary<Project, List<ModelSystemSession>>>();
 
         /// <summary>
-        /// Model system object reference tracker
+        /// Model system object reference tracker. Maps a model system session to the currently "active"
+        /// view model.
         /// </summary>
         /// <returns></returns>
         public Dictionary<ModelSystemSession, ModelSystemEditingModel> ModelSystemEditingModels { get; set; } =
         new Dictionary<ModelSystemSession, ModelSystemEditingModel>();
+
+        /// <summary>
+        /// Reference map for model system objects based on a GUID generated for the view model.
+        /// This is stored for efficiency and convenience. References are removed from the map when they are
+        /// removed from the model system.
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<ModelSystemSession, Dictionary<Guid, object>> ModelSystemObjectReferenceMap
+        = new Dictionary<ModelSystemSession, Dictionary<Guid, object>>();
 
         /// <summary>
         ///     Clears all model system sessions for the associated user
@@ -72,7 +82,7 @@ namespace XTMF2.Web.Server.Session
             if (!Sessions.ContainsKey(user)) {
                 Sessions[user] = new Dictionary<Project, List<ModelSystemSession>>();
             }
-            if (!Sessions[user].ContainsKey(project)) {
+            if (!Sessions[user].TryGetValue(project, out var list)){
                 Sessions[user][project] = new List<ModelSystemSession>();
             }
             Sessions[user][project].Add(session);

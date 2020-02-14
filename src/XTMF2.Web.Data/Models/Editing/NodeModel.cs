@@ -26,9 +26,11 @@ namespace XTMF2.Web.Data.Models.Editing
         public string Name { get; set; }
 
         public string Description { get; set; }
-        
+
         [JsonIgnore]
         public BoundaryModel ContainedWithin { get; set; }
+
+        public Guid ContainWithinId { get; set; }
         public Type Type { get; set; }
     }
 }

@@ -23,5 +23,7 @@ namespace XTMF2.Web.Data.Models.Editing
     public class NodeHookModel
     {
         public Type Type { get; set; }
+
+        public Guid Id { get; set; }
     }
 }

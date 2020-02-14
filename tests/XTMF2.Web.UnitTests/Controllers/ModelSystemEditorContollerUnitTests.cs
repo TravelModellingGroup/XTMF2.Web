@@ -124,7 +124,7 @@ namespace XTMF2.Web.UnitTests.Controllers
             options.Converters.Add(new TypeConverter());
             output.WriteLine(JsonSerializer.Serialize(modelSystem, options
             ));
-            Assert.NotNull(modelSystem.GlobalBoundary.Modules[0].Type);
+            Assert.Null(modelSystem.GlobalBoundary.Modules[0].Type);
         }
     }
 }
