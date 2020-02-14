@@ -105,9 +105,9 @@ namespace XTMF2.Web.UnitTests.Controllers
         public void GetModelSystem_ReturnsCorrectModelSystem_WhenQueryModelSystem()
         {
             TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
-            var result = (OkObjectResult) _controller.GetModelSystem("TestProject", "TestModelSystem", _userSession);
+            var result = (OkObjectResult)_controller.GetModelSystem("TestProject", "TestModelSystem", _userSession);
             Assert.IsType<ModelSystemEditingModel>(result.Value);
-            var modelSystem = (ModelSystemEditingModel) result.Value;
+            var modelSystem = (ModelSystemEditingModel)result.Value;
 
             // assert 
             Assert.Single(modelSystem.GlobalBoundary.Starts);
@@ -124,7 +124,7 @@ namespace XTMF2.Web.UnitTests.Controllers
             options.Converters.Add(new TypeConverter());
             output.WriteLine(JsonSerializer.Serialize(modelSystem, options
             ));
-            Assert.Null(modelSystem.GlobalBoundary.Modules[0].Type);
+            Assert.NotNull(modelSystem.GlobalBoundary.Modules[0].Type);
         }
     }
 }

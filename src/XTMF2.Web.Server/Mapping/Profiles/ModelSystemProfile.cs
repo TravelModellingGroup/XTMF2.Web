@@ -35,72 +35,47 @@ namespace XTMF2.Web.Server.Mapping.Profiles
         private void MapEditorProfile()
         {
             CreateMap<ModelSystem, ModelSystemEditingModel>();
-            CreateMap<Boundary, BoundaryModel>().BeforeMap((src, dest) =>
-            {
-                dest.Id = Guid.NewGuid();
-            }).AfterMap((src, dest) =>
-            {
-                // empty
-            });
-            CreateMap<Link, LinkModel>().BeforeMap((src, dest) =>
-            {
-                dest.Id = Guid.NewGuid();
-            }).AfterMap((src, dest) =>
-            {
-                // empty
-            }).ConvertUsing(typeof(Converters.LinkConverter))
-            ;
-            CreateMap<MultiLink, MultiLinkModel>().BeforeMap((src, dest) =>
-            {
-                dest.Id = Guid.NewGuid();
-            }).AfterMap((src, dest) =>
-            {
-                // empty
-            });
+            CreateMap<Boundary, BoundaryModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); }).AfterMap(
+                (src, dest) =>
+                {
+                    // empty
+                });
+            CreateMap<Link, LinkModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); }).AfterMap((src, dest) =>
+                {
+                    // empty
+                }).ConvertUsing(typeof(LinkConverter))
+                ;
+            CreateMap<MultiLink, MultiLinkModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); }).AfterMap(
+                (src, dest) =>
+                {
+                    // empty
+                });
             CreateMap<SingleLink, SingleLinkModel>()
-            .BeforeMap((src, dest) =>
-            {
-                dest.Id = Guid.NewGuid();
-            })
-            .AfterMap((src, dest) =>
-            {
-                dest.OriginHookId = dest.OriginHook.Id;
-                dest.OriginId = dest.Origin.Id;
-            });
-            CreateMap<Start, StartModel>().BeforeMap((src, dest) =>
-            {
-                dest.Id = Guid.NewGuid();
-            }).AfterMap((src, dest) =>
-            {
-                // empty
-            });
-            CreateMap<Node, NodeModel>().ForMember(m => m.ContainedWithin, opt =>
-            {
-                opt.MapFrom(x => x.ContainedWithin);
-            })
-            .BeforeMap((src, dest) =>
-            {
-                dest.Id = Guid.NewGuid();
-            })
-            .AfterMap((src, dest) =>
-            {
-                dest.ContainWithinId = dest.ContainedWithin.Id;
-            });
-            CreateMap<NodeHook, NodeHookModel>().BeforeMap((src, dest) =>
-            {
-                dest.Id = Guid.NewGuid();
-            }).AfterMap((src, dest) =>
-            {
-                // empty
-
-            });
-            CreateMap<CommentBlock, CommentBlockModel>().BeforeMap((src, dest) =>
-            {
-                dest.Id = Guid.NewGuid();
-            }).AfterMap((src, dest) =>
-            {
-                // empty
-            });
+                .BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); })
+                .AfterMap((src, dest) =>
+                {
+                    dest.OriginHookId = dest.OriginHook.Id;
+                    dest.OriginId = dest.Origin.Id;
+                });
+            CreateMap<Start, StartModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); }).AfterMap(
+                (src, dest) =>
+                {
+                    // empty
+                });
+            CreateMap<Node, NodeModel>()
+                .ForMember(m => m.ContainedWithin, opt => { opt.MapFrom(x => x.ContainedWithin); })
+                .BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); })
+                .AfterMap((src, dest) => { dest.ContainWithinId = dest.ContainedWithin.Id; });
+            CreateMap<NodeHook, NodeHookModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); }).AfterMap(
+                (src, dest) =>
+                {
+                    // empty
+                });
+            CreateMap<CommentBlock, CommentBlockModel>().BeforeMap((src, dest) => { dest.Id = Guid.NewGuid(); })
+                .AfterMap((src, dest) =>
+                {
+                    // empty
+                });
             CreateMap<Rectangle, Data.Types.Rectangle>();
         }
 
