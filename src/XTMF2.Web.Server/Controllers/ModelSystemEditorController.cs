@@ -112,7 +112,7 @@ namespace XTMF2.Web.Server.Controllers
                 return requestResult;
             }
             // determine if the model system edting model exists, otherwise add it
-            if(!_modelSystemSessions.ModelSystemEditingModels.TryGetValue(session, out var editingModel) {
+            if(!_modelSystemSessions.ModelSystemEditingModels.TryGetValue(session, out var editingModel)) {
                 editingModel = _mapper.Map<ModelSystemEditingModel>(session.ModelSystem);
                 _modelSystemSessions.ModelSystemEditingModels[session] = editingModel;
             }
