@@ -59,7 +59,6 @@ namespace XTMF2.Web.Client.Contexts
         /// <returns></returns>
         private async void OnAuthenticated(object sender, EventArgs eventArgs)
         {
-            Console.WriteLine("On Authenticated");
             _hubConnection = new HubConnectionBuilder()
                         .WithUrl(NavigationManager.ToAbsoluteUri("/session-context-hub"), options =>
                         {

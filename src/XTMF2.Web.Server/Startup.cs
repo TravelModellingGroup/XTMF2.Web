@@ -83,7 +83,7 @@ namespace XTMF2.Web.Server
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(
-                    ModelSystemAccessRequirement.REQUIREMENT_NAME, policy =>
+                    nameof(ModelSystemAccessRequirement), policy =>
                     policy.Requirements.Add(
                           new ModelSystemAccessRequirement()));
             });

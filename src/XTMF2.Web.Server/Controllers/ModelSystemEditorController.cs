@@ -68,6 +68,35 @@ namespace XTMF2.Web.Server.Controllers
         }
 
         /// <summary>
+        /// Utility request handler
+        /// </summary>
+        /// <param name="projectName"></param>
+        /// <param name="modelSystemName"></param>
+        /// <param name="userSession"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        private bool HandleRequest(string projectName, string modelSystemName, UserSession userSession, out Editing.ModelSystemSession session, out IActionResult result)
+        {
+            string error = default;
+            if (!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime, userSession, _projectSessions, projectName, modelSystemName, out var modelSystemHeader, ref error)) {
+                result = new NotFoundObjectResult(error);
+                session = null;
+                return false;
+            }
+            if (!Utils.XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession, _projectSessions, ref error)) {
+                result = new NotFoundObjectResult(error);
+                session = null;
+                return false;
+            }
+            if (!projectSession.EditModelSystem(userSession.User, modelSystemHeader, out session, ref error)) {
+                result = new UnprocessableEntityObjectResult(error);
+                return false;
+            }
+            result = null;
+            return true;
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="projectName"></param>
@@ -76,21 +105,13 @@ namespace XTMF2.Web.Server.Controllers
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [Authorize(Policy = ModelSystemAccessRequirement.REQUIREMENT_NAME)]
+        [Authorize(Policy = nameof(ModelSystemAccessRequirement))]
         [HttpGet("projects/{projectName}/model-systems/{modelSystemName}/")]
         public IActionResult GetModelSystem(string projectName, string modelSystemName, [FromServices] UserSession userSession)
         {
-            string error = default;
-            if (!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime, userSession, _projectSessions, projectName, modelSystemName, out var modelSystemHeader, ref error)) {
-                return new NotFoundObjectResult(error);
+            if (!HandleRequest(projectName, modelSystemName, userSession, out var session, out var requestResult )) {
+                return requestResult;
             }
-            if (!Utils.XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession, _projectSessions, ref error)) {
-                return new NotFoundObjectResult(error);
-            }
-            if (!projectSession.EditModelSystem(userSession.User, modelSystemHeader, out var session, ref error)) {
-                return new UnprocessableEntityObjectResult(error);
-            }
-
             return new OkObjectResult(_mapper.Map<ModelSystemEditingModel>(session.ModelSystem));
         }
 
@@ -188,7 +209,7 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/start")]
-        public IActionResult AddModelSystemStart(string projectName, string modelSystemName,  [FromHeader] Path parentBoundaryPath,
+        public IActionResult AddModelSystemStart(string projectName, string modelSystemName, [FromHeader] Path parentBoundaryPath,
                         [FromBody] BoundaryModel boundary, [FromServices] UserSession userSession)
         {
             if (!Utils.XtmfUtils.GetModelSystemSession(_xtmfRuntime, userSession, projectName,
@@ -247,7 +268,7 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/link")]
-        public IActionResult AddLink(string projectName, string modelSystemName,  [FromHeader] string parentBoundaryPath, [FromBody] CommentBlockModel commentBlock,
+        public IActionResult AddLink(string projectName, string modelSystemName, [FromHeader] string parentBoundaryPath, [FromBody] CommentBlockModel commentBlock,
         [FromServices] UserSession userSession)
         {
             //TODO
@@ -287,7 +308,7 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/node")]
-        public IActionResult AddNode(string projectName, string modelSystemName,  [FromHeader] string parentBoundaryPath, [FromBody] CommentBlockModel commentBlock,
+        public IActionResult AddNode(string projectName, string modelSystemName, [FromHeader] string parentBoundaryPath, [FromBody] CommentBlockModel commentBlock,
                                     [FromServices] UserSession userSession)
         {
             //TODO
@@ -307,7 +328,7 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [HttpDelete("projects/{projectName}/model-systems/{modelSystemName}/comment-block")]
-        public IActionResult RemoveCommentBlock(string projectName, string modelSystemName,  [FromHeader] string parentBoundaryPath, [FromBody] CommentBlockModel commentBlock,
+        public IActionResult RemoveCommentBlock(string projectName, string modelSystemName, [FromHeader] string parentBoundaryPath, [FromBody] CommentBlockModel commentBlock,
                                                 [FromServices] UserSession userSession)
         {
             //TODO
