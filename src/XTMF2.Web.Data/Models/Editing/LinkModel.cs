@@ -22,13 +22,13 @@ using XTMF2.Web.Data.Types;
 
 namespace XTMF2.Web.Data.Models.Editing
 {
-    public abstract class LinkModel : ViewObject, ILink
+    public abstract class LinkModel : ViewObject
     {
         [JsonIgnore]
-        public INode Origin { get; set; }
+        public NodeModel Origin { get; set; }
 
         [JsonIgnore]
-        public INodeHook OriginHook { get; set; }
+        public NodeHookModel OriginHook { get; set; }
 
         public Guid OriginId { get; set; }
 

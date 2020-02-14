@@ -23,19 +23,14 @@ using XTMF2.Web.Data.Types;
 
 namespace XTMF2.Web.Data.Models.Editing
 {
-    public class BoundaryModel : ViewObject, IBoundary
+    public class BoundaryModel : ViewObject
     {
         public string Name { get; set; }
         public string Description { get; set; }
-
-        public List<IBoundary> Boundaries { get; set; }
-
-        public List<INode> Modules { get; set; }
-
-        public List<ICommentBlock> CommentBlocks { get; set; }
-
-        public List<ILink> Links { get; set; }
-
-        public List<IStart> Starts { get; set; }
+        public List<BoundaryModel> Boundaries { get; set; }
+        public List<NodeModel> Modules { get; set; }
+        public List<CommentBlockModel> CommentBlocks { get; set; }
+        public List<LinkModel> Links { get; set; }
+        public List<StartModel> Starts { get; set; }
     }
 }

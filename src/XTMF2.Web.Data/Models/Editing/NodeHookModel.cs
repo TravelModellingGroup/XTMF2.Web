@@ -20,7 +20,8 @@ using XTMF2.Web.Data.Interfaces.Editing;
 
 namespace XTMF2.Web.Data.Models.Editing
 {
-    public class NodeHookModel : INodeHook
+    public class NodeHookModel
     {
+        public Type Type { get; set; }
     }
 }

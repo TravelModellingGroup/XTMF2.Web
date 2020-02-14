@@ -16,19 +16,31 @@
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using AutoMapper;
-using XTMF2.Web.Data.Models;
+using XTMF2.ModelSystemConstruct;
 using XTMF2.Web.Data.Models.Editing;
 
-namespace XTMF2.Web.Server.Profiles
+namespace XTMF2.Web.Server.Mapping.Converters
 {
     /// <summary>
-    ///     AutoMapper profile
+    ///     Maps Links to the appropriate link type
     /// </summary>
-    public class BoundaryProfile : Profile
+    public class LinkConverter : ITypeConverter<Link, LinkModel>
     {
-        public BoundaryProfile()
+        /// <summary>
+        ///     Converts the Link to the appropriate type
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public LinkModel Convert(Link source, LinkModel destination, ResolutionContext context)
         {
-            CreateMap<Boundary, BoundaryModel>();
+            if (source is MultiLink)
+            {
+                return context.Mapper.Map<MultiLinkModel>(source);
+            }
+
+            return context.Mapper.Map<SingleLinkModel>(source);
         }
     }
 }

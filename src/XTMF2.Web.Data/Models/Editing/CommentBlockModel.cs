@@ -20,7 +20,7 @@ using XTMF2.Web.Data.Interfaces.Editing;
 
 namespace XTMF2.Web.Data.Models.Editing
 {
-    public class CommentBlockModel : ViewObject, ICommentBlock
+    public class CommentBlockModel : ViewObject
     {
         public string Text { get; set; }
 

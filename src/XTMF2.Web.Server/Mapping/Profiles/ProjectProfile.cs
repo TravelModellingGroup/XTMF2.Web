@@ -17,19 +17,17 @@
 
 using AutoMapper;
 using XTMF2.Web.Data.Models;
-using XTMF2.Web.Data.Models.Editing;
 
-namespace XTMF2.Web.Server.Profiles
+namespace XTMF2.Web.Server.Mapping.Profiles
 {
     /// <summary>
     ///     AutoMapper profile
     /// </summary>
-    public class NodeProfile : Profile
+    public class ProjectProfile : Profile
     {
-        public NodeProfile()
+        public ProjectProfile()
         {
-            CreateMap<Node, NodeModel>()
-                .ForMember(m => m.Location, opt => opt.MapFrom(s => new { s.Location.X, s.Location.Y }));
+            CreateMap<Project, ProjectModel>();
         }
     }
 }

@@ -25,7 +25,8 @@ namespace XTMF2.Web.Data.Models.Editing
     public class ViewObject : IViewObject
     {
         public Guid Id { get; set; }
-        public Point Location { get; set; }
+
+        public Rectangle Location { get; set; }
         
         [JsonIgnore]
         public object ObjectReference { get; set; }

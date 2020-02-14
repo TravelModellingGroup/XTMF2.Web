@@ -1,3 +1,4 @@
+
 //     Copyright 2017-2020 University of Toronto
 // 
 //     This file is part of XTMF2.
@@ -15,9 +16,18 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace XTMF2.Web.Data.Interfaces.Editing
+using System.ComponentModel.DataAnnotations;
+using XTMF2.Web.Data.Interfaces;
+
+namespace XTMF2.Web.Data.Types
 {
-    public interface ILink : IViewObject
+    public class Rectangle
     {
+        public float X { get; set; }
+        public float Y { get; set; }
+
+        public float Width { get; set; }
+
+        public float Height { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-//     Copyright 2017-2020 University of Toronto
+﻿//     Copyright 2017-2020 University of Toronto
 // 
 //     This file is part of XTMF2.
 // 
@@ -15,14 +15,11 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
-using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.SignalR;
 
-namespace XTMF2.Web.Data.Interfaces.Editing
+namespace XTMF2.Web.Server.Hubs
 {
-    public interface ISingleLink : ILink, IViewObject
+    public class ModelSystemEditingHub : Hub
     {
-        public INode Origin { get; set; }
-
-        public INode Destination { get; set; }
     }
 }

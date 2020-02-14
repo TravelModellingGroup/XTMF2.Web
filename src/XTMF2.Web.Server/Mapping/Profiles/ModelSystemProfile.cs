@@ -15,38 +15,40 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using AutoMapper;
 using XTMF2.ModelSystemConstruct;
-using XTMF2.Web.Data.Interfaces.Editing;
 using XTMF2.Web.Data.Models;
 using XTMF2.Web.Data.Models.Editing;
+using XTMF2.Web.Server.Mapping.Converters;
 
-namespace XTMF2.Web.Server.Profiles
+namespace XTMF2.Web.Server.Mapping.Profiles
 {
     /// <summary>
     ///     AutoMapper profile
     /// </summary>
     public class ModelSystemProfile : Profile
     {
-        public ModelSystemProfile()
-        {
-            CreateMap<ModelSystemHeader, ModelSystemModel>();
-            MapEditorProfile();
-        }
         /// <summary>
-        /// Create mapping profiles for model system editor objects
+        ///     Create mapping profiles for model system editor objects
         /// </summary>
         private void MapEditorProfile()
         {
             CreateMap<ModelSystem, ModelSystemEditingModel>();
-            CreateMap<Boundary, IBoundary>().As<BoundaryModel>();
-            CreateMap<Link, ILink>();
-            CreateMap<Node, INode>().As<NodeModel>();
-            CreateMap<Start, IStart>().As<StartModel>();
-            CreateMap<CommentBlock, ICommentBlock>().As<CommentBlockModel>();
-            CreateMap<XTMF2.Point, XTMF2.Web.Data.Types.Point>();
-            
+            CreateMap<Boundary, BoundaryModel>();
+            CreateMap<Link, LinkModel>().ConvertUsing(typeof(LinkConverter));
+            CreateMap<MultiLink, MultiLinkModel>();
+            CreateMap<SingleLink, SingleLinkModel>();
+            CreateMap<Start, StartModel>();
+            CreateMap<Node, NodeModel>();
+            CreateMap<NodeHook, NodeHookModel>();
+            CreateMap<CommentBlock, CommentBlockModel>();
+            CreateMap<Rectangle, Data.Types.Rectangle>();
+        }
+
+        public ModelSystemProfile()
+        {
+            CreateMap<ModelSystemHeader, ModelSystemModel>();
+            MapEditorProfile();
         }
     }
 }

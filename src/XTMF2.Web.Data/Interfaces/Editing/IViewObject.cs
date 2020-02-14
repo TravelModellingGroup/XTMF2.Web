@@ -24,7 +24,7 @@ namespace XTMF2.Web.Data.Interfaces.Editing
     public interface IViewObject
     {
         public Guid Id { get; set; }
-        public Point Location { get; set; }
+        public Rectangle Location { get; set; }
         public object ObjectReference { get; set; }
     }
 }
