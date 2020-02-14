@@ -53,6 +53,10 @@ namespace XTMF2.Web.UnitTests.Controllers
         private string _userName;
         private User _user;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="output"></param>
         public ModelSystemEditorControllerUnitTests(ITestOutputHelper output)
         {
             var config = new MapperConfiguration(cfg =>
@@ -100,7 +104,6 @@ namespace XTMF2.Web.UnitTests.Controllers
             Assert.Collection<INode>(modelSystem.GlobalBoundary.Modules,
                 item =>
                 {
-                    // Assert.Equal(typeof(SimpleTestModule),item.Type);
                     Assert.Equal("TestNode1", item.Name);
                 });
 
