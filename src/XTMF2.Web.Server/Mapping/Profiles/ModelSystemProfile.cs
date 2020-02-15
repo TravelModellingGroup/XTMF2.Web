@@ -22,6 +22,7 @@ using XTMF2.Web.Data.Models;
 using XTMF2.Web.Data.Models.Editing;
 using XTMF2.Web.Server.Mapping.Actions;
 using XTMF2.Web.Server.Mapping.Converters;
+using XTMF2.Web.Server.Session;
 
 namespace XTMF2.Web.Server.Mapping.Profiles
 {
@@ -37,37 +38,30 @@ namespace XTMF2.Web.Server.Mapping.Profiles
         {
             CreateMap<ModelSystem, ModelSystemEditingModel>();
             CreateMap<Boundary, BoundaryModel>()
-                .BeforeMap<Actions.GenerateModelSystemObjectIdAction<Boundary, BoundaryModel>>()
-                .AfterMap<StoreModelSystemObjectReferenceAction<Boundary, BoundaryModel>>();
+                .BeforeMap<Actions.GenerateModelSystemObjectIdAction<Boundary, BoundaryModel>>();
             CreateMap<Link, LinkModel>()
             .BeforeMap<Actions.GenerateModelSystemObjectIdAction<Link, LinkModel>>()
                 .ConvertUsing(typeof(LinkConverter));
             CreateMap<MultiLink, MultiLinkModel>()
-            .BeforeMap<Actions.GenerateModelSystemObjectIdAction<MultiLink, MultiLinkModel>>()
-                .AfterMap<StoreModelSystemObjectReferenceAction<MultiLink, MultiLinkModel>>();
+            .BeforeMap<Actions.GenerateModelSystemObjectIdAction<MultiLink, MultiLinkModel>>();
             CreateMap<SingleLink, SingleLinkModel>()
             .BeforeMap<Actions.GenerateModelSystemObjectIdAction<SingleLink, SingleLinkModel>>()
                 .AfterMap((src, dest) =>
                 {
                     dest.OriginHookId = dest.OriginHook.Id;
                     dest.OriginId = dest.Origin.Id;
-                })
-                .AfterMap<StoreModelSystemObjectReferenceAction<SingleLink, SingleLinkModel>>();
+                });
             CreateMap<Start, StartModel>()
-            .BeforeMap<Actions.GenerateModelSystemObjectIdAction<Start, StartModel>>()
-                .AfterMap<StoreModelSystemObjectReferenceAction<Start, StartModel>>();
+            .BeforeMap<Actions.GenerateModelSystemObjectIdAction<Start, StartModel>>();
             CreateMap<Node, NodeModel>()
                 .ForMember(m => m.ContainedWithin, opt => { opt.MapFrom(x => x.ContainedWithin); })
             .BeforeMap<Actions.GenerateModelSystemObjectIdAction<Node, NodeModel>>()
-                .AfterMap((src, dest) => { dest.ContainWithinId = dest.ContainedWithin.Id; })
-                .AfterMap<StoreModelSystemObjectReferenceAction<Node, NodeModel>>();
+                .AfterMap((src, dest) => { dest.ContainWithinId = dest.ContainedWithin.Id; });
 
             CreateMap<NodeHook, NodeHookModel>()
-            .BeforeMap<Actions.GenerateModelSystemObjectIdAction<NodeHook, NodeHookModel>>()
-                .AfterMap<StoreModelSystemObjectReferenceAction<NodeHook, NodeHookModel>>();
+            .BeforeMap<Actions.GenerateModelSystemObjectIdAction<NodeHook, NodeHookModel>>();
             CreateMap<CommentBlock, CommentBlockModel>()
-            .BeforeMap<Actions.GenerateModelSystemObjectIdAction<CommentBlock, CommentBlockModel>>()
-                .AfterMap<StoreModelSystemObjectReferenceAction<CommentBlock, CommentBlockModel>>();
+            .BeforeMap<Actions.GenerateModelSystemObjectIdAction<CommentBlock, CommentBlockModel>>();
             CreateMap<Rectangle, Data.Types.Rectangle>();
         }
 

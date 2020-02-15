@@ -20,6 +20,7 @@ using System.Text.Json;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using XTMF2.Web.Data.Converters;
@@ -53,7 +54,11 @@ namespace XTMF2.Web.UnitTests.Controllers
         /// <param name="output"></param>
         public ModelSystemEditorControllerUnitTests(ITestOutputHelper output)
         {
-            var config = new MapperConfiguration(cfg => { cfg.AddProfile<ModelSystemProfile>(); });
+            var config = new MapperConfiguration(cfg =>
+             {
+                 cfg.AddProfile<ModelSystemProfile>();
+                 cfg.AddProfile<ProjectProfile>();
+             });
             _mapper = config.CreateMapper();
             _userName = Guid.NewGuid().ToString();
             _user = TestHelper.CreateTestUser(_userName);
@@ -114,16 +119,6 @@ namespace XTMF2.Web.UnitTests.Controllers
             Assert.Equal("TestStart", modelSystem.GlobalBoundary.Starts[0].Name);
             Assert.Collection(modelSystem.GlobalBoundary.Modules,
                 item => { Assert.Equal("TestNode1", item.Name); });
-
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                IgnoreNullValues = true,
-                MaxDepth = 64
-            };
-            options.Converters.Add(new TypeConverter());
-            output.WriteLine(JsonSerializer.Serialize(modelSystem, options
-            ));
             Assert.NotNull(modelSystem.GlobalBoundary.Modules[0].Type);
         }
     }

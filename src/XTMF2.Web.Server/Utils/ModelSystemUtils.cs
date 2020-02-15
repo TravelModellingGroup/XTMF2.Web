@@ -16,8 +16,10 @@
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using XTMF2.Editing;
+using XTMF2.Web.Data.Models.Editing;
 using XTMF2.Web.Data.Types;
 using XTMF2.Web.Server.Session;
 
@@ -25,6 +27,29 @@ namespace XTMF2.Web.Server.Utils
 {
     public class ModelSystemUtils
     {
+
+        /// <summary>
+        /// Iterate over all model system objects
+        /// </summary>
+        /// <param name="modelSystem"></param>
+        /// <returns></returns>
+        public static IEnumerable<ViewObject> ModelSystemObjects(ModelSystemEditingModel modelSystem)
+        {
+            return ModelSystemObjectsTraverse(modelSystem.GlobalBoundary);
+        }
+
+        private static IEnumerable<ViewObject> ModelSystemObjectsTraverse(ViewObject viewObject)
+        {
+            if (viewObject is BoundaryModel boundary)
+            {
+                foreach (var b in boundary.Boundaries)
+                {
+                    yield return b;
+                }
+            }
+            yield return viewObject;
+        }
+
         /// <summary>
         /// Returns the model system object addressed by the passed path.
         /// </summary>
@@ -34,10 +59,12 @@ namespace XTMF2.Web.Server.Utils
         /// <returns></returns>
         public static T GetModelSystemObjectByPath<T>(XTMFRuntime runtime, ModelSystemSession modelSystemSession, Path path) where T : class
         {
-            if (path.Parts.Length == 0) {
+            if (path.Parts.Length == 0)
+            {
                 return (T)(object)modelSystemSession.ModelSystem.GlobalBoundary;
             }
-            else {
+            else
+            {
                 return Traverse<T>(modelSystemSession.ModelSystem.GlobalBoundary, path, 0);
             }
         }
@@ -51,43 +78,55 @@ namespace XTMF2.Web.Server.Utils
         /// <returns></returns>
         private static T Traverse<T>(Boundary current, Path path, int index) where T : class
         {
-            if (index >= path.Parts.Length - 1) {
+            if (index >= path.Parts.Length - 1)
+            {
                 Type type = typeof(T);
-                if (type == typeof(Boundary)) {
+                if (type == typeof(Boundary))
+                {
                     var boundary = current.Boundaries.FirstOrDefault(b => b.Name == path.Parts[index]);
-                    if (boundary != null) {
+                    if (boundary != null)
+                    {
                         return (T)(object)boundary;
                     }
                 }
-                else if (type == typeof(ModelSystemConstruct.Start)) {
+                else if (type == typeof(ModelSystemConstruct.Start))
+                {
                     var start = current.Starts.FirstOrDefault(s => s.Name == path.Parts[index]);
-                    if (start != null) {
+                    if (start != null)
+                    {
                         return (T)(object)start;
                     }
                 }
-                else if (type == typeof(ModelSystemConstruct.CommentBlock)) {
+                else if (type == typeof(ModelSystemConstruct.CommentBlock))
+                {
                     var commentBlock = current.CommentBlocks.FirstOrDefault(cb => cb.Comment == path.Parts[index]);
-                    if (commentBlock != null) {
+                    if (commentBlock != null)
+                    {
                         return (T)(object)commentBlock;
                     }
                 }
-                else if (type == typeof(Node)) {
+                else if (type == typeof(Node))
+                {
                     var node = current.Modules.FirstOrDefault(n => n.Name == path.Parts[index]);
-                    if (node != null) {
+                    if (node != null)
+                    {
                         return (T)(object)node;
                     }
                 }
                 // no matching element 
                 return null;
             }
-            else {
+            else
+            {
                 // find the boundary with this current name
                 var boundary = current.Boundaries.FirstOrDefault(b => b.Name == path.Parts[index]);
-                if (boundary == null) {
+                if (boundary == null)
+                {
                     // not a valid path
                     return null;
                 }
-                else {
+                else
+                {
                     return Traverse<T>(boundary, path, index + 1);
                 }
             }

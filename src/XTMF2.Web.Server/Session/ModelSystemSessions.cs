@@ -107,6 +107,7 @@ namespace XTMF2.Web.Server.Session
                 model = _mapper.Map<ModelSystemEditingModel>(session.ModelSystem);
                 ModelSystemEditingModels[session] = model;
             }
+            StoreModelSystemObjectReferenceMap(session, model);
             return model;
         }
 
@@ -126,6 +127,17 @@ namespace XTMF2.Web.Server.Session
             {
                 return ms.ModelSystemHeader == modelSystemHeader;
             });
+        }
+
+        /// <summary>
+        /// Stores all objects in the object/view/edit model reference maps
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="editingModel"></param>
+        private void StoreModelSystemObjectReferenceMap(ModelSystemSession session, ModelSystemEditingModel editingModel) {
+            foreach(var viewObject in Utils.ModelSystemUtils.ModelSystemObjects(editingModel)) {
+                ModelSystemObjectReferenceMap[session][viewObject.Id] = viewObject;
+            }
         }
     }
 }
