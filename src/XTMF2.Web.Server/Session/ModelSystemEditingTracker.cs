@@ -65,6 +65,10 @@ namespace XTMF2.Web.Server.Session
             ModelSystem = modelSystem;
         }
 
+         ~ModelSystemEditingTracker() {
+            Dispose();
+        }
+
         /// <summary>
         /// Register to track changes
         /// </summary>
