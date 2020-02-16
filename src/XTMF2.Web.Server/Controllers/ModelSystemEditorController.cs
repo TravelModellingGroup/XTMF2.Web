@@ -206,11 +206,11 @@ namespace XTMF2.Web.Server.Controllers
                 return requestResult;
             }
             string error = default;
-            Boundary parentBoundary = ModelSystemUtils.GetModelSystemObjectByPath<Boundary>(_xtmfRuntime, session, parentBoundaryPath);
+            var tracker = _modelSystemSessions.GetModelSystemEditingTracker(session);
+            Boundary parentBoundary = tracker.GetModelSystemObject<Boundary>(parentId);
             if (!session.AddModelSystemStart(userSession.User, parentBoundary, boundary.Name, out var start, ref error)) {
                 return new UnprocessableEntityObjectResult(error);
             }
-
             return new CreatedResult("AddStart", start);
         }
 
