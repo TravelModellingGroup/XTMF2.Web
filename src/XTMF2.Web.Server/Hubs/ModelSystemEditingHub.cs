@@ -99,6 +99,7 @@ namespace XTMF2.Web.Server.Hubs
         public void RegisterEditingTracker(ModelSystem model, ModelSystemEditingTracker tracker)
         {
             _tracking[model] = tracker;
+            tracker.OnModelSystemChanged += OnModelSystemChanged;
         }
 
         /// <summary>
@@ -107,7 +108,22 @@ namespace XTMF2.Web.Server.Hubs
         /// <param name="model"></param>
         public void UnRegisterEditingTracker(ModelSystem model)
         {
-            _tracking.Remove(model);
+            if (_tracking.TryGetValue(model, out var tracker))
+            {
+                _tracking.Remove(model);
+                tracker.OnModelSystemChanged -= OnModelSystemChanged;
+            }
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        public void OnModelSystemChanged(object sender, ModelSystemChangedEventArgs eventArgs)
+        {
+
         }
     }
 }

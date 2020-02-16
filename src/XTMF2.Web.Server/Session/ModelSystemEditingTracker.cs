@@ -44,9 +44,15 @@ namespace XTMF2.Web.Server.Session
         /// <returns></returns>
         public Dictionary<object, object> ModelSystemObjectRefrenceMap { get; } = new Dictionary<object, object>();
 
-        private List<EventHandler> _delegates = new List<EventHandler>();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <value></value>
+        public ModelSystemEditingModel ModelSystem { get; private set; }
 
-        private event EventHandler _onModelSystemChanged;
+        private List<EventHandler<ModelSystemChangedEventArgs>> _delegates = new List<EventHandler<ModelSystemChangedEventArgs>>();
+
+        private event EventHandler<ModelSystemChangedEventArgs> _onModelSystemChanged;
 
 
         /// <summary>
@@ -62,7 +68,7 @@ namespace XTMF2.Web.Server.Session
         /// <summary>
         /// Register to track changes
         /// </summary>
-        public event EventHandler OnModelSystemChanged
+        public event EventHandler<ModelSystemChangedEventArgs> OnModelSystemChanged
         {
             add
             {
@@ -76,7 +82,7 @@ namespace XTMF2.Web.Server.Session
             }
         }
 
-        public ModelSystemEditingModel ModelSystem { get; private set; }
+        
 
         public void Dispose()
         {
@@ -89,6 +95,7 @@ namespace XTMF2.Web.Server.Session
 
     public class ModelSystemChangedEventArgs : EventArgs
     {
+        public ViewObject EditingModelObject { get; set; }
 
     }
 
