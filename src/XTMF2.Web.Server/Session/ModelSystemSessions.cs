@@ -45,13 +45,11 @@ namespace XTMF2.Web.Server.Session
         new Dictionary<ModelSystemSession, ModelSystemEditingModel>();
 
         /// <summary>
-        /// Reference map for model system objects based on a GUID generated for the view model.
-        /// This is stored for efficiency and convenience. References are removed from the map when they are
-        /// removed from the model system.
+        /// Stores reference to model system editing trackers
         /// </summary>
-        /// <returns></returns>
-        public Dictionary<ModelSystemSession, Dictionary<Guid, object>> ModelSystemObjectReferenceMap { get; }
-        = new Dictionary<ModelSystemSession, Dictionary<Guid, object>>();
+        /// <value></value>
+        public Dictionary<ModelSystemSession, ModelSystemEditingTracker> ModelSystemEditingTrackers { get; } =
+        new Dictionary<ModelSystemSession, ModelSystemEditingTracker>();
 
         private readonly IMapper _mapper;
 
@@ -66,13 +64,19 @@ namespace XTMF2.Web.Server.Session
         /// <param name="user">The user to clear sessions for.</param>
         public void ClearSessionsForUser(User user)
         {
-            if (Sessions.ContainsKey(user)) {
+            if (Sessions.ContainsKey(user))
+            {
                 //dispose each session
-                foreach (var project in Sessions[user].Values) {
-                    foreach (var modelSystem in project) {
+                foreach (var project in Sessions[user].Values)
+                {
+                    foreach (var modelSystem in project)
+                    {
                         modelSystem.Dispose();
-                        if (modelSystem.References <= 0) {
+                        if (modelSystem.References <= 0)
+                        {
                             ModelSystemEditingModels.Remove(modelSystem);
+                            ModelSystemEditingTrackers[modelSystem].Dispose();
+                            ModelSystemEditingTrackers.Remove(modelSystem);
                         }
                     }
                 }
@@ -87,12 +91,15 @@ namespace XTMF2.Web.Server.Session
         /// <param name="session">The session to track.</param>
         public void TrackSessionForUser(User user, Project project, ModelSystemSession session)
         {
-            if (!Sessions.ContainsKey(user)) {
+            if (!Sessions.ContainsKey(user))
+            {
                 Sessions[user] = new Dictionary<Project, List<ModelSystemSession>>();
             }
-            if (!Sessions[user].TryGetValue(project, out var list)) {
+            if (!Sessions[user].TryGetValue(project, out var list))
+            {
                 Sessions[user][project] = new List<ModelSystemSession>();
             }
+            ModelSystemEditingTrackers[session] = new ModelSystemEditingTracker(GetModelSystemEditingModel(session));
             Sessions[user][project].Add(session);
         }
 
@@ -103,11 +110,11 @@ namespace XTMF2.Web.Server.Session
         /// <returns>The editing model for the passed model system / session</returns>
         public ModelSystemEditingModel GetModelSystemEditingModel(ModelSystemSession session)
         {
-            if (!ModelSystemEditingModels.TryGetValue(session, out var model)) {
+            if (!ModelSystemEditingModels.TryGetValue(session, out var model))
+            {
                 model = _mapper.Map<ModelSystemEditingModel>(session.ModelSystem);
                 ModelSystemEditingModels[session] = model;
             }
-            StoreModelSystemObjectReferenceMap(session, model);
             return model;
         }
 
@@ -120,7 +127,8 @@ namespace XTMF2.Web.Server.Session
         /// <returns></returns>
         public ModelSystemSession GetModelSystemSession(User user, Project project, ModelSystemHeader modelSystemHeader)
         {
-            if (!Sessions.ContainsKey(user) && !Sessions[user].ContainsKey(project)) {
+            if (!Sessions.ContainsKey(user) && !Sessions[user].ContainsKey(project))
+            {
                 return null;
             }
             return Sessions[user][project].Find(ms =>
@@ -130,14 +138,15 @@ namespace XTMF2.Web.Server.Session
         }
 
         /// <summary>
-        /// Stores all objects in the object/view/edit model reference maps
+        /// 
         /// </summary>
         /// <param name="session"></param>
-        /// <param name="editingModel"></param>
-        private void StoreModelSystemObjectReferenceMap(ModelSystemSession session, ModelSystemEditingModel editingModel) {
-            foreach(var viewObject in Utils.ModelSystemUtils.ModelSystemObjects(editingModel)) {
-                ModelSystemObjectReferenceMap[session][viewObject.Id] = viewObject;
-            }
+        /// <returns></returns>
+        public ModelSystemEditingTracker GetModelSystemEditingTracker(ModelSystemSession session)
+        {
+            return ModelSystemEditingTrackers[session];
         }
+
+
     }
 }

@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 using XTMF2.Editing;
@@ -34,7 +35,7 @@ namespace XTMF2.Web.Server.Session
         /// <typeparam name="Guid"></typeparam>
         /// <typeparam name="object"></typeparam>
         /// <returns></returns>
-        public Dictionary<Guid, object> ModelSystemEditingObjectReferenceMap { get; } = new Dictionary<Guid, object>();
+        public Dictionary<Guid, ViewObject> ModelSystemEditingObjectReferenceMap { get; } = new Dictionary<Guid, ViewObject>();
 
         /// <summary>
         /// Tracks the underlying model system to editing model references
@@ -42,7 +43,7 @@ namespace XTMF2.Web.Server.Session
         /// <typeparam name="object"></typeparam>
         /// <typeparam name="object"></typeparam>
         /// <returns></returns>
-        public Dictionary<object, object> ModelSystemObjectRefrenceMap { get; } = new Dictionary<object, object>();
+        public Dictionary<object, ViewObject> ModelSystemObjectRefrenceMap { get; } = new Dictionary<object, ViewObject>();
 
         /// <summary>
         /// 
@@ -52,22 +53,27 @@ namespace XTMF2.Web.Server.Session
 
         private List<EventHandler<ModelSystemChangedEventArgs>> _delegates = new List<EventHandler<ModelSystemChangedEventArgs>>();
 
-        private event EventHandler<ModelSystemChangedEventArgs> _onModelSystemChanged;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ViewObject GetModelSystemEditingObject(Guid id)
+        {
+            return ModelSystemEditingObjectReferenceMap[id];
+        }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="hub"></param>
-        /// <param name="modelSystem"></param>
-        public ModelSystemEditingTracker(ModelSystemEditingModel modelSystem)
+        /// <param name="id"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T GetModelSystemObject<T>(Guid id)
         {
-            ModelSystem = modelSystem;
+            return (T)ModelSystemEditingObjectReferenceMap[id].ObjectReference;
         }
 
-         ~ModelSystemEditingTracker() {
-            Dispose();
-        }
 
         /// <summary>
         /// Register to track changes
@@ -84,6 +90,53 @@ namespace XTMF2.Web.Server.Session
                 _delegates.Remove(value);
                 _onModelSystemChanged -= value;
             }
+        }
+
+        private event EventHandler<ModelSystemChangedEventArgs> _onModelSystemChanged;
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="hub"></param>
+        /// <param name="modelSystem"></param>
+        public ModelSystemEditingTracker(ModelSystemEditingModel modelSystem)
+        {
+            ModelSystem = modelSystem;
+            StoreModelSystemObjectReferenceMap(modelSystem);
+        }
+
+        ~ModelSystemEditingTracker()
+        {
+            Dispose();
+        }
+
+        /// <summary>
+        /// Stores all objects in the object/view/edit model reference maps
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="editingModel"></param>
+        private void StoreModelSystemObjectReferenceMap(ModelSystemEditingModel editingModel)
+        {
+            foreach (var viewObject in Utils.ModelSystemUtils.ModelSystemObjects(editingModel))
+            {
+                ModelSystemObjectRefrenceMap[viewObject.Id] = viewObject;
+                ModelSystemObjectRefrenceMap[viewObject.ObjectReference] = viewObject;
+                if (ModelSystemObjectRefrenceMap[viewObject.ObjectReference] is INotifyPropertyChanged prop)
+                {
+                    prop.PropertyChanged += OnModelSystemPropertyChanged;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnModelSystemPropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            Console.WriteLine("here");
         }
 
         public void Dispose()

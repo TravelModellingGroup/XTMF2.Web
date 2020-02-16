@@ -15,6 +15,7 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -172,18 +173,18 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/boundary")]
-        public IActionResult AddBoundary(string projectName, string modelSystemName, [FromHeader] Path parentBoundaryPath,
+        public IActionResult AddBoundary(string projectName, string modelSystemName, [FromQuery] Guid parentId,
         [FromBody] BoundaryModel boundary, [FromServices] UserSession userSession)
         {
             if (!HandleRequest(projectName, modelSystemName, userSession, out var session, out var requestResult)) {
                 return requestResult;
             }
             string error = default;
-            Boundary parentBoundary = ModelSystemUtils.GetModelSystemObjectByPath<Boundary>(_xtmfRuntime, session, parentBoundaryPath);
+            var tracker = _modelSystemSessions.GetModelSystemEditingTracker(session);
+            Boundary parentBoundary = tracker.GetModelSystemObject<Boundary>(parentId);
             if (!session.AddBoundary(userSession.User, parentBoundary, boundary.Name, out var newBoundary, ref error)) {
                 return new UnprocessableEntityObjectResult(error);
             }
-
             return new CreatedResult("AddBoundary", newBoundary);
         }
 
@@ -198,7 +199,7 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/start")]
-        public IActionResult AddModelSystemStart(string projectName, string modelSystemName, [FromHeader] Path parentBoundaryPath,
+        public IActionResult AddModelSystemStart(string projectName, string modelSystemName, [FromQuery] Guid parentId,
                         [FromBody] BoundaryModel boundary, [FromServices] UserSession userSession)
         {
             if (!HandleRequest(projectName, modelSystemName, userSession, out var session, out var requestResult)) {

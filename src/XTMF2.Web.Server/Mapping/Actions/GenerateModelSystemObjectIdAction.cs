@@ -33,6 +33,7 @@ namespace XTMF2.Web.Server.Mapping.Actions
         public void Process(TSrc source, TDest destination, ResolutionContext context)
         {
             destination.Id = System.Guid.NewGuid();
+            destination.ObjectReference = source;
         }
     }
 }
