@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using XTMF2.Web.Server.Session;
 
 namespace XTMF2.Web.Server.Hubs
 {
@@ -48,6 +49,10 @@ namespace XTMF2.Web.Server.Hubs
         /// </summary>
         /// <returns></returns>
         private readonly Dictionary<User, HashSet<string>> _userConnectionIds = new Dictionary<User, HashSet<string>>();
+
+        private readonly Dictionary<ModelSystem, ModelSystemEditingTracker> _tracking = new Dictionary<ModelSystem, ModelSystemEditingTracker>();
+
+
 
         /// <summary>
         /// 
@@ -84,6 +89,25 @@ namespace XTMF2.Web.Server.Hubs
         {
             _logger.LogInformation("Client disconnected");
             await base.OnDisconnectedAsync(exception);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="tracker"></param>
+        public void RegisterEditingTracker(ModelSystem model, ModelSystemEditingTracker tracker)
+        {
+            _tracking[model] = tracker;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        public void UnRegisterEditingTracker(ModelSystem model)
+        {
+            _tracking.Remove(model);
         }
     }
 }

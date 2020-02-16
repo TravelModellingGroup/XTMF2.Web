@@ -18,13 +18,15 @@
 using System;
 using System.Collections.Generic;
 using AutoMapper;
+using Microsoft.AspNetCore.SignalR;
 using XTMF2.Editing;
 using XTMF2.Web.Data.Models.Editing;
+using XTMF2.Web.Server.Hubs;
 
 namespace XTMF2.Web.Server.Session
 {
 
-    public class ModelSystemEditingTracker
+    public class ModelSystemEditingTracker : IDisposable
     {
         /// <summary>
         /// Tracks GUID to model system editing references
@@ -32,7 +34,7 @@ namespace XTMF2.Web.Server.Session
         /// <typeparam name="Guid"></typeparam>
         /// <typeparam name="object"></typeparam>
         /// <returns></returns>
-        public Dictionary<Guid, object> ModelSystemEditingObjectReferenceMap { get; }= new Dictionary<Guid, object>();
+        public Dictionary<Guid, object> ModelSystemEditingObjectReferenceMap { get; } = new Dictionary<Guid, object>();
 
         /// <summary>
         /// Tracks the underlying model system to editing model references
@@ -40,18 +42,54 @@ namespace XTMF2.Web.Server.Session
         /// <typeparam name="object"></typeparam>
         /// <typeparam name="object"></typeparam>
         /// <returns></returns>
-        public Dictionary<object, object> ModelSystemObjectRefrenceMap { get; }= new Dictionary<object, object>();
+        public Dictionary<object, object> ModelSystemObjectRefrenceMap { get; } = new Dictionary<object, object>();
+
+        private List<EventHandler> _delegates = new List<EventHandler>();
+
+        private event EventHandler _onModelSystemChanged;
 
 
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="hub"></param>
         /// <param name="modelSystem"></param>
         public ModelSystemEditingTracker(ModelSystemEditingModel modelSystem)
         {
             ModelSystem = modelSystem;
         }
+
+        /// <summary>
+        /// Register to track changes
+        /// </summary>
+        public event EventHandler OnModelSystemChanged
+        {
+            add
+            {
+                _delegates.Add(value);
+                _onModelSystemChanged += value;
+            }
+            remove
+            {
+                _delegates.Remove(value);
+                _onModelSystemChanged -= value;
+            }
+        }
+
         public ModelSystemEditingModel ModelSystem { get; private set; }
+
+        public void Dispose()
+        {
+            foreach (var e in _delegates)
+            {
+                _onModelSystemChanged -= e;
+            }
+        }
+    }
+
+    public class ModelSystemChangedEventArgs : EventArgs
+    {
+
     }
 
 }
