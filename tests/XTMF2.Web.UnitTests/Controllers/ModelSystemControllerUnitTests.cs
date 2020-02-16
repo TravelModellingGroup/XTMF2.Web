@@ -16,6 +16,7 @@
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -83,7 +84,7 @@ namespace XTMF2.Web.UnitTests.Controllers
             }, _userSession);
             var queryResult = _controller.Get("projectName", "NameTest", _userSession);
             Assert.IsAssignableFrom<CreatedResult>(result);
-            Assert.Equal("NameTest", ((ModelSystemModel) ((OkObjectResult) queryResult).Value).Name);
+            Assert.Equal("NameTest", ((ModelSystemModel)((OkObjectResult)queryResult).Value).Name);
         }
 
         /// <summary>
@@ -185,6 +186,58 @@ namespace XTMF2.Web.UnitTests.Controllers
             }, _userSession);
             var result = _controller.Get("projectName", "MSName", _userSession);
             Assert.IsAssignableFrom<OkObjectResult>(result);
+        }
+
+        /// <summary>
+        ///     Tests that retrieval of a valid model system returns the correct model system.
+        /// </summary>
+        [Fact]
+        public void ModelSystemList_ReturnsOkObject_WhenValidRetrieved()
+        {
+            _projectController.Create("projectName", _userSession);
+            _controller.Create("projectName", new ModelSystemModel
+            {
+                Description = "Description",
+                Name = "MSName"
+            }, _userSession);
+            _controller.Create("projectName", new ModelSystemModel
+            {
+                Description = "Description",
+                Name = "MSName2"
+            }, _userSession);
+            var result = _controller.List("projectName", _userSession);
+            Assert.IsAssignableFrom<OkObjectResult>(result);
+            Assert.IsAssignableFrom<List<ModelSystemModel>>(((OkObjectResult)result).Value);
+            Assert.Collection((IEnumerable<ModelSystemModel>)((OkObjectResult)result).Value, item =>
+            {
+                item.Name = "MSName";
+            }, item =>
+            {
+                item.Name = "MSNam2";
+            });
+        }
+
+                /// <summary>
+        ///     Tests that retrieval of a valid model system returns the correct model system.
+        /// </summary>
+        [Fact]
+        public void ModelSystemList_ReturnsOkObjectEmptyList_WhenNoModelSystems()
+        {
+            _projectController.Create("projectName", _userSession);
+            _controller.Create("projectName", new ModelSystemModel
+            {
+                Description = "Description",
+                Name = "MSName"
+            }, _userSession);
+            _controller.Create("projectName", new ModelSystemModel
+            {
+                Description = "Description",
+                Name = "MSName2"
+            }, _userSession);
+            var result = _controller.List("projectName", _userSession);
+            Assert.IsAssignableFrom<OkObjectResult>(result);
+            Assert.IsAssignableFrom<List<ModelSystemModel>>(((OkObjectResult)result).Value);
+            Assert.Empty((IEnumerable<ModelSystemModel>)((OkObjectResult)result).Value);
         }
     }
 }

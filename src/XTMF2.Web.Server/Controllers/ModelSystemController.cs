@@ -15,6 +15,7 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -121,6 +122,24 @@ namespace XTMF2.Web.Server.Controllers
             }
 
             return new OkObjectResult(_mapper.Map<ModelSystemModel>(modelSystemHeader));
+        }
+
+        /// <summary>
+        /// Returns the list of model systems existing on a project
+        /// </summary>
+        /// <param name="projectName">The project name</param>
+        /// <param name="userSession">The active / current user session</param>
+        /// <returns>A list of model systems</returns>
+        [HttpGet("projects/{projectName}/model-systems")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(IEnumerable<ModelSystemModel>), StatusCodes.Status200OK)]
+        public IActionResult List(string projectName, [FromServices] UserSession userSession) {
+            string error = default;
+            if(!XtmfUtils.GetProjectSession(_xtmfRuntime,userSession, projectName, out var projectSession, _projectSessions, ref error)) {
+                return new NotFoundObjectResult(error);
+            }
+            return new OkObjectResult(_mapper.Map<List<ModelSystemModel>>(projectSession.ModelSystems));
+
         }
 
         /// <summary>

@@ -114,7 +114,7 @@ namespace XTMF2.Web.Server.Controllers {
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(IEnumerable<ProjectModel>), StatusCodes.Status200OK)]
-        [Authorize(Policy = nameof(ModelSystemAccessRequirement))]
+        // [Authorize(Policy = nameof(ModelSystemAccessRequirement))]
         public ActionResult<IEnumerable<ProjectModel>> List([FromServices] UserSession state)
         {
             return new OkObjectResult(_mapper.Map<List<ProjectModel>>(state.Projects));
