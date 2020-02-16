@@ -217,23 +217,13 @@ namespace XTMF2.Web.UnitTests.Controllers
             });
         }
 
-                /// <summary>
+        /// <summary>
         ///     Tests that retrieval of a valid model system returns the correct model system.
         /// </summary>
         [Fact]
         public void ModelSystemList_ReturnsOkObjectEmptyList_WhenNoModelSystems()
         {
             _projectController.Create("projectName", _userSession);
-            _controller.Create("projectName", new ModelSystemModel
-            {
-                Description = "Description",
-                Name = "MSName"
-            }, _userSession);
-            _controller.Create("projectName", new ModelSystemModel
-            {
-                Description = "Description",
-                Name = "MSName2"
-            }, _userSession);
             var result = _controller.List("projectName", _userSession);
             Assert.IsAssignableFrom<OkObjectResult>(result);
             Assert.IsAssignableFrom<List<ModelSystemModel>>(((OkObjectResult)result).Value);
