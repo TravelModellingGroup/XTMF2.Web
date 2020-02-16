@@ -27,6 +27,9 @@ using XTMF2.Web.Server.Hubs;
 namespace XTMF2.Web.Server.Session
 {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class ModelSystemEditingTracker : IDisposable
     {
         /// <summary>
@@ -46,7 +49,7 @@ namespace XTMF2.Web.Server.Session
         public Dictionary<object, ViewObject> ModelSystemObjectRefrenceMap { get; } = new Dictionary<object, ViewObject>();
 
         /// <summary>
-        /// 
+        /// Delegate tracker for objects subscribiding to model system changes
         /// </summary>
         /// <value></value>
         public ModelSystemEditingModel ModelSystem { get; private set; }
@@ -73,7 +76,6 @@ namespace XTMF2.Web.Server.Session
         {
             return (T)ModelSystemEditingObjectReferenceMap[id].ObjectReference;
         }
-
 
         /// <summary>
         /// Register to track changes
@@ -137,8 +139,14 @@ namespace XTMF2.Web.Server.Session
         private void OnModelSystemPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
             Console.WriteLine("here");
+            _onModelSystemChanged?.Invoke(this, new ModelSystemChangedEventArgs() {
+                EditingModelObject = ModelSystemObjectRefrenceMap[sender]
+            });
         }
 
+        /// <summary>
+        /// Disposes the tracker and unregisters delegates
+        /// </summary>
         public void Dispose()
         {
             foreach (var e in _delegates)
