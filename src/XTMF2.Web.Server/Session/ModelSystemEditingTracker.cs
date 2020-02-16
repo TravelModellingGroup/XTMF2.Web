@@ -86,8 +86,6 @@ namespace XTMF2.Web.Server.Session
             }
         }
 
-        
-
         public void Dispose()
         {
             foreach (var e in _delegates)
