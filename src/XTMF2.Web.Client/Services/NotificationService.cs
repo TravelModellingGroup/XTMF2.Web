@@ -15,6 +15,7 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using Microsoft.JSInterop;
 namespace XTMF2.Web.Client.Services
 {
     /// <summary>
@@ -22,10 +23,29 @@ namespace XTMF2.Web.Client.Services
     /// </summary>
     public class NotificationService
     {
-
-        public NotificationService()
+        private IJSRuntime _runtime;
+        public NotificationService(IJSRuntime runtime)
         {
+            _runtime = runtime;
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public async void SuccessMessage(string message)
+        {
+            await _runtime.InvokeAsync<string>("successMessage", message);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public async void ErrorMessage(string message) {
+            await _runtime.InvokeAsync<string>("notyf.error", message);
         }
     }
 }
