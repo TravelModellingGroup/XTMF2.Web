@@ -20,6 +20,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using XTMF2.Editing;
 using XTMF2.Web.Data.Models;
 using XTMF2.Web.Server.Session;
 using XTMF2.Web.Server.Utils;
@@ -52,15 +53,14 @@ namespace XTMF2.Web.Server.Controllers
         public IActionResult Create(string projectName, [FromBody] ModelSystemModel modelSystemModel,
             [FromServices] UserSession userSession)
         {
-            var error = default(string);
             if (!XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession,
-                _projectSessions, ref error))
+                _projectSessions, out var error))
             {
                 return new NotFoundObjectResult(error);
             }
 
             if (projectSession.CreateNewModelSystem(userSession.User, modelSystemModel.Name, out var modelSystem,
-                ref error))
+                out error))
             {
                 return new CreatedResult(nameof(ModelSystemController), _mapper.Map<ModelSystemModel>(modelSystem));
             }
@@ -81,20 +81,19 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult Delete(string projectName, string modelSystemName, [FromServices] UserSession userSession)
         {
-            string error = default;
             if (!XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession,
-                _projectSessions, ref error))
+                _projectSessions, out var error))
             {
                 return new NotFoundObjectResult(error);
             }
 
             if (!XtmfUtils.GetModelSystemHeader(_xtmfRuntime, userSession, _projectSessions, projectName,
-                modelSystemName, out var modelSystemHeader, ref error))
+                modelSystemName, out var modelSystemHeader, out error))
             {
                 return new NotFoundObjectResult(error);
             }
 
-            if (!projectSession.RemoveModelSystem(userSession.User, modelSystemHeader, ref error))
+            if (!projectSession.RemoveModelSystem(userSession.User, modelSystemHeader, out  error))
             {
                 return new UnprocessableEntityObjectResult(error);
             }
@@ -114,9 +113,8 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(typeof(ModelSystemModel), StatusCodes.Status200OK)]
         public IActionResult Get(string projectName, string modelSystemName, [FromServices] UserSession userSession)
         {
-            string error = default;
             if (!XtmfUtils.GetModelSystemHeader(_xtmfRuntime, userSession, _projectSessions, projectName,
-                modelSystemName, out var modelSystemHeader, ref error))
+                modelSystemName, out var modelSystemHeader, out var error))
             {
                 return new NotFoundObjectResult(error);
             }
@@ -134,8 +132,7 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(IEnumerable<ModelSystemModel>), StatusCodes.Status200OK)]
         public IActionResult List(string projectName, [FromServices] UserSession userSession) {
-            string error = default;
-            if(!XtmfUtils.GetProjectSession(_xtmfRuntime,userSession, projectName, out var projectSession, _projectSessions, ref error)) {
+            if(!XtmfUtils.GetProjectSession(_xtmfRuntime,userSession, projectName, out var projectSession, _projectSessions, out var error)) {
                 return new NotFoundObjectResult(error);
             }
             return new OkObjectResult(_mapper.Map<List<ModelSystemModel>>(projectSession.ModelSystems));

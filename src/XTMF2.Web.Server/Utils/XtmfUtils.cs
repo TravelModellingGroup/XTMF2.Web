@@ -37,12 +37,12 @@ namespace XTMF2.Web.Server.Utils
         /// <returns></returns>
         public static bool GetProjectSession(XTMFRuntime runtime, UserSession userSession, string projectName,
             out ProjectSession projectSession, ProjectSessions projectSessions,
-            ref string error)
+             out CommandError error)
         {
             var project = GetProject(projectName, userSession);
             if (project == null)
             {
-                error = "Invalid project";
+                error = new CommandError("Project does not exist.");
                 projectSession = null;
                 return false;
             }
@@ -52,11 +52,12 @@ namespace XTMF2.Web.Server.Utils
                 projectSession = projectSessions.Sessions[userSession.User].FirstOrDefault(p => p.Project == project);
                 if (projectSession != null)
                 {
+                    error = null;
                     return true;
                 }
             }
             // otherwise get the project session from the xtmf project controller
-            if (!runtime.ProjectController.GetProjectSession(userSession.User, project, out projectSession, ref error))
+            if (!runtime.ProjectController.GetProjectSession(userSession.User, project, out projectSession, out error))
             {
                 return false;
             }
@@ -94,14 +95,14 @@ namespace XTMF2.Web.Server.Utils
         /// <param name="error"></param>
         /// <returns></returns>
         public static bool GetModelSystemHeader(XTMFRuntime runtime, UserSession userSession, ProjectSessions projectSessions,
-            string projectName, string modelSystemName, out ModelSystemHeader modelSystem, ref string error)
+            string projectName, string modelSystemName, out ModelSystemHeader modelSystem, out CommandError error)
         {
-            if (!GetProjectSession(runtime, userSession, projectName, out var projectSession, projectSessions, ref error))
+            if (!GetProjectSession(runtime, userSession, projectName, out var projectSession, projectSessions, out error))
             {
                 modelSystem = null;
                 return false;
             }
-            if (!projectSession.GetModelSystemHeader(userSession.User, modelSystemName, out modelSystem, ref error))
+            if (!projectSession.GetModelSystemHeader(userSession.User, modelSystemName, out modelSystem, out error))
             {
                 return false;
             }

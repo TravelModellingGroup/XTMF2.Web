@@ -78,18 +78,17 @@ namespace XTMF2.Web.Server.Controllers
         /// <returns></returns>
         private bool HandleRequest(string projectName, string modelSystemName, UserSession userSession, out Editing.ModelSystemSession session, out IActionResult result)
         {
-            string error = default;
-            if (!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime, userSession, _projectSessions, projectName, modelSystemName, out var modelSystemHeader, ref error)) {
+            if (!Utils.XtmfUtils.GetModelSystemHeader(_xtmfRuntime, userSession, _projectSessions, projectName, modelSystemName, out var modelSystemHeader, out var error)) {
+                result =  error.UnauthorizedUser ? new UnauthorizedResult() : (IActionResult)(new NotFoundObjectResult(error));
+                session = null;
+                return false;
+            }
+            if (!Utils.XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession, _projectSessions, out error)) {
                 result = new NotFoundObjectResult(error);
                 session = null;
                 return false;
             }
-            if (!Utils.XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession, _projectSessions, ref error)) {
-                result = new NotFoundObjectResult(error);
-                session = null;
-                return false;
-            }
-            if (!projectSession.EditModelSystem(userSession.User, modelSystemHeader, out session, ref error)) {
+            if (!projectSession.EditModelSystem(userSession.User, modelSystemHeader, out session, out error)) {
                 result = new UnprocessableEntityObjectResult(error);
                 return false;
             }
@@ -179,10 +178,9 @@ namespace XTMF2.Web.Server.Controllers
             if (!HandleRequest(projectName, modelSystemName, userSession, out var session, out var requestResult)) {
                 return requestResult;
             }
-            string error = default;
             var tracker = _modelSystemSessions.GetModelSystemEditingTracker(session);
             Boundary parentBoundary = tracker.GetModelSystemObject<Boundary>(parentId);
-            if (!session.AddBoundary(userSession.User, parentBoundary, boundary.Name, out var newBoundary, ref error)) {
+            if (!session.AddBoundary(userSession.User, parentBoundary, boundary.Name, out var newBoundary, out var error)) {
                 return new UnprocessableEntityObjectResult(error);
             }
             return new CreatedResult("AddBoundary", newBoundary);
@@ -205,10 +203,9 @@ namespace XTMF2.Web.Server.Controllers
             if (!HandleRequest(projectName, modelSystemName, userSession, out var session, out var requestResult)) {
                 return requestResult;
             }
-            string error = default;
             var tracker = _modelSystemSessions.GetModelSystemEditingTracker(session);
             Boundary parentBoundary = tracker.GetModelSystemObject<Boundary>(parentId);
-            if (!session.AddModelSystemStart(userSession.User, parentBoundary, boundary.Name, out var start, ref error)) {
+            if (!session.AddModelSystemStart(userSession.User, parentBoundary, boundary.Name, out var start, out var error)) {
                 return new UnprocessableEntityObjectResult(error);
             }
             return new CreatedResult("AddStart", start);
@@ -234,10 +231,9 @@ namespace XTMF2.Web.Server.Controllers
                 modelSystemName, _projectSessions, _modelSystemSessions, out var modelSystemSession)) {
                 return new NotFoundObjectResult(null);
             }
-            string error = default;
             Boundary parentBoundary = ModelSystemUtils.GetModelSystemObjectByPath<Boundary>(_xtmfRuntime, modelSystemSession, parentBoundaryPath);
             if (!modelSystemSession.AddCommentBlock(userSession.User, parentBoundary,
-             commentBlock.Text, new Rectangle(commentBlock.Location.X, commentBlock.Location.Y, commentBlock.Location.Width, commentBlock.Location.Height), out var commentBlockRef, ref error)) {
+             commentBlock.Text, new Rectangle(commentBlock.Location.X, commentBlock.Location.Y, commentBlock.Location.Width, commentBlock.Location.Height), out var commentBlockRef, out var error)) {
                 return new UnprocessableEntityObjectResult(error);
             }
             return new CreatedResult("AddCommentBlock", commentBlockRef);

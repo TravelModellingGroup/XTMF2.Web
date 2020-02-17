@@ -33,10 +33,9 @@ namespace XTMF2.Web.UnitTests
         /// <returns></returns>
         public static User CreateTestUser(string userName)
         {
-            string error = default;
             UserController = Runtime.UserController;
             ProjectController = Runtime.ProjectController;
-            UserController.CreateNew(userName, true, out var user, ref error);
+            UserController.CreateNew(userName, true, out var user, out var error);
             return user;
         }
 
@@ -59,20 +58,19 @@ namespace XTMF2.Web.UnitTests
         public static void InitializeTestModelSystem(User user, string projectName, string modelSystemName,
             out ModelSystemSession modelSystemSession)
         {
-            string error = default;
-            ProjectController.CreateNewProject(user, projectName, out var projectSession, ref error);
-            projectSession.CreateNewModelSystem(user, modelSystemName, out var modelSystem, ref error);
-            projectSession.EditModelSystem(user, modelSystem, out modelSystemSession, ref error);
+            ProjectController.CreateNewProject(user, projectName, out var projectSession, out var error);
+            projectSession.CreateNewModelSystem(user, modelSystemName, out var modelSystem, out error);
+            projectSession.EditModelSystem(user, modelSystem, out modelSystemSession, out error);
 
             modelSystemSession.AddModelSystemStart(user, modelSystemSession.ModelSystem.GlobalBoundary, "TestStart",
-                out var start, ref error);
+                out var start, out error);
             modelSystemSession.AddNode(user, modelSystemSession.ModelSystem.GlobalBoundary, "TestNode1",
-                typeof(SimpleTestModule), out var node, ref error);
-            modelSystemSession.AddLink(user, start, start.Hooks[0], node, out var link, ref error);
+                typeof(SimpleTestModule), out var node, out error);
+            modelSystemSession.AddLink(user, start, start.Hooks[0], node, out var link, out error);
             modelSystemSession.AddBoundary(user, modelSystemSession.ModelSystem.GlobalBoundary, "TestBoundary1",
-                out var boundary, ref error);
+                out var boundary, out error);
             modelSystemSession.AddNode(user, boundary, "TestNode2",
-                typeof(SimpleTestModule), out var testNode2, ref error);
+                typeof(SimpleTestModule), out var testNode2, out error);
         }
 
         static TestHelper()

@@ -99,7 +99,7 @@ namespace XTMF2.Web.UnitTests.Controllers
         public void DeletePost_ReturnsNotFound_WhenProjectDeleted()
         {
             var result = _controller.Delete("projectName", _userSession);
-            Assert.IsAssignableFrom<NotFoundObjectResult>(result);
+            Assert.IsAssignableFrom<NotFoundResult>(result);
         }
 
         /// <summary>
