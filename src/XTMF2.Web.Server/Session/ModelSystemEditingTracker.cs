@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
@@ -122,11 +123,15 @@ namespace XTMF2.Web.Server.Session
         {
             foreach (var viewObject in Utils.ModelSystemUtils.ModelSystemObjects(editingModel))
             {
-                ModelSystemObjectRefrenceMap[viewObject.Id] = viewObject;
+                ModelSystemEditingObjectReferenceMap[viewObject.Id] = viewObject;
                 ModelSystemObjectRefrenceMap[viewObject.ObjectReference] = viewObject;
-                if (ModelSystemObjectRefrenceMap[viewObject.ObjectReference] is INotifyPropertyChanged prop)
+                if (ModelSystemObjectRefrenceMap[viewObject.ObjectReference].ObjectReference is INotifyPropertyChanged prop)
                 {
                     prop.PropertyChanged += OnModelSystemPropertyChanged;
+                }
+                if (ModelSystemObjectRefrenceMap[viewObject.ObjectReference].ObjectReference is Boundary boundary)
+                {
+                    ((INotifyCollectionChanged)boundary.Boundaries).CollectionChanged += OnModelSystemCollectionChanged;
                 }
             }
         }
@@ -138,8 +143,21 @@ namespace XTMF2.Web.Server.Session
         /// <param name="args"></param>
         private void OnModelSystemPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
-            Console.WriteLine("here");
-            _onModelSystemChanged?.Invoke(this, new ModelSystemChangedEventArgs() {
+            _onModelSystemChanged?.Invoke(this, new ModelSystemChangedEventArgs(args)
+            {
+                EditingModelObject = ModelSystemObjectRefrenceMap[sender]
+            });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnModelSystemCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            _onModelSystemChanged?.Invoke(this, new ModelSystemChangedEventArgs(args)
+            {
                 EditingModelObject = ModelSystemObjectRefrenceMap[sender]
             });
         }
@@ -158,7 +176,13 @@ namespace XTMF2.Web.Server.Session
 
     public class ModelSystemChangedEventArgs : EventArgs
     {
+        public ModelSystemChangedEventArgs(EventArgs args)
+        {
+            Args = args;
+        }
         public ViewObject EditingModelObject { get; set; }
+
+        public EventArgs Args { get; set; }
 
     }
 
