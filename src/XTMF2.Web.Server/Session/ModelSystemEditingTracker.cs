@@ -125,13 +125,17 @@ namespace XTMF2.Web.Server.Session
             {
                 ModelSystemEditingObjectReferenceMap[viewObject.Id] = viewObject;
                 ModelSystemObjectRefrenceMap[viewObject.ObjectReference] = viewObject;
-                if (ModelSystemObjectRefrenceMap[viewObject.ObjectReference].ObjectReference is INotifyPropertyChanged prop)
+                if (viewObject.ObjectReference is INotifyPropertyChanged prop)
                 {
                     prop.PropertyChanged += OnModelSystemPropertyChanged;
                 }
-                if (ModelSystemObjectRefrenceMap[viewObject.ObjectReference].ObjectReference is Boundary boundary)
+                if (viewObject.ObjectReference is Boundary boundary)
                 {
                     ((INotifyCollectionChanged)boundary.Boundaries).CollectionChanged += OnModelSystemCollectionChanged;
+                    ((INotifyCollectionChanged)boundary.Modules).CollectionChanged += OnModelSystemCollectionChanged;
+                    ((INotifyCollectionChanged)boundary.Links).CollectionChanged += OnModelSystemCollectionChanged;
+                    ((INotifyCollectionChanged)boundary.CommentBlocks).CollectionChanged += OnModelSystemCollectionChanged;
+                    ((INotifyCollectionChanged)boundary.Starts).CollectionChanged += OnModelSystemCollectionChanged;
                 }
             }
         }
