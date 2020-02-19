@@ -42,12 +42,17 @@ namespace XTMF2.Web.UnitTests.Sessions
             _user = TestHelper.CreateTestUser(Guid.NewGuid().ToString());
         }
 
+        /// <summary>
+        /// Tests that references are stored in the object map
+        /// </summary>
         [Fact]
         public void NewTracker_StoresAllReferencesCorrectly()
         {
             TestHelper.InitializeTestModelSystem(_user, "ProjectName", "TestModelSystem", out var session);
             var editingModel = _mapper.Map<ModelSystemEditingModel>(session.ModelSystem);
             var tracker = new ModelSystemEditingTracker(editingModel);
+            Assert.Equal(tracker.ModelSystemObjectRefrenceMap.Count, tracker.ModelSystemEditingObjectReferenceMap.Count);
+            Assert.True(tracker.ModelSystemEditingObjectReferenceMap.Count > 0);
         }
 
         public void Dispose()
