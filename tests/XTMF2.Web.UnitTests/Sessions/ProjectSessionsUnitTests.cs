@@ -23,7 +23,6 @@ namespace XTMF2.Web.UnitTests.Sessions
     /// <summary>
     ///     Unit tests related to the SessionContextUnitHub
     /// </summary>
-    [Collection("Sequential")]
     public class ProjectSessionsUnitTests : IDisposable
     {
         public void Dispose()

@@ -55,7 +55,7 @@ namespace XTMF2.Web.UnitTests
         /// <param name="projectName"></param>
         /// <param name="modelSystemName"></param>
         /// <param name="modelSystemSession"></param>
-        public static void InitializeTestModelSystem(User user, string projectName, string modelSystemName,
+        public static ModelSystemSession InitializeTestModelSystem(User user, string projectName, string modelSystemName,
             out ModelSystemSession modelSystemSession)
         {
             ProjectController.CreateNewProject(user, projectName, out var projectSession, out var error);
@@ -71,6 +71,7 @@ namespace XTMF2.Web.UnitTests
                 out var boundary, out error);
             modelSystemSession.AddNode(user, boundary, "TestNode2",
                 typeof(SimpleTestModule), out var testNode2, out error);
+            return modelSystemSession;
         }
 
         static TestHelper()
