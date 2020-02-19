@@ -23,13 +23,22 @@ namespace XTMF2.Web.Data.Types
     /// <summary>
     /// 
     /// </summary>
-    public class Path : IPath
+    public struct Path
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="parts"></param>
+        public Path(Guid id, string [] parts) {
+            Id = id;
+            Parts = parts;
+        }
         /// <summary>
         /// Parts of this path, initially 0.
         /// </summary>
         /// <value></value>
-        public string[] Parts { get; set; } = new string[0];
+        public string[] Parts { get; set; }
 
         /// <summary>
         /// Guid of the element being searched for.

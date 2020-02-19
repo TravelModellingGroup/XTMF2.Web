@@ -21,8 +21,9 @@ using XTMF2.Web.Data.Interfaces;
 
 namespace XTMF2.Web.Data.Types
 {
-    public class Rectangle
+    public struct Rectangle
     {
+        public Rectangle(float x, float y, float width, float height) => (X,Y,Width,Height) = (x,y,width,height);
         public float X { get; set; }
         public float Y { get; set; }
 

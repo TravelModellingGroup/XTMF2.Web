@@ -36,6 +36,7 @@ namespace XTMF2.Web.Server.Authorization
         {
             HttpContext httpContext = _httpContextAccessor.HttpContext;
             var routedata = httpContext.GetRouteData();
+            // TO DO dependent on authorization implementation
             return Task.CompletedTask;
         }
     }
