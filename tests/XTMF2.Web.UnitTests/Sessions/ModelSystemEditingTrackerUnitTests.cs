@@ -50,7 +50,7 @@ namespace XTMF2.Web.UnitTests.Sessions
         {
             TestHelper.InitializeTestModelSystem(_user, "ProjectName", "TestModelSystem", out var session);
             var editingModel = _mapper.Map<ModelSystemEditingModel>(session.ModelSystem);
-            var tracker = new ModelSystemEditingTracker(editingModel);
+            var tracker = new ModelSystemEditingTracker(editingModel,_mapper);
             Assert.Equal(tracker.ModelSystemObjectRefrenceMap.Count, tracker.ModelSystemEditingObjectReferenceMap.Count);
             Assert.True(tracker.ModelSystemEditingObjectReferenceMap.Count > 0);
         }
@@ -63,10 +63,45 @@ namespace XTMF2.Web.UnitTests.Sessions
         {
             TestHelper.InitializeTestModelSystem(_user, "ProjectName", "TestModelSystem", out var session);
             var editingModel = _mapper.Map<ModelSystemEditingModel>(session.ModelSystem);
-            var tracker = new ModelSystemEditingTracker(editingModel);
+            var tracker = new ModelSystemEditingTracker(editingModel,_mapper);
             Assert.True(tracker.ModelSystemEditingObjectReferenceMap.ContainsKey(editingModel.GlobalBoundary.Id));
             Assert.True(tracker.ModelSystemObjectRefrenceMap.ContainsKey(editingModel.GlobalBoundary.ObjectReference));
         }
+
+        /// <summary>
+        /// Tests that references are stored in the object map when new items are added
+        /// </summary>
+        [Fact]
+        public void Tracker_AddsNewReferences_WhenModelSystemHasNewObject()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "ProjectName", "TestModelSystem", out var session);
+            var editingModel = _mapper.Map<ModelSystemEditingModel>(session.ModelSystem);
+            var tracker = new ModelSystemEditingTracker(editingModel,_mapper);
+            session.AddCommentBlock(_user, session.ModelSystem.GlobalBoundary, "A comment", new Rectangle(0, 0, 100, 100), out var block, out var error);
+            Assert.True(tracker.ModelSystemObjectRefrenceMap.ContainsKey(block));
+            Assert.NotEqual(new Guid(), tracker.ModelSystemObjectRefrenceMap[block].Id);
+            // Assert.True(tracker.ModelSystemObjectRefrenceMap.ContainsKey(editingModel.GlobalBoundary.ObjectReference));
+        }
+
+        /// <summary>
+        /// Tests that references are removed from the reference map
+        /// </summary>
+        [Fact]
+        public void Tracker_RemovesReferences_WhenModelSystemRemovesObject()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "ProjectName", "TestModelSystem", out var session);
+            var editingModel = _mapper.Map<ModelSystemEditingModel>(session.ModelSystem);
+            var tracker = new ModelSystemEditingTracker(editingModel,_mapper);
+            session.AddCommentBlock(_user, session.ModelSystem.GlobalBoundary, "A comment", new Rectangle(0, 0, 100, 100), out var block, out var error);
+            session.AddCommentBlock(_user, session.ModelSystem.GlobalBoundary, "A comment 2", new Rectangle(0, 0, 100, 100), out var block2, out  error);
+            Assert.True(tracker.ModelSystemObjectRefrenceMap.ContainsKey(block));
+            Assert.NotEqual(new Guid(), tracker.ModelSystemObjectRefrenceMap[block].Id);
+            Assert.True(tracker.ModelSystemObjectRefrenceMap.ContainsKey(block2));
+            session.RemoveCommentBlock(_user,  session.ModelSystem.GlobalBoundary, block, out error);
+            Assert.True(!tracker.ModelSystemObjectRefrenceMap.ContainsKey(block));
+            Assert.True(tracker.ModelSystemObjectRefrenceMap.ContainsKey(block2));
+        }
+
 
         public void Dispose()
         {

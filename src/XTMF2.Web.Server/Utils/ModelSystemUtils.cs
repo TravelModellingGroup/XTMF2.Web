@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using XTMF2.Editing;
+using XTMF2.ModelSystemConstruct;
 using XTMF2.Web.Data.Models.Editing;
 using XTMF2.Web.Data.Types;
 using XTMF2.Web.Server.Session;
@@ -27,6 +28,15 @@ namespace XTMF2.Web.Server.Utils
 {
     public class ModelSystemUtils
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public static IEnumerable<ViewObject> Traverse(ViewObject o)
+        {
+            return ModelSystemObjectsTraverse(o);
+        }
 
         /// <summary>
         /// Iterate over all model system objects
@@ -42,9 +52,20 @@ namespace XTMF2.Web.Server.Utils
         {
             if (viewObject is BoundaryModel boundary)
             {
+                foreach (var c in boundary.CommentBlocks)
+                {
+                    yield return c;
+                }
+                foreach (var s in boundary.Starts)
+                {
+                    yield return s;
+                }
                 foreach (var b in boundary.Boundaries)
                 {
-                    yield return b;
+                    foreach (var boundaryChild in ModelSystemObjectsTraverse(b))
+                    {
+                        yield return boundaryChild;
+                    }
                 }
             }
             yield return viewObject;
@@ -66,6 +87,35 @@ namespace XTMF2.Web.Server.Utils
             else
             {
                 return Traverse<T>(modelSystemSession.ModelSystem.GlobalBoundary, path, 0);
+            }
+        }
+
+        /// <summary>
+        /// Returns the editing type for the passed model system object.
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public static Type GetModelSystemEditingType(object o)
+        {
+            switch (o)
+            {
+                case Boundary b:
+                    return typeof(BoundaryModel);
+                case Start s:
+                    return typeof(StartModel);
+                case SingleLink l:
+                    return typeof(SingleLinkModel);
+                case MultiLink m:
+                    return typeof(MultiLinkModel);
+                case CommentBlock c:
+                    return typeof(CommentBlockModel);
+                case Node n:
+                    return typeof(NodeModel);
+                case NodeHook nh:
+                    return typeof(NodeHookModel);
+                default:
+                    return null;
+
             }
         }
 

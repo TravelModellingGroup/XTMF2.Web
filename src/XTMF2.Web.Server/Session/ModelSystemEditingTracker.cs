@@ -20,45 +20,51 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using AutoMapper;
-using Microsoft.AspNetCore.SignalR;
-using XTMF2.Editing;
 using XTMF2.Web.Data.Models.Editing;
-using XTMF2.Web.Server.Hubs;
+using XTMF2.Web.Server.Utils;
 
 namespace XTMF2.Web.Server.Session
 {
-
     /// <summary>
-    /// 
+    ///     Tracks the editing state of a model system. Will fire events for underlying changes to the model system
+    ///     and updated / free stored object references.
     /// </summary>
     public class ModelSystemEditingTracker : IDisposable
     {
+        private readonly IMapper _mapper;
+
         /// <summary>
-        /// Tracks GUID to model system editing references
+        ///     List of registered deligates for the tracker callback
+        /// </summary>
+        /// <returns></returns>
+        private readonly List<EventHandler<ModelSystemChangedEventArgs>> _delegates =
+            new List<EventHandler<ModelSystemChangedEventArgs>>();
+
+        /// <summary>
+        ///     Tracks GUID to model system editing references
         /// </summary>
         /// <typeparam name="Guid"></typeparam>
         /// <typeparam name="object"></typeparam>
         /// <returns></returns>
-        public Dictionary<Guid, ViewObject> ModelSystemEditingObjectReferenceMap { get; } = new Dictionary<Guid, ViewObject>();
+        public Dictionary<Guid, ViewObject> ModelSystemEditingObjectReferenceMap { get; } =
+            new Dictionary<Guid, ViewObject>();
 
         /// <summary>
-        /// Tracks the underlying model system to editing model references
+        ///     Tracks the underlying model system to editing model references
         /// </summary>
         /// <typeparam name="object"></typeparam>
         /// <typeparam name="object"></typeparam>
         /// <returns></returns>
-        public Dictionary<object, ViewObject> ModelSystemObjectRefrenceMap { get; } = new Dictionary<object, ViewObject>();
+        public Dictionary<object, ViewObject> ModelSystemObjectRefrenceMap { get; } =
+            new Dictionary<object, ViewObject>();
 
         /// <summary>
-        /// Delegate tracker for objects subscribiding to model system changes
+        ///     Delegate tracker for objects subscribiding to model system changes
         /// </summary>
         /// <value></value>
-        public ModelSystemEditingModel ModelSystem { get; private set; }
-
-        private List<EventHandler<ModelSystemChangedEventArgs>> _delegates = new List<EventHandler<ModelSystemChangedEventArgs>>();
+        public ModelSystemEditingModel ModelSystem { get; }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -68,18 +74,47 @@ namespace XTMF2.Web.Server.Session
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="id"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T GetModelSystemObject<T>(Guid id)
+        public T GetModelSystemObject<T>(Guid id) where T : class
         {
-            return (T)ModelSystemEditingObjectReferenceMap[id].ObjectReference;
+            if (ModelSystemEditingObjectReferenceMap.ContainsKey(id))
+            {
+                if (ModelSystemEditingObjectReferenceMap[id].ObjectReference is T assignedReference)
+                {
+                    return assignedReference;
+                }
+            }
+            return null;
         }
 
         /// <summary>
-        /// Register to track changes
+        ///     Attempts to return the model system object of specified type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id"></param>
+        /// <param name="modelSystemObject"></param>
+        /// <returns></returns>
+        public bool TryGetModelSystemObject<T>(Guid id, out T modelSystemObject)
+        {
+            if (ModelSystemEditingObjectReferenceMap.ContainsKey(id))
+            {
+                var objectReference = ModelSystemEditingObjectReferenceMap[id].ObjectReference;
+                if (objectReference is T assignedReference)
+                {
+                    modelSystemObject = assignedReference;
+                    return true;
+                }
+            }
+
+            modelSystemObject = default;
+            return false;
+        }
+
+        /// <summary>
+        ///     Register to track changes
         /// </summary>
         public event EventHandler<ModelSystemChangedEventArgs> OnModelSystemChanged
         {
@@ -97,31 +132,19 @@ namespace XTMF2.Web.Server.Session
 
         private event EventHandler<ModelSystemChangedEventArgs> _onModelSystemChanged;
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="hub"></param>
-        /// <param name="modelSystem"></param>
-        public ModelSystemEditingTracker(ModelSystemEditingModel modelSystem)
-        {
-            ModelSystem = modelSystem;
-            StoreModelSystemObjectReferenceMap(modelSystem);
-        }
-
         ~ModelSystemEditingTracker()
         {
             Dispose();
         }
 
         /// <summary>
-        /// Stores all objects in the object/view/edit model reference maps
+        ///     Stores all objects in the object/view/edit model reference maps
         /// </summary>
         /// <param name="session"></param>
         /// <param name="editingModel"></param>
         private void StoreModelSystemObjectReferenceMap(ModelSystemEditingModel editingModel)
         {
-            foreach (var viewObject in Utils.ModelSystemUtils.ModelSystemObjects(editingModel))
+            foreach (var viewObject in ModelSystemUtils.ModelSystemObjects(editingModel))
             {
                 ModelSystemEditingObjectReferenceMap[viewObject.Id] = viewObject;
                 ModelSystemObjectRefrenceMap[viewObject.ObjectReference] = viewObject;
@@ -129,19 +152,21 @@ namespace XTMF2.Web.Server.Session
                 {
                     prop.PropertyChanged += OnModelSystemPropertyChanged;
                 }
+
                 if (viewObject.ObjectReference is Boundary boundary)
                 {
-                    ((INotifyCollectionChanged)boundary.Boundaries).CollectionChanged += OnModelSystemCollectionChanged;
-                    ((INotifyCollectionChanged)boundary.Modules).CollectionChanged += OnModelSystemCollectionChanged;
-                    ((INotifyCollectionChanged)boundary.Links).CollectionChanged += OnModelSystemCollectionChanged;
-                    ((INotifyCollectionChanged)boundary.CommentBlocks).CollectionChanged += OnModelSystemCollectionChanged;
-                    ((INotifyCollectionChanged)boundary.Starts).CollectionChanged += OnModelSystemCollectionChanged;
+                    ((INotifyCollectionChanged) boundary.Boundaries).CollectionChanged +=
+                        OnModelSystemCollectionChanged;
+                    ((INotifyCollectionChanged) boundary.Modules).CollectionChanged += OnModelSystemCollectionChanged;
+                    ((INotifyCollectionChanged) boundary.Links).CollectionChanged += OnModelSystemCollectionChanged;
+                    ((INotifyCollectionChanged) boundary.CommentBlocks).CollectionChanged +=
+                        OnModelSystemCollectionChanged;
+                    ((INotifyCollectionChanged) boundary.Starts).CollectionChanged += OnModelSystemCollectionChanged;
                 }
             }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
@@ -154,20 +179,60 @@ namespace XTMF2.Web.Server.Session
         }
 
         /// <summary>
-        /// 
+        ///     Called when a model system collection changes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
         private void OnModelSystemCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
+            if (args.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (var item in args.NewItems)
+                {
+                    var editingObject = (ViewObject) _mapper.Map(item, item.GetType(),
+                        ModelSystemUtils.GetModelSystemEditingType(item));
+                    // traverse also returns the passed item for convenience
+                    foreach (var e in ModelSystemUtils.Traverse(editingObject))
+                    {
+                        ModelSystemEditingObjectReferenceMap[e.Id] = e;
+                        ModelSystemObjectRefrenceMap[e.ObjectReference] = e;
+                    }
+                }
+            }
+            else if (args.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (var item in args.OldItems)
+                {
+                    var editingObject = (ViewObject) _mapper.Map(item, item.GetType(),
+                        ModelSystemUtils.GetModelSystemEditingType(item));
+                    foreach (var e in ModelSystemUtils.Traverse(editingObject))
+                    {
+                        ModelSystemEditingObjectReferenceMap.Remove(e.Id);
+                        ModelSystemObjectRefrenceMap.Remove(e.ObjectReference);
+                    }
+                }
+            }
+
             _onModelSystemChanged?.Invoke(this, new ModelSystemChangedEventArgs(args)
             {
                 EditingModelObject = ModelSystemObjectRefrenceMap[sender]
             });
         }
 
+
         /// <summary>
-        /// Disposes the tracker and unregisters delegates
+        /// </summary>
+        /// <param name="modelSystem"></param>
+        /// <param name="mapper"></param>
+        public ModelSystemEditingTracker(ModelSystemEditingModel modelSystem, IMapper mapper)
+        {
+            ModelSystem = modelSystem;
+            _mapper = mapper;
+            StoreModelSystemObjectReferenceMap(modelSystem);
+        }
+
+        /// <summary>
+        ///     Disposes the tracker and unregisters delegates
         /// </summary>
         public void Dispose()
         {
@@ -180,14 +245,13 @@ namespace XTMF2.Web.Server.Session
 
     public class ModelSystemChangedEventArgs : EventArgs
     {
-        public ModelSystemChangedEventArgs(EventArgs args)
-        {
-            Args = args;
-        }
         public ViewObject EditingModelObject { get; set; }
 
         public EventArgs Args { get; set; }
 
+        public ModelSystemChangedEventArgs(EventArgs args)
+        {
+            Args = args;
+        }
     }
-
 }

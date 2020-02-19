@@ -15,6 +15,7 @@
 //     You should have received a copy of the GNU General Public License
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -25,14 +26,16 @@ using XTMF2.Web.Server.Session;
 namespace XTMF2.Web.Server.Mapping.Actions
 {
     /// <summary>
-    ///     Maps Links to the appropriate link type
+    /// Creates a new GUID for Guid type properties during automapping process.
     /// </summary>
     public class GenerateModelSystemObjectIdAction<TSrc, TDest> : IMappingAction<TSrc, TDest>
             where TDest : ViewObject
     {
         public void Process(TSrc source, TDest destination, ResolutionContext context)
         {
-            destination.Id = System.Guid.NewGuid();
+            if(destination.Id == Guid.Empty) { 
+                destination.Id = System.Guid.NewGuid();
+            }
             destination.ObjectReference = source;
         }
     }

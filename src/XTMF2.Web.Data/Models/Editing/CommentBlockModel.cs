@@ -22,7 +22,7 @@ namespace XTMF2.Web.Data.Models.Editing
 {
     public class CommentBlockModel : ViewObject
     {
-        public string Text { get; set; }
+        public string Comment { get; set; }
 
     }
 }

@@ -99,7 +99,7 @@ namespace XTMF2.Web.Server.Session
             {
                 Sessions[user][project] = new List<ModelSystemSession>();
             }
-            ModelSystemEditingTrackers[session] = new ModelSystemEditingTracker(GetModelSystemEditingModel(session));
+            ModelSystemEditingTrackers[session] = new ModelSystemEditingTracker(GetModelSystemEditingModel(session),_mapper);
             Sessions[user][project].Add(session);
         }
 

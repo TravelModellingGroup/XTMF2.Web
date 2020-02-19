@@ -188,12 +188,16 @@ namespace XTMF2.Web.Server.Controllers
                 return requestResult;
             }
             var tracker = _modelSystemSessions.GetModelSystemEditingTracker(session);
-            Boundary parentBoundary = tracker.GetModelSystemObject<Boundary>(parentId);
+            if (!tracker.TryGetModelSystemObject<Boundary>(parentId, out var parentBoundary))
+            {
+                return new UnprocessableEntityObjectResult("Specified parent boundary does not exist.");
+            }
             if (!session.AddBoundary(userSession.User, parentBoundary, boundary.Name, out var newBoundary, out var error))
             {
                 return new UnprocessableEntityObjectResult(error);
             }
-            return new CreatedResult("AddBoundary", newBoundary);
+            // return the added boundary from the tracker
+            return new CreatedResult("AddBoundary", tracker.ModelSystemObjectRefrenceMap[newBoundary]);
         }
 
         /// <summary>
@@ -208,19 +212,22 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/start")]
         public IActionResult AddModelSystemStart(string projectName, string modelSystemName, [FromQuery] Guid parentId,
-                        [FromBody] BoundaryModel boundary, [FromServices] UserSession userSession)
+                        [FromBody] StartModel startModel, [FromServices] UserSession userSession)
         {
             if (!HandleRequest(projectName, modelSystemName, userSession, out var session, out var requestResult))
             {
                 return requestResult;
             }
             var tracker = _modelSystemSessions.GetModelSystemEditingTracker(session);
-            Boundary parentBoundary = tracker.GetModelSystemObject<Boundary>(parentId);
-            if (!session.AddModelSystemStart(userSession.User, parentBoundary, boundary.Name, out var start, out var error))
+            if (!tracker.TryGetModelSystemObject<Boundary>(parentId, out var parentBoundary))
+            {
+                return new UnprocessableEntityObjectResult("Specified parent boundary does not exist.");
+            }
+            if (!session.AddModelSystemStart(userSession.User, parentBoundary, startModel.Name, out var start, out var error))
             {
                 return new UnprocessableEntityObjectResult(error);
             }
-            return new CreatedResult("AddStart", start);
+            return new CreatedResult("AddStart", tracker.ModelSystemObjectRefrenceMap[start]);
         }
 
         /// <summary>
@@ -228,7 +235,7 @@ namespace XTMF2.Web.Server.Controllers
         /// </summary>
         /// <param name="projectName"></param>
         /// <param name="modelSystemName"></param>
-        /// <param name="parentBoundaryPath"></param>
+        /// <param name="parentId"></param>
         /// <param name="commentBlock"></param>
         /// <param name="userSession"></param>
         /// <returns></returns>
@@ -245,13 +252,16 @@ namespace XTMF2.Web.Server.Controllers
                 return requestResult;
             }
             var tracker = _modelSystemSessions.GetModelSystemEditingTracker(session);
-            Boundary parentBoundary = tracker.GetModelSystemObject<Boundary>(parentId);
+            if (!tracker.TryGetModelSystemObject<Boundary>(parentId, out var parentBoundary))
+            {
+                return new UnprocessableEntityObjectResult("Specified parent boundary does not exist.");
+            }
             if (!session.AddCommentBlock(userSession.User, parentBoundary,
-             commentBlock.Text, new Rectangle(commentBlock.Location.X, commentBlock.Location.Y, commentBlock.Location.Width, commentBlock.Location.Height), out var commentBlockRef, out var error))
+             commentBlock.Comment, new Rectangle(commentBlock.Location.X, commentBlock.Location.Y, commentBlock.Location.Width, commentBlock.Location.Height), out var commentBlockRef, out var error))
             {
                 return new UnprocessableEntityObjectResult(error);
             }
-            return new CreatedResult("AddCommentBlock", commentBlockRef);
+            return new CreatedResult("AddCommentBlock", tracker.ModelSystemObjectRefrenceMap[commentBlockRef]);
         }
 
 
@@ -260,7 +270,6 @@ namespace XTMF2.Web.Server.Controllers
         /// </summary>
         /// <param name="projectName"></param>
         /// <param name="modelSystemName"></param>
-        /// <param name="parentBoundaryPath"></param>
         /// <param name="commentBlock"></param>
         /// <param name="userSession"></param>
         /// <returns></returns>
@@ -301,7 +310,7 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/node-generate-parameters")]
-        public IActionResult AddNodeGenerateParameteres(string projectName, string modelSystemName, [FromQuery] Guid parentBoundaryId,
+        public IActionResult AddNodeGenerateParameters(string projectName, string modelSystemName, [FromQuery] Guid parentId,
                                                         [FromBody] NodeModel nodeModel, 
                                                         [FromServices] UserSession userSession)
         {
@@ -310,8 +319,11 @@ namespace XTMF2.Web.Server.Controllers
                 return requestResult;
             }
             var tracker = _modelSystemSessions.GetModelSystemEditingTracker(session);
-            Boundary parentBoundary = tracker.GetModelSystemObject<Boundary>(parentBoundaryId);
-            if(!session.AddNodeGenerateParameters(userSession.User, parentBoundary, nodeModel.Name, nodeModel.Type, out var node, out var children, out var commandError)){
+            if (!tracker.TryGetModelSystemObject<Boundary>(parentId, out var parentBoundary))
+            {
+                return new UnprocessableEntityObjectResult("Specified parent boundary does not exist.");
+            }
+            if (!session.AddNodeGenerateParameters(userSession.User, parentBoundary, nodeModel.Name, nodeModel.Type, out var node, out var children, out var commandError)){
                return new UnprocessableEntityObjectResult(commandError);
             }
             return new CreatedResult(nameof(AddNode), node);
@@ -322,15 +334,15 @@ namespace XTMF2.Web.Server.Controllers
         /// </summary>
         /// <param name="projectName"></param>
         /// <param name="modelSystemName"></param>
-        /// <param name="parentBoundaryPath"></param>
-        /// <param name="commentBlock"></param>
+        /// <param name="parentId"></param>
         /// <param name="userSession"></param>
+        /// <param name="nodeModel"></param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [HttpPost("projects/{projectName}/model-systems/{modelSystemName}/node")]
-        public IActionResult AddNode(string projectName, string modelSystemName, [FromBody] NodeModel nodeModel, [FromQuery] Guid parentBoundaryId,
+        public IActionResult AddNode(string projectName, string modelSystemName, [FromBody] NodeModel nodeModel, [FromQuery] Guid parentId,
 
                                     [FromServices] UserSession userSession)
         {
@@ -339,7 +351,10 @@ namespace XTMF2.Web.Server.Controllers
                 return requestResult;
             }
             var tracker = _modelSystemSessions.GetModelSystemEditingTracker(session);
-            Boundary parentBoundary = tracker.GetModelSystemObject<Boundary>(parentBoundaryId);
+            if (!tracker.TryGetModelSystemObject<Boundary>(parentId, out var parentBoundary))
+            {
+                return new UnprocessableEntityObjectResult("Specified parent boundary does not exist.");
+            }
             if (!session.AddNode(userSession.User, parentBoundary, nodeModel.Name, nodeModel.Type, out var node, out var error))
             {
                 return new UnprocessableEntityObjectResult(error);
@@ -352,8 +367,6 @@ namespace XTMF2.Web.Server.Controllers
         /// </summary>
         /// <param name="projectName"></param>
         /// <param name="modelSystemName"></param>
-        /// <param name="parentBoundaryPath"></param>
-        /// <param name="commentBlock"></param>
         /// <param name="userSession"></param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -45,6 +45,7 @@ namespace XTMF2.Web.UnitTests.Controllers
         private readonly ModelSystemEditorController _controller;
         private readonly UserSession _userSession;
         private readonly ProjectSessions _projectSessions;
+        private readonly ModelSystemSessions _modelSystemSessions;
         private readonly ITestOutputHelper output;
         private readonly string _userName;
         private readonly User _user;
@@ -65,9 +66,9 @@ namespace XTMF2.Web.UnitTests.Controllers
             _runtime = TestHelper.Runtime;
             _logger = Mock.Of<ILogger<ModelSystemEditorController>>();
             _projectSessions = new ProjectSessions();
-            var modelSystemSessions = new ModelSystemSessions(_mapper);
+            _modelSystemSessions = new ModelSystemSessions(_mapper);
             _controller =
-                new ModelSystemEditorController(_runtime, _logger, _projectSessions, modelSystemSessions, _mapper,
+                new ModelSystemEditorController(_runtime, _logger, _projectSessions, _modelSystemSessions, _mapper,
                     Mock.Of<IHubContext<ModelSystemEditingHub>>());
             _userSession = new UserSession(_runtime.UserController.GetUserByName(_userName));
             this.output = output;
@@ -121,5 +122,190 @@ namespace XTMF2.Web.UnitTests.Controllers
                 item => { Assert.Equal("TestNode1", item.Name); });
             Assert.NotNull(modelSystem.GlobalBoundary.Modules[0].Type);
         }
+
+        /// <summary>
+        /// Tests that adding a boundary adds a boundary to the model system
+        /// </summary>
+        [Fact]
+        public void AddBoundary_ReturnsCreatedResult_AndAddsBoundary()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
+            _runtime.ProjectController.GetProject(_user.UserName, "TestProject", out var project, out var error);
+            _modelSystemSessions.TrackSessionForUser(_user, project, modelSystemSession);
+            var result = (OkObjectResult)_controller.GetModelSystem("TestProject", "TestModelSystem", _userSession);
+            var editingModel = (ModelSystemEditingModel)result.Value;
+            var tracker = _modelSystemSessions.GetModelSystemEditingTracker(modelSystemSession);
+            var globalBoundary = editingModel.GlobalBoundary;
+            var addBoundaryResult = _controller.AddBoundary("TestProject", "TestModelSystem", globalBoundary.Id, new BoundaryModel()
+            {
+                Name = "TestBoundaryUnit",
+                Location = new Data.Types.Rectangle()
+                {
+                    Height = 100,
+                    Width = 100,
+                    X = 50,
+                    Y = 50
+                }
+            }, _userSession);
+            Assert.IsAssignableFrom<CreatedResult>(addBoundaryResult);
+            Assert.IsAssignableFrom<BoundaryModel>(((CreatedResult)addBoundaryResult).Value);
+            //get reference to boundary model
+            var returnedModel = (BoundaryModel)(((CreatedResult)addBoundaryResult).Value);
+            Assert.True(tracker.ModelSystemEditingObjectReferenceMap.ContainsKey(returnedModel.Id));
+            Assert.True(tracker.ModelSystemObjectRefrenceMap.ContainsKey(tracker
+                .ModelSystemEditingObjectReferenceMap[returnedModel.Id].ObjectReference));
+
+        }
+
+        /// <summary>
+        /// Tests that adding a boundary to an invalid parent returns unprocessable entity
+        /// </summary>
+        [Fact]
+        public void AddBoundary_ReturnsInvalid_FromInvalidParent()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
+            _runtime.ProjectController.GetProject(_user.UserName, "TestProject", out var project, out var error);
+            _modelSystemSessions.TrackSessionForUser(_user, project, modelSystemSession);
+            var result = (OkObjectResult)_controller.GetModelSystem("TestProject", "TestModelSystem", _userSession);
+            var editingModel = (ModelSystemEditingModel)result.Value;
+            var tracker = _modelSystemSessions.GetModelSystemEditingTracker(modelSystemSession);
+            var globalBoundary = editingModel.GlobalBoundary;
+            var addBoundaryResult = _controller.AddBoundary("TestProject", "TestModelSystem", Guid.Empty, new BoundaryModel()
+            {
+                Name = "TestBoundaryUnit",
+                Location = new Data.Types.Rectangle()
+                {
+                    Height = 100,
+                    Width = 100,
+                    X = 50,
+                    Y = 50
+                }
+            }, _userSession);
+            Assert.IsAssignableFrom<UnprocessableEntityObjectResult>(addBoundaryResult);
+
+        }
+
+        /// <summary>
+        /// Tests that adding a model system start returns correctly
+        /// </summary>
+        [Fact]
+        public void AddStart_ReturnsCreatedResult_AndAddsBoundary()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
+            _runtime.ProjectController.GetProject(_user.UserName, "TestProject", out var project, out var error);
+            _modelSystemSessions.TrackSessionForUser(_user, project, modelSystemSession);
+            var result = (OkObjectResult)_controller.GetModelSystem("TestProject", "TestModelSystem", _userSession);
+            var editingModel = (ModelSystemEditingModel)result.Value;
+            var tracker = _modelSystemSessions.GetModelSystemEditingTracker(modelSystemSession);
+            var globalBoundary = editingModel.GlobalBoundary;
+            var addStartResult = _controller.AddModelSystemStart("TestProject", "TestModelSystem", globalBoundary.Id, new StartModel()
+            {
+                Name = "TestBoundaryUnit",
+                Location = new Data.Types.Rectangle()
+                {
+                    Height = 100,
+                    Width = 100,
+                    X = 50,
+                    Y = 50
+                }
+            }, _userSession);
+            Assert.IsAssignableFrom<CreatedResult>(addStartResult);
+            Assert.IsAssignableFrom<StartModel>(((CreatedResult)addStartResult).Value);
+            //get reference to boundary model
+            var returnedModel = (StartModel)(((CreatedResult)addStartResult).Value);
+            Assert.True(tracker.ModelSystemEditingObjectReferenceMap.ContainsKey(returnedModel.Id));
+            Assert.True(tracker.ModelSystemObjectRefrenceMap.ContainsKey(tracker
+                .ModelSystemEditingObjectReferenceMap[returnedModel.Id].ObjectReference));
+
+        }
+
+        /// <summary>
+        /// Tests that adding a model system start returns correctly
+        /// </summary>
+        [Fact]
+        public void AddCommentBlock_ReturnsCreatedResult_AndAddsBoundary()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
+            _runtime.ProjectController.GetProject(_user.UserName, "TestProject", out var project, out var error);
+            _modelSystemSessions.TrackSessionForUser(_user, project, modelSystemSession);
+            var result = (OkObjectResult)_controller.GetModelSystem("TestProject", "TestModelSystem", _userSession);
+            var editingModel = (ModelSystemEditingModel)result.Value;
+            var tracker = _modelSystemSessions.GetModelSystemEditingTracker(modelSystemSession);
+            var globalBoundary = editingModel.GlobalBoundary;
+            var addCommentBlockResult = _controller.AddCommentBlock("TestProject", "TestModelSystem", globalBoundary.Id, new CommentBlockModel()
+            {
+                Comment = "TestBoundaryUnit",
+                Location = new Data.Types.Rectangle()
+                {
+                    Height = 100,
+                    Width = 100,
+                    X = 50,
+                    Y = 50
+                }
+            }, _userSession);
+            Assert.IsAssignableFrom<CreatedResult>(addCommentBlockResult);
+            Assert.IsAssignableFrom<CommentBlockModel>(((CreatedResult)addCommentBlockResult).Value);
+            //get reference to boundary model
+            var returnedModel = (CommentBlockModel)(((CreatedResult)addCommentBlockResult).Value);
+            Assert.True(tracker.ModelSystemEditingObjectReferenceMap.ContainsKey(returnedModel.Id));
+            Assert.True(tracker.ModelSystemObjectRefrenceMap.ContainsKey(tracker
+                .ModelSystemEditingObjectReferenceMap[returnedModel.Id].ObjectReference));
+
+        }
+
+        /// <summary>
+        /// Tests that adding a start to an invalid parent returns unprocessable entity
+        /// </summary>
+        [Fact]
+        public void AddStart_ReturnsInvalid_FromInvalidParent()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
+            _runtime.ProjectController.GetProject(_user.UserName, "TestProject", out var project, out var error);
+            _modelSystemSessions.TrackSessionForUser(_user, project, modelSystemSession);
+            var result = (OkObjectResult)_controller.GetModelSystem("TestProject", "TestModelSystem", _userSession);
+            var editingModel = (ModelSystemEditingModel)result.Value;
+            var tracker = _modelSystemSessions.GetModelSystemEditingTracker(modelSystemSession);
+            var globalBoundary = editingModel.GlobalBoundary;
+            var addStartResult = _controller.AddModelSystemStart("TestProject", "TestModelSystem", Guid.Empty, new StartModel()
+            {
+                Name = "TestStartUnit",
+                Location = new Data.Types.Rectangle()
+                {
+                    Height = 100,
+                    Width = 100,
+                    X = 50,
+                    Y = 50
+                }
+            }, _userSession);
+            Assert.IsAssignableFrom<UnprocessableEntityObjectResult>(addStartResult);
+        }
+
+                /// <summary>
+        /// Tests that adding a start to an invalid parent returns unprocessable entity
+        /// </summary>
+        [Fact]
+        public void AddCommentBlock_ReturnsInvalid_FromInvalidParent()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
+            _runtime.ProjectController.GetProject(_user.UserName, "TestProject", out var project, out var error);
+            _modelSystemSessions.TrackSessionForUser(_user, project, modelSystemSession);
+            var result = (OkObjectResult)_controller.GetModelSystem("TestProject", "TestModelSystem", _userSession);
+            var editingModel = (ModelSystemEditingModel)result.Value;
+            var tracker = _modelSystemSessions.GetModelSystemEditingTracker(modelSystemSession);
+            var globalBoundary = editingModel.GlobalBoundary;
+            var addCommentBlockResult = _controller.AddCommentBlock("TestProject", "TestModelSystem", Guid.Empty, new CommentBlockModel()
+            {
+                Comment = "TestStartUnit",
+                Location = new Data.Types.Rectangle()
+                {
+                    Height = 100,
+                    Width = 100,
+                    X = 50,
+                    Y = 50
+                }
+            }, _userSession);
+            Assert.IsAssignableFrom<UnprocessableEntityObjectResult>(addCommentBlockResult);
+        }
+
     }
 }
