@@ -81,6 +81,7 @@ namespace XTMF2.Web.Server.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult Delete(string projectName, string modelSystemName, [FromServices] UserSession userSession)
         {
+            
             if (!XtmfUtils.GetProjectSession(_xtmfRuntime, userSession, projectName, out var projectSession,
                 _projectSessions, out var error))
             {

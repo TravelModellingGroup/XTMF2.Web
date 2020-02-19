@@ -27,7 +27,7 @@ namespace XTMF2.Web.UnitTests.Sessions
     /// <summary>
     ///     Unit tests related to the model sysem tracker
     /// </summary>
-    public class ModelSystemEditingTrackerUnitTests : IDisposable
+    public sealed class ModelSystemEditingTrackerUnitTests : IDisposable
     {
         private IMapper _mapper;
         private User _user;

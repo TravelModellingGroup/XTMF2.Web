@@ -32,7 +32,7 @@ namespace XTMF2.Web.UnitTests.Controllers
     /// <summary>
     ///     Unit tests related to the ProjectController
     /// </summary>
-    public class ProjectControllerUnitTests : IDisposable
+    public sealed class ProjectControllerUnitTests : IDisposable
     {
         private readonly IMapper _mapper;
         private readonly XTMFRuntime _runtime;

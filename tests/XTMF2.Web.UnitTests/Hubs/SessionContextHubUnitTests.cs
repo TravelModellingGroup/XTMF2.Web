@@ -30,7 +30,7 @@ namespace XTMF2.Web.UnitTests.Hubs
     ///     Unit tests related to the SessionContextUnitHub
     /// </summary>
     [Collection("Sequential")]
-    public class SessionContextHubUnitTests : IDisposable
+    public  sealed class SessionContextHubUnitTests : IDisposable
     {
         public SessionContextHubUnitTests()
         {

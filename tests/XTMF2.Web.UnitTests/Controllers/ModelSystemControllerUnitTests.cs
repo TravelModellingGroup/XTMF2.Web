@@ -32,7 +32,7 @@ namespace XTMF2.Web.UnitTests.Controllers
     /// <summary>
     ///     Unit tests related to the ModelSystemController
     /// </summary>
-    public class ModelSystemControllerUnitTests : IDisposable
+    public sealed class ModelSystemControllerUnitTests : IDisposable
     {
         private readonly XTMFRuntime _runtime;
         private readonly ModelSystemController _controller;

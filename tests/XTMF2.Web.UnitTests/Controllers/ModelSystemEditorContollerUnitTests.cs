@@ -37,7 +37,7 @@ namespace XTMF2.Web.UnitTests.Controllers
     /// <summary>
     ///     Unit tests related to the ModelSystemEditorController
     /// </summary>
-    public class ModelSystemEditorControllerUnitTests : IDisposable
+    public sealed class ModelSystemEditorControllerUnitTests : IDisposable
     {
         private readonly IMapper _mapper;
         private readonly XTMFRuntime _runtime;

@@ -23,7 +23,7 @@ namespace XTMF2.Web.UnitTests.Sessions
     /// <summary>
     ///     Unit tests related to the SessionContextUnitHub
     /// </summary>
-    public class ProjectSessionsUnitTests : IDisposable
+    public  sealed class ProjectSessionsUnitTests : IDisposable
     {
         public void Dispose()
         {
