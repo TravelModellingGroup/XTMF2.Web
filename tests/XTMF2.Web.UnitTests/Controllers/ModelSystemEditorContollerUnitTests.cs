@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
+using XTMF2.UnitTests.Modules;
 using XTMF2.Web.Data.Converters;
 using XTMF2.Web.Data.Models.Editing;
 using XTMF2.Web.Server.Controllers;
@@ -305,6 +306,47 @@ namespace XTMF2.Web.UnitTests.Controllers
                 }
             }, _userSession);
             Assert.IsAssignableFrom<UnprocessableEntityObjectResult>(addCommentBlockResult);
+        }
+
+         /// <summary>
+        /// Tests that adding a model system start returns correctly
+        /// </summary>
+        [Fact]
+        public void AddNodeGenerateParameters_ReturnsCreatedResult_AndAddsNode()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "TestProject", "TestModelSystem", out var modelSystemSession);
+            _runtime.ProjectController.GetProject(_user.UserName, "TestProject", out var project, out var error);
+            _modelSystemSessions.TrackSessionForUser(_user, project, modelSystemSession);
+            var result = (OkObjectResult)_controller.GetModelSystem("TestProject", "TestModelSystem", _userSession);
+            var editingModel = (ModelSystemEditingModel)result.Value;
+            var tracker = _modelSystemSessions.GetModelSystemEditingTracker(modelSystemSession);
+            var globalBoundary = editingModel.GlobalBoundary;
+            
+            var addNodeResult = _controller.AddNodeGenerateParameters("TestProject", "TestModelSystem", globalBoundary.Id, new NodeModel()
+            {
+                Name = "TestNodeModule",
+                Type = typeof(SimpleTestModule),
+                Location = new Data.Types.Rectangle()
+                {
+                    Height = 100,
+                    Width = 100,
+                    X = 50,
+                    Y = 50
+                },
+
+            }, _userSession);
+            Assert.IsAssignableFrom<CreatedResult>(addNodeResult);
+            Assert.IsAssignableFrom<NodeModel>(((CreatedResult)addNodeResult).Value);
+            //get reference to boundary model
+            var returnedModel = (NodeModel)(((CreatedResult)addNodeResult).Value);
+            Assert.True(tracker.ModelSystemEditingObjectReferenceMap.ContainsKey(returnedModel.Id));
+            Assert.True(tracker.ModelSystemObjectReferenceMap.ContainsKey(tracker
+                .ModelSystemEditingObjectReferenceMap[returnedModel.Id].ObjectReference));
+            Assert.True(tracker.ModelSystemObjectReferenceMap.ContainsKey(((NodeModel)tracker
+                .ModelSystemEditingObjectReferenceMap[returnedModel.Id]).ContainedWithin.ObjectReference));
+            Assert.True(tracker.ModelSystemEditingObjectReferenceMap.ContainsKey(((NodeModel)tracker
+                .ModelSystemEditingObjectReferenceMap[returnedModel.Id]).ContainedWithin.Id));
+
         }
     }
 }

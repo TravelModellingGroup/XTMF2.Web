@@ -48,6 +48,7 @@ namespace XTMF2.Web.Server.Utils
 
         private static IEnumerable<ViewObject> ModelSystemObjectsTraverse(ViewObject viewObject)
         {
+            yield return viewObject;
             if (viewObject is BoundaryModel boundary)
             {
                 foreach (var c in boundary.CommentBlocks)
@@ -60,6 +61,11 @@ namespace XTMF2.Web.Server.Utils
                     yield return s;
                 }
 
+                foreach (var n in boundary.Modules)
+                {
+                    yield return n;
+                }
+
                 foreach (var b in boundary.Boundaries)
                 {
                     foreach (var boundaryChild in ModelSystemObjectsTraverse(b))
@@ -69,7 +75,6 @@ namespace XTMF2.Web.Server.Utils
                 }
             }
 
-            yield return viewObject;
         }
 
         /// <summary>

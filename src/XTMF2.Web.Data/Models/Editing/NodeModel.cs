@@ -30,7 +30,8 @@ namespace XTMF2.Web.Data.Models.Editing
         [JsonIgnore]
         public BoundaryModel ContainedWithin { get; set; }
 
-        public Guid ContainWithinId { get; set; }
+        public Guid ContainedWithinId { get; 
+            set; }
         public Type Type { get; set; }
     }
 }

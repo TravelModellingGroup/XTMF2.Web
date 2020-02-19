@@ -55,8 +55,9 @@ namespace XTMF2.Web.Server.Mapping.Profiles
             .BeforeMap<Actions.GenerateModelSystemObjectIdAction<Start, StartModel>>();
             CreateMap<Node, NodeModel>()
                 .ForMember(m => m.ContainedWithin, opt => { opt.MapFrom(x => x.ContainedWithin); })
-            .BeforeMap<Actions.GenerateModelSystemObjectIdAction<Node, NodeModel>>()
-                .AfterMap((src, dest) => { dest.ContainWithinId = dest.ContainedWithin.Id; });
+                .ForMember(m => m.ContainedWithinId, opt => { opt.Ignore(); })
+                .BeforeMap<Actions.GenerateModelSystemObjectIdAction<Node, NodeModel>>();
+ //               .AfterMap((src, dest) => { dest.ContainedWithinId = dest.ContainedWithin.Id; });
 
             CreateMap<NodeHook, NodeHookModel>()
             .BeforeMap<Actions.GenerateModelSystemObjectIdAction<NodeHook, NodeHookModel>>();
