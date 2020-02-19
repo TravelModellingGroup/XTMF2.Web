@@ -1,4 +1,4 @@
-﻿//     Copyright 2017-2020 University of Toronto
+﻿﻿//     Copyright 2017-2020 University of Toronto
 // 
 //     This file is part of XTMF2.
 // 
@@ -77,6 +77,16 @@ namespace XTMF2.Web.UnitTests
         static TestHelper()
         {
             Runtime = XTMFRuntime.CreateRuntime();
+        }
+
+        /// <summary>
+        ///     Cleanup the test context
+        /// </summary>
+        /// <param name="runtime"></param>
+        /// <param name="userName"></param>
+        public static void CleanUpTestContext(XTMFRuntime runtime, string userName)
+        {
+            runtime.UserController.Delete(userName);
         }
     }
 }

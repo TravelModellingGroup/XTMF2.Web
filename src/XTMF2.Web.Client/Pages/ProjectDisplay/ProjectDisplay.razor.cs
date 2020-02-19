@@ -114,7 +114,6 @@ namespace XTMF2.Web.Client.Pages
             {
                 Logger.LogError(e, $"Unable to load model systems for project: {ProjectName}");
             }
-
         }
     }
 }

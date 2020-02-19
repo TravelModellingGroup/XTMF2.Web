@@ -39,6 +39,8 @@ namespace XTMF2.Web.Server.Controllers
         private readonly ProjectSessions _projectSessions;
         private readonly XTMFRuntime _xtmfRuntime;
 
+        private readonly ProjectSessions _projectSessions;
+
         /// <summary>
         ///     Creates a new model system from the passed model.
         /// </summary>

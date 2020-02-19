@@ -113,7 +113,6 @@ namespace XTMF2.Web.UnitTests.Controllers
             //assert
             Assert.IsAssignableFrom<OkResult>(result);
         }
-
         /// <summary>
         ///     Tests single get project, should return not found.
         /// </summary>
