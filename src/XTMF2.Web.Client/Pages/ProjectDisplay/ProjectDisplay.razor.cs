@@ -44,7 +44,7 @@ namespace XTMF2.Web.Client.Pages
         /// <summary>
         ///     Model systems belonging to the project
         /// </summary>
-        public List<ModelSystemModel> ModelSystems { get; set; } = new List<ModelSystemModel>();
+        public List<ModelSystemModel> ModelSystems { get; private set; } = new List<ModelSystemModel>();
 
         /// <summary>
         ///     The loaded project.
