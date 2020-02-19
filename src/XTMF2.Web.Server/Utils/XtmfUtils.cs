@@ -1,3 +1,20 @@
+//     Copyright 2017-2020 University of Toronto
+// 
+//     This file is part of XTMF2.
+// 
+//     XTMF2 is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     XTMF2 is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
+
 using System.Linq;
 using XTMF2.Editing;
 using XTMF2.Web.Server.Session;
@@ -20,12 +37,12 @@ namespace XTMF2.Web.Server.Utils
         /// <returns></returns>
         public static bool GetProjectSession(XTMFRuntime runtime, UserSession userSession, string projectName,
             out ProjectSession projectSession, ProjectSessions projectSessions,
-            ref string error)
+             out CommandError error)
         {
             var project = GetProject(projectName, userSession);
             if (project == null)
             {
-                error = "Invalid project";
+                error = new CommandError("Project does not exist.");
                 projectSession = null;
                 return false;
             }
@@ -35,11 +52,12 @@ namespace XTMF2.Web.Server.Utils
                 projectSession = projectSessions.Sessions[userSession.User].FirstOrDefault(p => p.Project == project);
                 if (projectSession != null)
                 {
+                    error = null;
                     return true;
                 }
             }
             // otherwise get the project session from the xtmf project controller
-            if (!runtime.ProjectController.GetProjectSession(userSession.User, project, out projectSession, ref error))
+            if (!runtime.ProjectController.GetProjectSession(userSession.User, project, out projectSession, out error))
             {
                 return false;
             }
@@ -48,9 +66,21 @@ namespace XTMF2.Web.Server.Utils
             return true;
         }
 
-        public static bool GetModelSystemSession(XTMFRuntime runtime, UserSession userSession, string projectName,
-            ProjectSessions projectSessions, ModelSystemSessions modelSystemSessions)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="runtime"></param>
+        /// <param name="userSession"></param>
+        /// <param name="projectName"></param>
+        /// <param name="modelSystemName"></param>
+        /// <param name="projectSessions"></param>
+        /// <param name="modelSystemSessions"></param>
+        /// <param name="modelSystemSession"></param>
+        /// <returns></returns>
+        public static bool GetModelSystemSession(XTMFRuntime runtime, UserSession userSession, string projectName, string modelSystemName,
+            ProjectSessions projectSessions, ModelSystemSessions modelSystemSessions, out ModelSystemSession modelSystemSession)
         {
+            modelSystemSession = null;
             return true;
         }
 
@@ -65,14 +95,14 @@ namespace XTMF2.Web.Server.Utils
         /// <param name="error"></param>
         /// <returns></returns>
         public static bool GetModelSystemHeader(XTMFRuntime runtime, UserSession userSession, ProjectSessions projectSessions,
-            string projectName, string modelSystemName, out ModelSystemHeader modelSystem, ref string error)
+            string projectName, string modelSystemName, out ModelSystemHeader modelSystem, out CommandError error)
         {
-            if (!GetProjectSession(runtime, userSession, projectName, out var projectSession, projectSessions, ref error))
+            if (!GetProjectSession(runtime, userSession, projectName, out var projectSession, projectSessions, out error))
             {
                 modelSystem = null;
                 return false;
             }
-            if (!projectSession.GetModelSystemHeader(userSession.User, modelSystemName, out modelSystem, ref error))
+            if (!projectSession.GetModelSystemHeader(userSession.User, modelSystemName, out modelSystem, out error))
             {
                 return false;
             }

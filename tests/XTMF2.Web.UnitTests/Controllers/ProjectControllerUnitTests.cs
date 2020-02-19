@@ -23,57 +23,49 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using XTMF2.Web.Data.Models;
 using XTMF2.Web.Server.Controllers;
-using XTMF2.Web.Server.Profiles;
+using XTMF2.Web.Server.Mapping.Profiles;
 using XTMF2.Web.Server.Session;
 using Xunit;
 
 namespace XTMF2.Web.UnitTests.Controllers
 {
     /// <summary>
-    /// Unit tests related to the ProjectController
+    ///     Unit tests related to the ProjectController
     /// </summary>
-    [Collection("Sequential")]
-    public class ProjectControllerUnitTests : IDisposable
+    public sealed class ProjectControllerUnitTests : IDisposable
     {
-
-        private IMapper _mapper;
-        private XTMFRuntime _runtime;
-        private ILogger<ProjectController> _logger;
-        private ProjectController _controller;
-        private UserSession _userSession;
-        private ProjectSessions _projectSessions;
-        private string _userName;
+        private readonly IMapper _mapper;
+        private readonly XTMFRuntime _runtime;
+        private readonly ILogger<ProjectController> _logger;
+        private readonly ProjectController _controller;
+        private readonly UserSession _userSession;
+        private readonly ProjectSessions _projectSessions;
+        private readonly string _userName;
 
         public ProjectControllerUnitTests()
         {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<ProjectProfile>();
-            });
+            var config = new MapperConfiguration(cfg => { cfg.AddProfile<ProjectProfile>(); });
             _userName = Guid.NewGuid().ToString();
             _mapper = config.CreateMapper();
-            _runtime = TestHelper.CreateTestContext(_userName);
+            TestHelper.CreateTestUser(_userName);
+            _runtime = TestHelper.Runtime;
             _logger = Mock.Of<ILogger<ProjectController>>();
             _userSession = new UserSession(_runtime.UserController.GetUserByName(_userName));
             _projectSessions = new ProjectSessions();
             _controller = new ProjectController(_runtime, _logger, _mapper, _projectSessions);
-
-
         }
 
         /// <summary>
-        /// Tests if the projects list returns a valid list for the default (local) user.
+        ///     Dispose of test data
         /// </summary>
-        [Fact]
-        public void IndexGet_ReturnsValidList()
+        public void Dispose()
         {
-            var projects = _controller.List(_userSession);
-            //assert
-            Assert.IsAssignableFrom<ActionResult<IEnumerable<ProjectModel>>>(projects);
+            TestHelper.CleanUpTestContext(_runtime, _userName);
+            _runtime.Shutdown();
         }
 
         /// <summary>
-        /// Tests creating a user, and that the controller returns the correct response type.
+        ///     Tests creating a user, and that the controller returns the correct response type.
         /// </summary>
         [Fact]
         public void CreatePost_ReturnsCreatedResult_WhenProjectCreated()
@@ -83,12 +75,11 @@ namespace XTMF2.Web.UnitTests.Controllers
             //assert
             Assert.IsAssignableFrom<CreatedResult>(result);
             Assert.IsAssignableFrom<OkObjectResult>(projects.Result);
-            Assert.Single(((List<ProjectModel>)((OkObjectResult)projects.Result).Value));
-
+            Assert.Single((List<ProjectModel>) ((OkObjectResult) projects.Result).Value);
         }
 
         /// <summary>
-        /// Test that project creation wont accept invalid name / model.
+        ///     Test that project creation wont accept invalid name / model.
         /// </summary>
         [Fact]
         public void CreatePost_ReturnsInvalid_WhenProjectCreated()
@@ -98,12 +89,21 @@ namespace XTMF2.Web.UnitTests.Controllers
             //assert
             Assert.IsAssignableFrom<UnprocessableEntityObjectResult>(result);
             Assert.IsAssignableFrom<OkObjectResult>(projects.Result);
-            Assert.Empty(((List<ProjectModel>)((OkObjectResult)projects.Result).Value));
-
+            Assert.Empty((List<ProjectModel>) ((OkObjectResult) projects.Result).Value);
         }
 
         /// <summary>
-        /// Tests deleting a single project
+        ///     Tests deletion of a non-existing project
+        /// </summary>
+        [Fact]
+        public void DeletePost_ReturnsNotFound_WhenProjectDeleted()
+        {
+            var result = _controller.Delete("projectName", _userSession);
+            Assert.IsAssignableFrom<NotFoundResult>(result);
+        }
+
+        /// <summary>
+        ///     Tests deleting a single project
         /// </summary>
         [Fact]
         public void DeletePost_ReturnsValid_WhenProjectDeleted()
@@ -114,29 +114,7 @@ namespace XTMF2.Web.UnitTests.Controllers
             Assert.IsAssignableFrom<OkResult>(result);
         }
         /// <summary>
-        /// Tests deletion of a non-existing project
-        /// </summary>
-        [Fact]
-        public void DeletePost_ReturnsNotFound_WhenProjectDeleted()
-        {
-            var result = _controller.Delete("projectName", _userSession);
-            Assert.IsAssignableFrom<NotFoundObjectResult>(result);
-        }
-
-        /// <summary>
-        /// Tests retrieving of a single project
-        /// </summary>
-        [Fact]
-        public void Get_ReturnsValid_WhenProjectRetrieved()
-        {
-            _controller.Create("projectName", _userSession);
-            var result = _controller.Get("projectName", _userSession);
-            Assert.IsAssignableFrom<OkObjectResult>(result);
-            Assert.Equal("projectName", ((ProjectModel)((OkObjectResult)result).Value).Name);
-        }
-
-        /// <summary>
-        /// Tests single get project, should return not found.
+        ///     Tests single get project, should return not found.
         /// </summary>
         [Fact]
         public void Get_ReturnsNotFound_WhenProjectRetrieved()
@@ -147,12 +125,26 @@ namespace XTMF2.Web.UnitTests.Controllers
         }
 
         /// <summary>
-        /// Dispose of test data
+        ///     Tests retrieving of a single project
         /// </summary>
-        public void Dispose()
+        [Fact]
+        public void Get_ReturnsValid_WhenProjectRetrieved()
         {
-            TestHelper.CleanUpTestContext(_runtime, _userName);
-            _runtime.Shutdown();
+            _controller.Create("projectName", _userSession);
+            var result = _controller.Get("projectName", _userSession);
+            Assert.IsAssignableFrom<OkObjectResult>(result);
+            Assert.Equal("projectName", ((ProjectModel) ((OkObjectResult) result).Value).Name);
+        }
+
+        /// <summary>
+        ///     Tests if the projects list returns a valid list for the default (local) user.
+        /// </summary>
+        [Fact]
+        public void IndexGet_ReturnsValidList()
+        {
+            var projects = _controller.List(_userSession);
+            //assert
+            Assert.IsAssignableFrom<ActionResult<IEnumerable<ProjectModel>>>(projects);
         }
     }
 }

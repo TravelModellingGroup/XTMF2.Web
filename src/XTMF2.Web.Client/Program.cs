@@ -65,6 +65,7 @@ namespace XTMF2.Web.Client
             services.AddAuthorizationCore();
             services.AddScoped<ModelSystemClient>();
             services.AddScoped<AuthenticationService>();
+            services.AddSingleton<NotificationService>();
             services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Trace); });
             services.AddBlazoredSessionStorage();
         }

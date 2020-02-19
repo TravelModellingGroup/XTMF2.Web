@@ -26,28 +26,15 @@ using XTMF2.Web.Server.Session;
 namespace XTMF2.Web.Server.Hubs
 {
     /// <summary>
-    /// Tracks user connnects and disconnects via a SignalR hub.
+    ///     Tracks user connects and disconnects via a SignalR hub.
     /// </summary>
     [Authorize]
     public class SessionContextHub : Hub
     {
-        public readonly Dictionary<User, int> UserSessionCounts = new Dictionary<User, int>();
         private readonly ILogger<SessionContextHub> _logger;
         private readonly ModelSystemSessions _modelSystemSessions;
         private readonly ProjectSessions _projectSessions;
-
-        /// <summary>
-        /// </summary>
-        /// <param name="logger"></param>
-        /// <param name="projectSessions"></param>
-        /// <param name="modelSystemSessions"></param>
-        public SessionContextHub(ILogger<SessionContextHub> logger, ProjectSessions projectSessions,
-            ModelSystemSessions modelSystemSessions)
-        {
-            _logger = logger;
-            _projectSessions = projectSessions;
-            _modelSystemSessions = modelSystemSessions;
-        }
+        public readonly Dictionary<User, int> UserSessionCounts = new Dictionary<User, int>();
 
         /// <summary>
         ///     Called when a client disconnects or timeout is reached.
@@ -67,7 +54,11 @@ namespace XTMF2.Web.Server.Hubs
         /// <param name="userSession"></param>
         public void TrackUserConnected(UserSession userSession)
         {
-            if (!UserSessionCounts.ContainsKey(userSession.User)) UserSessionCounts[userSession.User] = 0;
+            if (!UserSessionCounts.ContainsKey(userSession.User))
+            {
+                UserSessionCounts[userSession.User] = 0;
+            }
+
             UserSessionCounts[userSession.User]++;
         }
 
@@ -95,6 +86,19 @@ namespace XTMF2.Web.Server.Hubs
             var user = Context.User;
             _logger.LogInformation("Client connected");
             await base.OnConnectedAsync();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="projectSessions"></param>
+        /// <param name="modelSystemSessions"></param>
+        public SessionContextHub(ILogger<SessionContextHub> logger, ProjectSessions projectSessions,
+            ModelSystemSessions modelSystemSessions)
+        {
+            _logger = logger;
+            _projectSessions = projectSessions;
+            _modelSystemSessions = modelSystemSessions;
         }
     }
 }

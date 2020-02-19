@@ -25,7 +25,6 @@ namespace XTMF2.Web.Data.Models
     {
 
         [Required]
-
         public string Name { get; set; }
     }
 }

@@ -3,7 +3,7 @@
 <BasePage ShowSideNav="false">
 
     <Content>
-        @if (Project != null)
+        @if (IsLoaded)
         {
             <table class="table table-hover">
                 <thead>
@@ -17,7 +17,7 @@
                     {
                         <tr>
                             <td>
-                                <NavLink class="nav-link" href=@($"/ModelSystem/{Project.Name}/{modelSystem.Name}")>
+                                <NavLink class="nav-link" href=@($"/ModelSystem/{ProjectName}/{modelSystem.Name}")>
                                     @modelSystem.Name
                                 </NavLink>
                             </td>

@@ -119,7 +119,8 @@
       "generateDefaultValues": true,
       "generateDataAnnotations": true,
       "excludedTypeNames": [
-        "ProjectModel"
+        "ProjectModel",
+        "ModelSystemModel"
       ],
       "excludedParameterNames": [],
       "handleReferences": false,

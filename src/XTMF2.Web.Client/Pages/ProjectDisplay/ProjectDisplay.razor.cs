@@ -15,10 +15,12 @@
 //    You should have received a copy of the GNU General Public License
 //    along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
+using XTMF2.Web.Client.Services.Api;
 using XTMF2.Web.Components.Util;
 using XTMF2.Web.Data.Models;
 
@@ -42,15 +44,30 @@ namespace XTMF2.Web.Client.Pages
         /// <summary>
         ///     Model systems belonging to the project
         /// </summary>
-        public IReadOnlyCollection<ModelSystemModel> ModelSystems { get; set; } = new List<ModelSystemModel>();
+        public List<ModelSystemModel> ModelSystems { get; private set; } = new List<ModelSystemModel>();
 
         /// <summary>
         ///     The loaded project.
         /// </summary>
         protected ProjectModel Project { get; set; }
 
-        protected void NewModelSystemSubmit(string input)
+        protected bool IsLoaded { get; set; } = false;
+
+        [Inject] protected ProjectClient ProjectClient { get; set; }
+
+        [Inject] protected ModelSystemClient ModelSystemClient { get; set; }
+
+        protected async void NewModelSystemSubmit(string input)
         {
+            var modelSystem = new ModelSystemModel()
+            {
+                Name = input
+            };
+            var model = await ModelSystemClient.CreateAsync(ProjectName, modelSystem);
+
+            Logger.LogInformation("Created");
+            ModelSystems.Add(modelSystem);
+            this.StateHasChanged();
             /*
             string error = null;
             if (!_projectSession.CreateNewModelSystem(XtmfUser, input, out var modelSystem, ref error))
@@ -84,23 +101,19 @@ namespace XTMF2.Web.Client.Pages
         /// <summary>
         ///     Initialization function, will attempt to load the referenced project.
         /// </summary>
-        protected override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
-            /*
-            string error = null;
-            if (XtmfRuntime.ProjectController.GetProject(XtmfUser, ProjectName, out var project, ref error))
+            try
             {
-                Project = project;
-                ModelSystems = project.ModelSystems;
-                XtmfRuntime.ProjectController.GetProjectSession(XtmfUser, Project, out _projectSession, ref error);
+                var modelSystems = await ModelSystemClient.ListAsync(ProjectName);
+                Logger.LogInformation(modelSystems.Count.ToString());
+                ModelSystems.AddRange(modelSystems);
+                IsLoaded = true;
             }
-            else
+            catch (ApiException e)
             {
-                ModelSystems = new List<ModelSystemHeader>();
-                Logger.LogError("Unable to load project, or project not found: " + ProjectName);
+                Logger.LogError(e, $"Unable to load model systems for project: {ProjectName}");
             }
- */
-            return base.OnInitializedAsync();
         }
     }
 }

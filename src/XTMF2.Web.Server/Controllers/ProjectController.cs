@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using XTMF2.Web.Data.Models;
+using XTMF2.Web.Server.Authorization;
 using XTMF2.Web.Server.Session;
 using XTMF2.Web.Server.Utils;
 
@@ -68,9 +69,8 @@ namespace XTMF2.Web.Server.Controllers {
         [ProducesResponseType(typeof(ProjectModel), StatusCodes.Status201Created)]
         public IActionResult Create(string projectName, [FromServices] UserSession state)
         {
-            var error = default(string);
             if (!_xtmfRuntime.ProjectController.CreateNewProject(state.User, projectName,
-                    out var session, ref error))
+                    out var session, out var error))
             {
                 _logger.LogError($"Unable to create project: {projectName}\n" +
                     $"Error: {error}");
@@ -91,14 +91,13 @@ namespace XTMF2.Web.Server.Controllers {
         [ProducesResponseType(typeof(ProjectModel), StatusCodes.Status200OK)]
         public IActionResult Get(string projectName, [FromServices] UserSession state)
         {
-            string error = default;
             var project = state.Projects.FirstOrDefault(p => p.Name == projectName);
             if (project != null)
             {
                 return new OkObjectResult(_mapper.Map<ProjectModel>(project));
             }
             if (!_xtmfRuntime.ProjectController.GetProject(state.User.UserName, projectName,
-                    out project, ref error))
+                    out project, out var error))
             {
                 return new NotFoundResult();
             }
@@ -113,6 +112,7 @@ namespace XTMF2.Web.Server.Controllers {
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(IEnumerable<ProjectModel>), StatusCodes.Status200OK)]
+        // [Authorize(Policy = nameof(ModelSystemAccessRequirement))]
         public ActionResult<IEnumerable<ProjectModel>> List([FromServices] UserSession state)
         {
             return new OkObjectResult(_mapper.Map<List<ProjectModel>>(state.Projects));
@@ -130,16 +130,15 @@ namespace XTMF2.Web.Server.Controllers {
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         public IActionResult Delete(string projectName, [FromServices] UserSession state)
         {
-            var error = default(string);
             var project = state.Projects.FirstOrDefault(p => p.Name == projectName);
             if (project == null)
             {
-                return new NotFoundObjectResult(error);
+                return new NotFoundResult();
             }
-            if (!_xtmfRuntime.ProjectController.DeleteProject(state.User, project, ref error))
+            if (!_xtmfRuntime.ProjectController.DeleteProject(state.User, project, out var error))
             {
                 _logger.LogError($"Unable to delete project: {projectName}\n" +
-                    $"Error: {error}");
+                    $"Error: {error.Message}");
                 return new UnprocessableEntityObjectResult(error);
             }
             _logger.LogInformation($"Project deleted: {projectName}");
@@ -157,8 +156,7 @@ namespace XTMF2.Web.Server.Controllers {
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult EndSession(string projectName, [FromServices] UserSession state)
         {
-            string error = default;
-            if (!XtmfUtils.GetProjectSession(_xtmfRuntime, state, projectName, out var projectSession, _projectSessions, ref error))
+            if (!XtmfUtils.GetProjectSession(_xtmfRuntime, state, projectName, out var projectSession, _projectSessions, out var error))
             {
                 return new NotFoundObjectResult(error);
             }

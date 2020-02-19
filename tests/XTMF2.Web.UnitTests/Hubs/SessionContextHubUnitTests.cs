@@ -16,9 +16,11 @@
 //     along with XTMF2.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Moq;
 using XTMF2.Web.Server.Hubs;
+using XTMF2.Web.Server.Mapping.Profiles;
 using XTMF2.Web.Server.Session;
 using Xunit;
 
@@ -28,14 +30,16 @@ namespace XTMF2.Web.UnitTests.Hubs
     ///     Unit tests related to the SessionContextUnitHub
     /// </summary>
     [Collection("Sequential")]
-    public class SessionContextHubUnitTests : IDisposable
+    public  sealed class SessionContextHubUnitTests : IDisposable
     {
         public SessionContextHubUnitTests()
         {
+            var config = new MapperConfiguration(cfg => { cfg.AddProfile<ModelSystemProfile>(); });
             _userName = Guid.NewGuid().ToString();
-            _runtime = TestHelper.CreateTestContext(_userName);
+            TestHelper.CreateTestUser(_userName);
+            _runtime = TestHelper.Runtime;
             _projectSessions = new ProjectSessions();
-            _modelSystemSessions = new ModelSystemSessions();
+            _modelSystemSessions = new ModelSystemSessions(config.CreateMapper());
             _userSession = new UserSession(_runtime.UserController.GetUserByName(_userName));
             var logger = Mock.Of<ILogger<SessionContextHub>>();
             _sessionContextHub = new SessionContextHub(logger, _projectSessions, _modelSystemSessions);
@@ -101,11 +105,10 @@ namespace XTMF2.Web.UnitTests.Hubs
         {
             _sessionContextHub.TrackUserConnected(_userSession);
             _sessionContextHub.TrackUserConnected(_userSession);
-            string error = default;
             _runtime.ProjectController.CreateNewProject(_userSession.User, "ProjectName", out var projectSession,
-                ref error);
-            projectSession.CreateNewModelSystem(_userSession.User, "MSNAME", out var modelSystem, ref error);
-            projectSession.EditModelSystem(_userSession.User, modelSystem, out var modelSystemSession, ref error);
+                out var error);
+            projectSession.CreateNewModelSystem(_userSession.User, "MSNAME", out var modelSystem, out error);
+            projectSession.EditModelSystem(_userSession.User, modelSystem, out var modelSystemSession, out error);
             _modelSystemSessions.TrackSessionForUser(_userSession.User, projectSession.Project, modelSystemSession);
             Assert.Single(_modelSystemSessions.Sessions[_userSession.User]);
             _sessionContextHub.TrackUserDisconnected(_userSession);
@@ -121,11 +124,10 @@ namespace XTMF2.Web.UnitTests.Hubs
         {
             _sessionContextHub.TrackUserConnected(_userSession);
             _sessionContextHub.TrackUserConnected(_userSession);
-            string error = default;
             _runtime.ProjectController.CreateNewProject(_userSession.User, "ProjectName", out var projectSession,
-                ref error);
+                out var error);
             _runtime.ProjectController.CreateNewProject(_userSession.User, "ProjectName2", out var projectSession2,
-                ref error);
+                out error);
             _projectSessions.TrackSessionForUser(_userSession.User, projectSession);
             _projectSessions.TrackSessionForUser(_userSession.User, projectSession2);
             Assert.Collection(_projectSessions.Sessions[_userSession.User],

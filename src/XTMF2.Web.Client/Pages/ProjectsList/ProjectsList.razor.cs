@@ -22,16 +22,20 @@ using System.Threading.Tasks;
 using BlazorStrap;
 using Microsoft.AspNetCore.Components;
 using Serilog;
+using Microsoft.JSInterop;
 using XTMF2.Web.Client.Services.Api;
 using XTMF2.Web.Components.Util;
 using XTMF2.Web.Data.Models;
+using XTMF2.Web.Client.Services;
 
-namespace XTMF2.Web.Client.Pages {
+namespace XTMF2.Web.Client.Pages
+{
     /// <summary>
     ///     Projects (page) base component. This page lists the currently existing projects
     ///     for the current active user. The user can both add and delete projects from this page.
     /// </summary>
-    public partial class ProjectsList : ComponentBase {
+    public partial class ProjectsList : ComponentBase
+    {
         /// <summary>
         ///     New project form validation model.
         /// </summary>
@@ -44,49 +48,57 @@ namespace XTMF2.Web.Client.Pages {
 
         [Inject] protected ProjectClient ProjectClient { get; set; }
 
-        protected ILogger Logger { get; } = Log.ForContext<ProjectsList> ();
+        protected ILogger Logger { get; } = Log.ForContext<ProjectsList>();
 
         [Inject] private NavigationManager NavigationManager { get; set; }
+
+        [Inject] protected NotificationService NotificationService { get; set; }
 
         /// <summary>
         ///     List of projects for the active user.
         /// </summary>
-        public List<ProjectModel> Projects { get; } = new List<ProjectModel> ();
+        public List<ProjectModel> Projects { get; } = new List<ProjectModel>();
 
         /// <summary>
         /// </summary>
         /// <param name="e"></param>
-        public void OpenNewProjectDialog (EventArgs e) {
-            _inputRequestDialog.Show ();
+        public void OpenNewProjectDialog(EventArgs e)
+        {
+            _inputRequestDialog.Show();
         }
 
         /// <summary>
         ///     Initialization for component.
         /// </summary>
-        protected override async Task OnInitializedAsync () {
-            Logger.Information ("Projects List loading.");
-            var projects = await ProjectClient.ListAsync ();
-            Projects.AddRange (projects);
+        protected override async Task OnInitializedAsync()
+        {
+            Logger.Information("Projects List loading.");
+            var projects = await ProjectClient.ListAsync();
+            Projects.AddRange(projects);
         }
 
         /// <summary>
         ///     Deletes a project for this user.
         /// </summary>
-        public async void DeleteProject (ProjectModel project) {
-            await ProjectClient.DeleteAsync (project.Name);
-            Projects.Remove (project);
-            Logger.Information ($"Project {project.Name} has been deleted.");
-            this.StateHasChanged ();
+        public async void DeleteProject(ProjectModel project)
+        {
+            await ProjectClient.DeleteAsync(project.Name);
+            Projects.Remove(project);
+            Logger.Information($"Project {project.Name} has been deleted.");
+            NotificationService.ErrorMessage($"Project {project.Name} deleted.");
+            this.StateHasChanged();
         }
 
         /// <summary>
         ///     Attempts to create a new project on submission of the new project form.
         /// </summary>
-        protected async void OnNewProjectFormSubmit (string input) {
-            var model = await ProjectClient.CreateAsync (input);
-            Projects.Add (model);
-            Logger.Information ($"Project {input} has been created.");
-            this.StateHasChanged ();
+        protected async void OnNewProjectFormSubmit(string input)
+        {
+            var model = await ProjectClient.CreateAsync(input);
+            Projects.Add(model);
+            Logger.Information($"Project {input} has been created.");
+            NotificationService.SuccessMessage($"Project {input} Created.");
+            this.StateHasChanged();
 
         }
 
@@ -94,8 +106,9 @@ namespace XTMF2.Web.Client.Pages {
         ///     Closes the new project dialog/
         /// </summary>
         /// <param name="e"></param>
-        protected void CloseNewProjectDialog () {
-            NewProjectModal.Hide ();
+        protected void CloseNewProjectDialog()
+        {
+            NewProjectModal.Hide();
         }
     }
 }
