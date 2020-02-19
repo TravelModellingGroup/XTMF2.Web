@@ -280,7 +280,7 @@ namespace XTMF2.Web.UnitTests.Controllers
             Assert.IsAssignableFrom<UnprocessableEntityObjectResult>(addStartResult);
         }
 
-                /// <summary>
+        /// <summary>
         /// Tests that adding a start to an invalid parent returns unprocessable entity
         /// </summary>
         [Fact]
