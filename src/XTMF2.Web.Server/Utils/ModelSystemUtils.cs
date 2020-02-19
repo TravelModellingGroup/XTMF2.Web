@@ -22,14 +22,12 @@ using XTMF2.Editing;
 using XTMF2.ModelSystemConstruct;
 using XTMF2.Web.Data.Models.Editing;
 using XTMF2.Web.Data.Types;
-using XTMF2.Web.Server.Session;
 
 namespace XTMF2.Web.Server.Utils
 {
     public class ModelSystemUtils
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="o"></param>
         /// <returns></returns>
@@ -39,7 +37,7 @@ namespace XTMF2.Web.Server.Utils
         }
 
         /// <summary>
-        /// Iterate over all model system objects
+        ///     Iterate over all model system objects
         /// </summary>
         /// <param name="modelSystem"></param>
         /// <returns></returns>
@@ -56,10 +54,12 @@ namespace XTMF2.Web.Server.Utils
                 {
                     yield return c;
                 }
+
                 foreach (var s in boundary.Starts)
                 {
                     yield return s;
                 }
+
                 foreach (var b in boundary.Boundaries)
                 {
                     foreach (var boundaryChild in ModelSystemObjectsTraverse(b))
@@ -68,30 +68,30 @@ namespace XTMF2.Web.Server.Utils
                     }
                 }
             }
+
             yield return viewObject;
         }
 
         /// <summary>
-        /// Returns the model system object addressed by the passed path.
+        ///     Returns the model system object addressed by the passed path.
         /// </summary>
         /// <param name="runtime">The XTMF Runtime</param>
         /// <param name="modelSystemSession">The model system session to query.</param>
         /// <param name="path">The path to the object in the form of eg: Parent.Child.Child.ObjectName</param>
         /// <returns></returns>
-        public static T GetModelSystemObjectByPath<T>(XTMFRuntime runtime, ModelSystemSession modelSystemSession, Path path) where T : class
+        public static T GetModelSystemObjectByPath<T>(XTMFRuntime runtime, ModelSystemSession modelSystemSession,
+            Path path) where T : class
         {
             if (path.Parts.Length == 0)
             {
-                return (T)(object)modelSystemSession.ModelSystem.GlobalBoundary;
+                return (T) (object) modelSystemSession.ModelSystem.GlobalBoundary;
             }
-            else
-            {
-                return Traverse<T>(modelSystemSession.ModelSystem.GlobalBoundary, path, 0);
-            }
+
+            return Traverse<T>(modelSystemSession.ModelSystem.GlobalBoundary, path, 0);
         }
 
         /// <summary>
-        /// Returns the editing type for the passed model system object.
+        ///     Returns the editing type for the passed model system object.
         /// </summary>
         /// <param name="o"></param>
         /// <returns></returns>
@@ -99,28 +99,26 @@ namespace XTMF2.Web.Server.Utils
         {
             switch (o)
             {
-                case Boundary b:
+                case Boundary _:
                     return typeof(BoundaryModel);
-                case Start s:
+                case Start _:
                     return typeof(StartModel);
-                case SingleLink l:
+                case SingleLink _:
                     return typeof(SingleLinkModel);
-                case MultiLink m:
+                case MultiLink _:
                     return typeof(MultiLinkModel);
-                case CommentBlock c:
+                case CommentBlock _:
                     return typeof(CommentBlockModel);
-                case Node n:
+                case Node _:
                     return typeof(NodeModel);
-                case NodeHook nh:
+                case NodeHook _:
                     return typeof(NodeHookModel);
                 default:
                     return null;
-
             }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="current"></param>
         /// <param name="path"></param>
@@ -130,29 +128,29 @@ namespace XTMF2.Web.Server.Utils
         {
             if (index >= path.Parts.Length - 1)
             {
-                Type type = typeof(T);
+                var type = typeof(T);
                 if (type == typeof(Boundary))
                 {
                     var boundary = current.Boundaries.FirstOrDefault(b => b.Name == path.Parts[index]);
                     if (boundary != null)
                     {
-                        return (T)(object)boundary;
+                        return (T) (object) boundary;
                     }
                 }
-                else if (type == typeof(ModelSystemConstruct.Start))
+                else if (type == typeof(Start))
                 {
                     var start = current.Starts.FirstOrDefault(s => s.Name == path.Parts[index]);
                     if (start != null)
                     {
-                        return (T)(object)start;
+                        return (T) (object) start;
                     }
                 }
-                else if (type == typeof(ModelSystemConstruct.CommentBlock))
+                else if (type == typeof(CommentBlock))
                 {
                     var commentBlock = current.CommentBlocks.FirstOrDefault(cb => cb.Comment == path.Parts[index]);
                     if (commentBlock != null)
                     {
-                        return (T)(object)commentBlock;
+                        return (T) (object) commentBlock;
                     }
                 }
                 else if (type == typeof(Node))
@@ -160,13 +158,14 @@ namespace XTMF2.Web.Server.Utils
                     var node = current.Modules.FirstOrDefault(n => n.Name == path.Parts[index]);
                     if (node != null)
                     {
-                        return (T)(object)node;
+                        return (T) (object) node;
                     }
                 }
+
                 // no matching element 
                 return null;
             }
-            else
+
             {
                 // find the boundary with this current name
                 var boundary = current.Boundaries.FirstOrDefault(b => b.Name == path.Parts[index]);
@@ -175,10 +174,8 @@ namespace XTMF2.Web.Server.Utils
                     // not a valid path
                     return null;
                 }
-                else
-                {
-                    return Traverse<T>(boundary, path, index + 1);
-                }
+
+                return Traverse<T>(boundary, path, index + 1);
             }
         }
     }

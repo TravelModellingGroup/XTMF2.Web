@@ -306,6 +306,5 @@ namespace XTMF2.Web.UnitTests.Controllers
             }, _userSession);
             Assert.IsAssignableFrom<UnprocessableEntityObjectResult>(addCommentBlockResult);
         }
-
     }
 }

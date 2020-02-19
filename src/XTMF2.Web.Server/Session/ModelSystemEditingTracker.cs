@@ -31,14 +31,14 @@ namespace XTMF2.Web.Server.Session
     /// </summary>
     public class ModelSystemEditingTracker : IDisposable
     {
-        private readonly IMapper _mapper;
-
         /// <summary>
-        ///     List of registered deligates for the tracker callback
+        ///     List of registered delegates for the tracker callback
         /// </summary>
         /// <returns></returns>
         private readonly List<EventHandler<ModelSystemChangedEventArgs>> _delegates =
             new List<EventHandler<ModelSystemChangedEventArgs>>();
+
+        private readonly IMapper _mapper;
 
         /// <summary>
         ///     Tracks GUID to model system editing references
@@ -55,7 +55,7 @@ namespace XTMF2.Web.Server.Session
         /// <typeparam name="object"></typeparam>
         /// <typeparam name="object"></typeparam>
         /// <returns></returns>
-        public Dictionary<object, ViewObject> ModelSystemObjectRefrenceMap { get; } =
+        public Dictionary<object, ViewObject> ModelSystemObjectReferenceMap { get; } =
             new Dictionary<object, ViewObject>();
 
         /// <summary>
@@ -87,6 +87,7 @@ namespace XTMF2.Web.Server.Session
                     return assignedReference;
                 }
             }
+
             return null;
         }
 
@@ -147,7 +148,7 @@ namespace XTMF2.Web.Server.Session
             foreach (var viewObject in ModelSystemUtils.ModelSystemObjects(editingModel))
             {
                 ModelSystemEditingObjectReferenceMap[viewObject.Id] = viewObject;
-                ModelSystemObjectRefrenceMap[viewObject.ObjectReference] = viewObject;
+                ModelSystemObjectReferenceMap[viewObject.ObjectReference] = viewObject;
                 if (viewObject.ObjectReference is INotifyPropertyChanged prop)
                 {
                     prop.PropertyChanged += OnModelSystemPropertyChanged;
@@ -174,7 +175,7 @@ namespace XTMF2.Web.Server.Session
         {
             _onModelSystemChanged?.Invoke(this, new ModelSystemChangedEventArgs(args)
             {
-                EditingModelObject = ModelSystemObjectRefrenceMap[sender]
+                EditingModelObject = ModelSystemObjectReferenceMap[sender]
             });
         }
 
@@ -195,7 +196,7 @@ namespace XTMF2.Web.Server.Session
                     foreach (var e in ModelSystemUtils.Traverse(editingObject))
                     {
                         ModelSystemEditingObjectReferenceMap[e.Id] = e;
-                        ModelSystemObjectRefrenceMap[e.ObjectReference] = e;
+                        ModelSystemObjectReferenceMap[e.ObjectReference] = e;
                     }
                 }
             }
@@ -208,14 +209,14 @@ namespace XTMF2.Web.Server.Session
                     foreach (var e in ModelSystemUtils.Traverse(editingObject))
                     {
                         ModelSystemEditingObjectReferenceMap.Remove(e.Id);
-                        ModelSystemObjectRefrenceMap.Remove(e.ObjectReference);
+                        ModelSystemObjectReferenceMap.Remove(e.ObjectReference);
                     }
                 }
             }
 
             _onModelSystemChanged?.Invoke(this, new ModelSystemChangedEventArgs(args)
             {
-                EditingModelObject = ModelSystemObjectRefrenceMap[sender]
+                EditingModelObject = ModelSystemObjectReferenceMap[sender]
             });
         }
 
