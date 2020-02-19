@@ -32,7 +32,7 @@ namespace XTMF2.Web.Data.Converters
         /// <returns></returns>
         public override Type Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return Assembly.GetExecutingAssembly().GetType(reader.GetString());
+            return Type.GetType(reader.GetString());
         }
 
         /// <summary>
