@@ -55,6 +55,19 @@ namespace XTMF2.Web.UnitTests.Sessions
             Assert.True(tracker.ModelSystemEditingObjectReferenceMap.Count > 0);
         }
 
+        /// <summary>
+        /// Tests that references are stored in the object map
+        /// </summary>
+        [Fact]
+        public void Tracker_Stores_SpecificReferencesCorrectly()
+        {
+            TestHelper.InitializeTestModelSystem(_user, "ProjectName", "TestModelSystem", out var session);
+            var editingModel = _mapper.Map<ModelSystemEditingModel>(session.ModelSystem);
+            var tracker = new ModelSystemEditingTracker(editingModel);
+            Assert.True(tracker.ModelSystemEditingObjectReferenceMap.ContainsKey(editingModel.GlobalBoundary.Id));
+            Assert.True(tracker.ModelSystemObjectRefrenceMap.ContainsKey(editingModel.GlobalBoundary.ObjectReference));
+        }
+
         public void Dispose()
         {
 
