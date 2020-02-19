@@ -197,7 +197,7 @@ namespace XTMF2.Web.Server.Controllers
                 return new UnprocessableEntityObjectResult(error);
             }
             // return the added boundary from the tracker
-            return new CreatedResult("AddBoundary", tracker.ModelSystemObjectRefrenceMap[newBoundary]);
+            return new CreatedResult("AddBoundary", tracker.ModelSystemObjectReferenceMap[newBoundary]);
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace XTMF2.Web.Server.Controllers
             {
                 return new UnprocessableEntityObjectResult(error);
             }
-            return new CreatedResult("AddStart", tracker.ModelSystemObjectRefrenceMap[start]);
+            return new CreatedResult("AddStart", tracker.ModelSystemObjectReferenceMap[start]);
         }
 
         /// <summary>
@@ -261,7 +261,8 @@ namespace XTMF2.Web.Server.Controllers
             {
                 return new UnprocessableEntityObjectResult(error);
             }
-            return new CreatedResult("AddCommentBlock", tracker.ModelSystemObjectRefrenceMap[commentBlockRef]);
+            
+            return new CreatedResult("AddCommentBlock", tracker.ModelSystemObjectReferenceMap[commentBlockRef]);
         }
 
 

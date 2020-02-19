@@ -152,7 +152,7 @@ namespace XTMF2.Web.UnitTests.Controllers
             //get reference to boundary model
             var returnedModel = (BoundaryModel)(((CreatedResult)addBoundaryResult).Value);
             Assert.True(tracker.ModelSystemEditingObjectReferenceMap.ContainsKey(returnedModel.Id));
-            Assert.True(tracker.ModelSystemObjectRefrenceMap.ContainsKey(tracker
+            Assert.True(tracker.ModelSystemObjectReferenceMap.ContainsKey(tracker
                 .ModelSystemEditingObjectReferenceMap[returnedModel.Id].ObjectReference));
 
         }
@@ -214,7 +214,7 @@ namespace XTMF2.Web.UnitTests.Controllers
             //get reference to boundary model
             var returnedModel = (StartModel)(((CreatedResult)addStartResult).Value);
             Assert.True(tracker.ModelSystemEditingObjectReferenceMap.ContainsKey(returnedModel.Id));
-            Assert.True(tracker.ModelSystemObjectRefrenceMap.ContainsKey(tracker
+            Assert.True(tracker.ModelSystemObjectReferenceMap.ContainsKey(tracker
                 .ModelSystemEditingObjectReferenceMap[returnedModel.Id].ObjectReference));
 
         }
@@ -248,7 +248,7 @@ namespace XTMF2.Web.UnitTests.Controllers
             //get reference to boundary model
             var returnedModel = (CommentBlockModel)(((CreatedResult)addCommentBlockResult).Value);
             Assert.True(tracker.ModelSystemEditingObjectReferenceMap.ContainsKey(returnedModel.Id));
-            Assert.True(tracker.ModelSystemObjectRefrenceMap.ContainsKey(tracker
+            Assert.True(tracker.ModelSystemObjectReferenceMap.ContainsKey(tracker
                 .ModelSystemEditingObjectReferenceMap[returnedModel.Id].ObjectReference));
 
         }

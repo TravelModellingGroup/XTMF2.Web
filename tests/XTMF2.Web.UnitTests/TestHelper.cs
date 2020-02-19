@@ -78,15 +78,5 @@ namespace XTMF2.Web.UnitTests
         {
             Runtime = XTMFRuntime.CreateRuntime();
         }
-
-        /// <summary>
-        ///     Cleanup the test context
-        /// </summary>
-        /// <param name="runtime"></param>
-        /// <param name="userName"></param>
-        public static void CleanUpTestContext(XTMFRuntime runtime, string userName)
-        {
-            runtime.UserController.Delete(userName);
-        }
     }
 }
