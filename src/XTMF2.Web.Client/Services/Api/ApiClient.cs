@@ -2480,7 +2480,7 @@ namespace XTMF2.Web.Client.Services.Api
         [Newtonsoft.Json.JsonProperty("ContainedWithin", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public BoundaryModel ContainedWithin { get; set; }
     
-        [Newtonsoft.Json.JsonProperty("ContainWithinId", Required = Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonProperty("ContainedWithinId", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.Guid ContainWithinId { get; set; }
     

@@ -295,7 +295,7 @@ namespace XTMF2.Web.Server.Controllers
             {
                 return new UnprocessableEntityObjectResult(error);
             }
-            return new CreatedResult(nameof(AddLink), link);
+            return new CreatedResult(nameof(AddLink), tracker.ModelSystemObjectReferenceMap[link]);
         }
 
         /// <summary>
@@ -327,7 +327,7 @@ namespace XTMF2.Web.Server.Controllers
             if (!session.AddNodeGenerateParameters(userSession.User, parentBoundary, nodeModel.Name, nodeModel.Type, out var node, out var children, out var commandError)){
                return new UnprocessableEntityObjectResult(commandError);
             }
-            return new CreatedResult(nameof(AddNode), node);
+            return new CreatedResult(nameof(AddNode), tracker.ModelSystemObjectReferenceMap[node]);
         }
 
         /// <summary>
