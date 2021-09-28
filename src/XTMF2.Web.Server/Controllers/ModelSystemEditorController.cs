@@ -223,7 +223,9 @@ namespace XTMF2.Web.Server.Controllers
             {
                 return new UnprocessableEntityObjectResult("Specified parent boundary does not exist.");
             }
-            if (!session.AddModelSystemStart(userSession.User, parentBoundary, startModel.Name, out var start, out var error))
+            if (!session.AddModelSystemStart(userSession.User, parentBoundary, startModel.Name, 
+                new Rectangle(startModel.Location.X, startModel.Location.Y, startModel.Location.Width, startModel.Location.Height), 
+                out var start, out var error))
             {
                 return new UnprocessableEntityObjectResult(error);
             }
@@ -324,7 +326,10 @@ namespace XTMF2.Web.Server.Controllers
             {
                 return new UnprocessableEntityObjectResult("Specified parent boundary does not exist.");
             }
-            if (!session.AddNodeGenerateParameters(userSession.User, parentBoundary, nodeModel.Name, nodeModel.Type, out var node, out var children, out var commandError)){
+            if (!session.AddNodeGenerateParameters(userSession.User, parentBoundary, nodeModel.Name, nodeModel.Type, 
+                new Rectangle(nodeModel.Location.X, nodeModel.Location.Y, nodeModel.Location.Width, nodeModel.Location.Height),
+                out var node, out var children, out var commandError))
+            {
                return new UnprocessableEntityObjectResult(commandError);
             }
             return new CreatedResult(nameof(AddNode), tracker.ModelSystemObjectReferenceMap[node]);
@@ -356,7 +361,9 @@ namespace XTMF2.Web.Server.Controllers
             {
                 return new UnprocessableEntityObjectResult("Specified parent boundary does not exist.");
             }
-            if (!session.AddNode(userSession.User, parentBoundary, nodeModel.Name, nodeModel.Type, out var node, out var error))
+            if (!session.AddNode(userSession.User, parentBoundary, nodeModel.Name, nodeModel.Type, 
+                new Rectangle(nodeModel.Location.X, nodeModel.Location.Y, nodeModel.Location.Width, nodeModel.Location.Height),
+                out var node, out var error))
             {
                 return new UnprocessableEntityObjectResult(error);
             }

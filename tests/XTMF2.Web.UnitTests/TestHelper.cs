@@ -63,14 +63,14 @@ namespace XTMF2.Web.UnitTests
             projectSession.EditModelSystem(user, modelSystem, out modelSystemSession, out error);
 
             modelSystemSession.AddModelSystemStart(user, modelSystemSession.ModelSystem.GlobalBoundary, "TestStart",
-                out var start, out error);
+                new XTMF2.Rectangle(0,0,20,20), out var start, out error);
             modelSystemSession.AddNode(user, modelSystemSession.ModelSystem.GlobalBoundary, "TestNode1",
-                typeof(SimpleTestModule), out var node, out error);
+                typeof(SimpleTestModule), new XTMF2.Rectangle(30,0,20,20), out var node, out error);
             modelSystemSession.AddLink(user, start, start.Hooks[0], node, out var link, out error);
             modelSystemSession.AddBoundary(user, modelSystemSession.ModelSystem.GlobalBoundary, "TestBoundary1",
                 out var boundary, out error);
             modelSystemSession.AddNode(user, boundary, "TestNode2",
-                typeof(SimpleTestModule), out var testNode2, out error);
+                typeof(SimpleTestModule), new XTMF2.Rectangle(30,0,20,20), out var testNode2, out error);
             return modelSystemSession;
         }
 
