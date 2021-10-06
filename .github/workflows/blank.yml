@@ -10,7 +10,7 @@ jobs:
       - name: Setup .NetCore
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 3.1.101
+          dotnet-version: 5.0.401
       - name: XTMF2 Submodule
         working-directory: src/XTMF2
         run: |
@@ -20,4 +20,4 @@ jobs:
           dotnet build --configuration Release
       - name: Unit Tests
         run: |
-          dotnet test
+          dotnet test --configuration Release
